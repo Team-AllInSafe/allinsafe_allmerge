@@ -18,7 +18,13 @@
 
     <color name="background_tab_pressed">#1AFFFFFF</color>
 
-
+    <color name="background">#001149</color>
+    <color name="ui_blue">#233B6A</color>
+    <color name="ui_beige">#EEE5D3</color>
+    <color name="ui_yellow">#FFD53F</color>
+    <color name="ui_red">#E93769</color>
+    <color name="ui_green">#44BBA4</color>
+    <color name="transparent">#00000000</color>
     <color name="dataIn">#ff0000</color>
     <color name="dataOut">#0000ff</color>
     <color name="logobackground">#F2F2F2</color>

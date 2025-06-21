@@ -17,6 +17,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.widget.Toast;
 
+
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal;
@@ -33,6 +34,7 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
     private boolean disconnectPending = false;
     private final ServiceConnection mConnection = new ServiceConnection() {
 
+        // todo 여기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -91,6 +93,8 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
+
+        // todo 여기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (which == DialogInterface.BUTTON_POSITIVE) {
             ProfileManager.setConntectedVpnProfileDisconnected(this);
             if (mService != null) {

@@ -20,12 +20,14 @@ import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
 import de.blinkt.openvpn.databinding.MainActivityBinding
+import de.blinkt.openvpn.databinding.Ac301VpnInitMainBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.UUID
 
 class MainActivity : BaseActivity() {
-    lateinit var binding:MainActivityBinding
+//    lateinit var binding:MainActivityBinding
+    lateinit var binding:Ac301VpnInitMainBinding
     private var mSelectedProfile: VpnProfile? = null
     private var mSelectedProfileReason: String? = null
     private var isError = 1
@@ -49,10 +51,13 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=MainActivityBinding.inflate(layoutInflater)
+        //기존 ui
+        //binding=MainActivityBinding.inflate(layoutInflater)
+        binding=Ac301VpnInitMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.vpnconnect.setOnClickListener {
+        //기존의 vpnConnect 버튼
+        binding.btnVpnStart.setOnClickListener {
             // 입력창에서 id pw 추출
             val id=binding.vpnid.text.toString()
             val pw=binding.vpnpw.text.toString()
@@ -109,16 +114,17 @@ class MainActivity : BaseActivity() {
 
         }
 
-        binding.vpndisconnect.setOnClickListener {
+        //기존의 vpnDisconnect 버튼
+        binding.btnVpnStop.setOnClickListener {
 
-            //이렇게 하면 disconnect,log 선택하는 창이 뜸
-
+            //연결 끊기
+//            이렇게 하면 disconnect,log 선택하는 창이 뜸
+//
 //            val intent = Intent(
 //                getActivity(this),
 //                DisconnectVPN::class.java
 //            )
 //            startActivity(intent)
-            //연결 끊기
 
             Log.d("allinsafevpn","disconnect btn onclick")
             ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)

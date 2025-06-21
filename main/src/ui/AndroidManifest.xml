@@ -16,8 +16,8 @@
     <!-- This library wants SDK version 23 but we do runtime checks to not use it before
         API 23 -->
     <uses-sdk tools:overrideLibrary="androidx.security"/>
-
-    <application android:banner="@mipmap/banner_tv">
+<!--    <application android:banner="@mipmap/banner_tv"> 기존의 배너를 제거하였음-->
+    <application>
         <activity
                 android:exported="true"
                 android:name=".activities.MainActivity"

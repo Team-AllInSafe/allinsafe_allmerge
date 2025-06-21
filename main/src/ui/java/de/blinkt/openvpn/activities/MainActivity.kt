@@ -126,6 +126,9 @@ class MainActivity : BaseActivity() {
 //            )
 //            startActivity(intent)
 
+
+            //todo vpnService가 null 이란다 여기서부터 시작!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             Log.d("allinsafevpn","disconnect btn onclick")
             ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)
             Log.d("allinsafevpn",vpnService.toString())

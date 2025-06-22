@@ -54,6 +54,7 @@ import java.util.TreeSet;
 import de.blinkt.openvpn.LaunchVPN;
 import de.blinkt.openvpn.R;
 import de.blinkt.openvpn.VpnProfile;
+//import de.blinkt.openvpn.activities.ConfigConverter;
 import de.blinkt.openvpn.activities.ConfigConverter;
 import de.blinkt.openvpn.activities.DisconnectVPN;
 import de.blinkt.openvpn.activities.FileSelect;
@@ -531,20 +532,21 @@ public class VPNProfileList extends ListFragment implements OnClickListener, Vpn
         } else if (requestCode == SELECT_PROFILE) {
             String fileData = data.getStringExtra(FileSelect.RESULT_DATA);
             Uri uri = new Uri.Builder().path(fileData).scheme("file").build();
-
+//25.06.22 처내기 주석
             startConfigImport(uri);
         } else if (requestCode == IMPORT_PROFILE) {
             String profileUUID = data.getStringExtra(VpnProfile.EXTRA_PROFILEUUID);
             mArrayadapter.add(ProfileManager.get(getActivity(), profileUUID));
         } else if (requestCode == FILE_PICKER_RESULT_KITKAT) {
             if (data != null) {
+                //25.06.22 처내기 주석
                 Uri uri = data.getData();
                 startConfigImport(uri);
             }
         }
 
     }
-
+//25.06.22 처내기 주석
     private void startConfigImport(Uri uri) {
         Intent startImport = new Intent(getActivity(), ConfigConverter.class);
         startImport.setAction(ConfigConverter.IMPORT_PROFILE);

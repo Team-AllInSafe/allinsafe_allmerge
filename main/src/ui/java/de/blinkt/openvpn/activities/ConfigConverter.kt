@@ -422,6 +422,7 @@ class ConfigConverter : BaseActivity(), FileSelectCallback, View.OnClickListener
 
         val isCert =
             type == Utils.FileType.CA_CERTIFICATE || type == Utils.FileType.CLIENT_CERTIFICATE
+        //25.06.22 처내기 주석
         val fl = FileSelectLayout(this, getString(fileDialogInfo.first), isCert, false)
         fileSelectMap[type] = fl
         fl.layoutParams = LinearLayout.LayoutParams(

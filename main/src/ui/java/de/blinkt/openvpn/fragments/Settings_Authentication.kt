@@ -25,7 +25,7 @@ import de.blinkt.openvpn.views.RemoteCNPreference
 import de.blinkt.openvpn.views.RemoteCNPreferenceDialog
 import java.io.IOException
 
-class Settings_Authentication : OpenVpnPreferencesFragment(), Preference.OnPreferenceClickListener {
+class  Settings_Authentication : OpenVpnPreferencesFragment(), Preference.OnPreferenceClickListener {
     private lateinit var handleFileSelectResult: ActivityResultLauncher<Intent>
     private lateinit var handleSystemChooserResult: ActivityResultLauncher<Intent>
     private lateinit var mExpectTLSCert: CheckBoxPreference

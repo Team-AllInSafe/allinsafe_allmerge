@@ -52,49 +52,13 @@ android {
 
         }
 
-        create("ui") {
-        }
+        create("ui") {}
 
-        create("skeleton") {
-        }
-
-        getByName("debug") {
-        }
-
-        getByName("release") {
-        }
-    }
-
-    signingConfigs {
-        create("release") {
-            // ~/.gradle/gradle.properties
-            val keystoreFile: String? by project
-            storeFile = keystoreFile?.let { file(it) }
-            val keystorePassword: String? by project
-            storePassword = keystorePassword
-            val keystoreAliasPassword: String? by project
-            keyPassword = keystoreAliasPassword
-            val keystoreAlias: String? by project
-            keyAlias = keystoreAlias
-            enableV1Signing = true
-            enableV2Signing = true
-        }
-
-        create("releaseOvpn2") {
-            // ~/.gradle/gradle.properties
-            val keystoreO2File: String? by project
-            storeFile = keystoreO2File?.let { file(it) }
-            val keystoreO2Password: String? by project
-            storePassword = keystoreO2Password
-            val keystoreO2AliasPassword: String? by project
-            keyPassword = keystoreO2AliasPassword
-            val keystoreO2Alias: String? by project
-            keyAlias = keystoreO2Alias
-            enableV1Signing = true
-            enableV2Signing = true
-        }
+        getByName("debug") {}
 
     }
+
+    signingConfigs {}
 
     lint {
         enable += setOf("BackButton", "EasterEgg", "StopShip", "IconExpectedSize", "GradleDynamicVersion", "NewerVersionAvailable")
@@ -110,35 +74,15 @@ android {
             dimension = "implementation"
         }
 
-        create("skeleton") {
-            dimension = "implementation"
-        }
-
         create("ovpn23")
         {
             dimension = "ovpnimpl"
             buildConfigField("boolean", "openvpn3", "true")
         }
 
-        create("ovpn2")
-        {
-            dimension = "ovpnimpl"
-            versionNameSuffix = "-o2"
-            buildConfigField("boolean", "openvpn3", "false")
-        }
     }
 
-    buildTypes {
-        getByName("release") {
-            if (project.hasProperty("icsopenvpnDebugSign")) {
-                logger.warn("property icsopenvpnDebugSign set, using debug signing for release")
-                signingConfig = android.signingConfigs.getByName("debug")
-            } else {
-                productFlavors["ovpn23"].signingConfig = signingConfigs.getByName("release")
-                productFlavors["ovpn2"].signingConfig = signingConfigs.getByName("releaseOvpn2")
-            }
-        }
-    }
+    buildTypes {}
 
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
@@ -254,12 +198,6 @@ dependencies {
     uiImplementation(libs.kotlin)
     uiImplementation(libs.mpandroidchart)
     uiImplementation(libs.square.okhttp)
-
-//    testImplementation(libs.androidx.test.core)
-//    testImplementation(libs.junit)
-//    testImplementation(libs.kotlin)
-//    testImplementation(libs.mockito.core)
-//    testImplementation(libs.robolectric)
 }
 
 fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =

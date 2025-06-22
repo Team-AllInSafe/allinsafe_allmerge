@@ -41,16 +41,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.InternalWebView" />
-        <activity
-                android:name=".activities.CredentialsPopup"
-                android:theme="@style/blinkt.dialog" />
+<!--        <activity-->
+<!--                android:name=".activities.CredentialsPopup"-->
+<!--                android:theme="@style/blinkt.dialog" />-->
 
 
-        <activity
-                android:name=".activities.LogWindow"
-                android:allowTaskReparenting="true"
-                android:label="@string/openvpn_log"
-                android:launchMode="singleTask" />
+<!--        <activity-->
+<!--                android:name=".activities.LogWindow"-->
+<!--                android:allowTaskReparenting="true"-->
+<!--                android:label="@string/openvpn_log"-->
+<!--                android:launchMode="singleTask" />-->
 
         <activity
                 android:name=".activities.VPNPreferences"
@@ -73,6 +73,7 @@
                     android:name="android.service.quicksettings.ACTIVE_TILE"
                     android:value="false" />
         </service>
+        <!--//25.06.22 처내기 주석-->
         <activity
                 android:name=".activities.ConfigConverter"
                 android:exported="true"
@@ -141,19 +142,19 @@
             </intent-filter>
         </activity-alias>
 
-        <activity
-                android:exported="true"
-                android:name=".activities.CreateShortcuts"
-                android:excludeFromRecents="true"
-                android:label="@string/vpn_shortcut"
-                android:taskAffinity=".CreateShortcuts"
-                android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+<!--        <activity-->
+<!--                android:exported="true"-->
+<!--                android:name=".activities.CreateShortcuts"-->
+<!--                android:excludeFromRecents="true"-->
+<!--                android:label="@string/vpn_shortcut"-->
+<!--                android:taskAffinity=".CreateShortcuts"-->
+<!--                android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.CREATE_SHORTCUT" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <activity
                 android:exported="false"

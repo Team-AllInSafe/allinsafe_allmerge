@@ -8,6 +8,7 @@ import com.android.build.gradle.api.ApplicationVariant
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("checkstyle")
 }
 
@@ -16,6 +17,7 @@ android {
         aidl = true
         buildConfig = true
         viewBinding =true
+        compose = true
     }
     namespace = "de.blinkt.openvpn"
     compileSdk = 35
@@ -25,18 +27,22 @@ android {
     ndkVersion = "28.0.13004108"
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 21 // 기존 vpn 앱 21
         targetSdk = 35
         //targetSdkPreview = "UpsideDownCake"
         versionCode = 216
         versionName = "0.7.61"
+        // spoofing 앱은 이하의 값. 기능적 의미는 없어 그대로 둠
+        //  versionCode = 1
+        //  versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         externalNativeBuild {
             cmake {
                 //arguments+= "-DCMAKE_VERBOSE_MAKEFILE=1"
             }
         }
     }
-
 
     //testOptions.unitTests.isIncludeAndroidResources = true
 
@@ -49,13 +55,9 @@ android {
     sourceSets {
         getByName("main") {
             assets.srcDirs("src/main/assets", "build/ovpnassets")
-
         }
-
         create("ui") {}
-
         getByName("debug") {}
-
     }
 
     signingConfigs {}
@@ -65,7 +67,6 @@ android {
         checkOnly += setOf("ImpliedQuantity", "MissingQuantity")
         disable += setOf("MissingTranslation", "UnsafeNativeCodeLocation")
     }
-
 
     flavorDimensions += listOf("implementation", "ovpnimpl")
 
@@ -82,7 +83,16 @@ android {
 
     }
 
-    buildTypes {}
+    buildTypes {
+        // spoofing
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
@@ -202,6 +212,27 @@ dependencies {
     uiImplementation(libs.kotlin)
     uiImplementation(libs.mpandroidchart)
     uiImplementation(libs.square.okhttp)
+
+    // spoofing
+//    implementation(libs.androidx.core.ktx) // 중
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(libs.androidx.recyclerview)
+
+    // 테스트 관련
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =

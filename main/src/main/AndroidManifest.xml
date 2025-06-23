@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!--spoofing 추가-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!-- Used to show all apps in the allowed Apps selection,
          this app needs the list the app in the allow/deny apps over the VPN -->
@@ -22,10 +24,19 @@
         android:appCategory="productivity"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/app"
+        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/blinkt"
-        tools:ignore="UnusedAttribute">
+        android:theme="@style/Theme.AllinSafe"
+        tools:ignore="UnusedAttribute"
+        tools:targetApi="31"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules">
+        <!--
+        android:name="de.blinkt.openvpn.core.ICSOpenVPNApplication"
+        기존 android:name ICSOpenVPNApplication를 그냥 없애기엔 그 안에서 초기화하는 것도 있어서
+        MyApp 안에서 ICSOpenVPNApplication 를 상속 받는걸로 추가
+        android:label="@string/app"
+        android:theme="@style/blinkt"-->
         <meta-data
             android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/app_restrictions" />

@@ -152,7 +152,14 @@ class VpnMainActivity : BaseActivity() {
             Log.d("allinsafevpn",vpnService.toString())
             vpnService?.stopVPN(false)
             Log.d("allinsafevpn","stopvpn 실행됨")
+            isAleadyCreated=false
         }
+    }
+
+    //service 종료(서버와의 연결과는 상관없이)
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(vpnServiceConnection)
     }
 
     private fun launchVPN() {
@@ -188,19 +195,17 @@ class VpnMainActivity : BaseActivity() {
                 val startReason = intent.getStringExtra(OpenVPNService.EXTRA_START_REASON)
                 val replace_running_vpn = true
 
-
-
                 // vpn 시작 요청
                 val startVPN: Intent = profileToConnect.getStartServiceIntent(applicationContext, startReason, replace_running_vpn)
-                Log.d("allinsafevpn", "startVPN intent : $startVPN")
+//                Log.d("allinsafevpn", "startVPN intent : $startVPN")
                 if (startVPN != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         applicationContext.startForegroundService(startVPN)
                     }else applicationContext.startService(startVPN)
                 }
                 val bindIntent = Intent(this, OpenVPNService::class.java)
+                bindIntent.setAction(OpenVPNService.START_SERVICE)
                 bindService(bindIntent, vpnServiceConnection, Context.BIND_AUTO_CREATE)
-
             }
         } else if (resultCode == RESULT_CANCELED) {
             // User does not want us to start, so we just vanish

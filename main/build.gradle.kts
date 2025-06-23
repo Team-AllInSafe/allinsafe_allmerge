@@ -214,7 +214,7 @@ dependencies {
     uiImplementation(libs.square.okhttp)
 
     // spoofing
-//    implementation(libs.androidx.core.ktx) // 중
+//    implementation(libs.androidx.core.ktx) // 중복
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

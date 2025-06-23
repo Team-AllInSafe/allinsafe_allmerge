@@ -5,6 +5,7 @@ package de.blinkt.openvpn.core;
 import de.blinkt.openvpn.core.IStatusCallbacks;
 import android.os.ParcelFileDescriptor;
 import de.blinkt.openvpn.core.TrafficHistory;
+import de.blinkt.openvpn.core.LogItem;
 
 
 interface IServiceStatus {

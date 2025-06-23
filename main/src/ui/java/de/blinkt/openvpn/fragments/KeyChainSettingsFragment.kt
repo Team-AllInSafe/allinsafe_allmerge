@@ -22,10 +22,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.VpnProfile
-import de.blinkt.openvpn.api.ExternalCertificateProvider
 import de.blinkt.openvpn.core.ExtAuthHelper
 import de.blinkt.openvpn.core.X509Utils
 import java.security.KeyFactory

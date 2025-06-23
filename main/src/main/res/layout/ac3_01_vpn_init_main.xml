@@ -16,35 +16,36 @@
             android:text="VPN"/>
     </LinearLayout>
     <TextView
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
         android:layout_weight="1"
         android:text="@string/vpn_offline_background"
         style="@style/text_background"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="id"
-        android:textColor="@color/ui_beige"
-        android:textSize="30dp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/ui_beige"
-        android:textSize="25sp"
-        android:id="@+id/vpnid"/>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="id"-->
+<!--        android:textColor="@color/ui_beige"-->
+<!--        android:textSize="30dp"/>-->
+<!--    <EditText-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/ui_beige"-->
+<!--        android:textSize="25sp"-->
+<!--        android:id="@+id/vpnid"/>-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="pw"
-        android:textColor="@color/ui_beige"
-        android:textSize="30dp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/ui_beige"
-        android:textSize="25sp"
-        android:id="@+id/vpnpw"/>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="pw"-->
+<!--        android:textColor="@color/ui_beige"-->
+<!--        android:textSize="30dp"/>-->
+<!--    <EditText-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/ui_beige"-->
+<!--        android:textSize="25sp"-->
+<!--        android:id="@+id/vpnpw"/>-->
     <TextView
         android:id="@+id/btn_vpn_start"
         android:text="vpn 기능 활성화하기"

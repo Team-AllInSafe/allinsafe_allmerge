@@ -24,7 +24,7 @@ import androidx.annotation.Nullable;
 
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Pair;
+import android.util.Log;
 
 import de.blinkt.openvpn.core.*;
 
@@ -847,6 +847,7 @@ public class VpnProfile implements Serializable, Cloneable {
     }
 
     public Intent getStartServiceIntent(Context context, String startReason, boolean replace_running_vpn) {
+        Log.d("allinsafevpn", "getStartServiceIntent is called");
         Intent intent = new Intent(context, OpenVPNService.class);
         intent.putExtra(EXTRA_PROFILEUUID, mUuid.toString());
         intent.putExtra(EXTRA_PROFILE_VERSION, mVersion);

@@ -6,7 +6,6 @@
 package de.blinkt.openvpn.views;
 
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;

@@ -46,6 +46,7 @@ public class ProfileManager {
     }
 
     private static VpnProfile get(String key) {
+        Log.d("allinsafevpn","[private ProfileManager.get]");
         if (tmpprofile != null && tmpprofile.getUUIDString().equals(key))
             return tmpprofile;
 
@@ -55,6 +56,7 @@ public class ProfileManager {
     }
 
     private synchronized static void checkInstance(Context context) {
+        Log.d("allinsafevpn","[checkInstance]");
         if (instance == null) {
             instance = new ProfileManager();
             ProfileEncryption.initMasterCryptAlias(context);
@@ -63,6 +65,7 @@ public class ProfileManager {
     }
 
     synchronized public static ProfileManager getInstance(Context context) {
+        Log.d("allinsafevpn","[getInstance]");
         checkInstance(context);
         return instance;
     }
@@ -78,6 +81,7 @@ public class ProfileManager {
      * Sets the profile that is connected (to connect if the service restarts)
      */
     public static void setConnectedVpnProfile(Context c, VpnProfile connectedProfile) {
+        Log.d("allinsafevpn","[setConnectedVpnProfile]");
         SharedPreferences prefs = Preferences.getDefaultSharedPreferences(c);
         Editor prefsedit = prefs.edit();
 
@@ -111,6 +115,7 @@ public class ProfileManager {
     }
 
     public static void saveProfile(Context context, VpnProfile profile) {
+        Log.d("allinsafevpn","[saveProfile]");
         SharedPreferences prefs = Preferences.getDefaultSharedPreferences(context);
         boolean preferEncryption = prefs.getBoolean("preferencryption", true);
         if (encryptionBroken)
@@ -192,8 +197,11 @@ public class ProfileManager {
     }
 
     public static VpnProfile get(Context context, String profileUUID, int version, int tries) {
+        Log.d("allinsafevpn","[public ProfileManager.get]");
         checkInstance(context);
         VpnProfile profile = get(profileUUID);
+//        Log.d("allinsafevpn", "uuid=" + profile.getUUID() + ", version=" + profile.mVersion);
+        Log.d("allinsafevpn","[public ProfileManager.get] profile is "+profile);
         int tried = 0;
         while ((profile == null || profile.mVersion < version) && (tried++ < tries)) {
             try {
@@ -258,6 +266,7 @@ public class ProfileManager {
     }
 
     public void saveProfileList(Context context) {
+        Log.d("allinsafevpn","saveProfileList");
         SharedPreferences sharedprefs = Preferences.getSharedPreferencesMulti(PREFS_NAME, context);
         Editor editor = sharedprefs.edit();
         editor.putStringSet("vpnlist", profiles.keySet());
@@ -304,6 +313,7 @@ public class ProfileManager {
     }
 
     private synchronized void loadVPNList(Context context) {
+        Log.d("allinsafevpn","[loadVPNList]");
         profiles = new HashMap<>();
         SharedPreferences listpref = Preferences.getSharedPreferencesMulti(PREFS_NAME, context);
         Set<String> vlist = listpref.getStringSet("vpnlist", null);
@@ -313,20 +323,23 @@ public class ProfileManager {
         // Always try to load the temporary profile
         vlist.add(TEMPORARY_PROFILE_FILENAME);
 
+        Log.d("allinsafevpn","[loadVPNList] vpnlist 길이: "+vlist.size());
+
+
+
         for (String vpnentry : vlist) {
             loadVpnEntry(context, vpnentry);
         }
     }
 
     private synchronized void loadVpnEntry(Context context, String vpnentry) {
+        Log.d("allinsafevpn","[loadVpnEntry]");
         ObjectInputStream vpnfile = null;
         try {
             FileInputStream vpInput;
             // 파일경로 생성. 파일이 있는지 없는지는 모름. 그냥 경로만 만든 것
             File encryptedPath = context.getFileStreamPath(vpnentry + ".cp");
             File encryptedPathOld = context.getFileStreamPath(vpnentry + ".cpold");
-//            Log.d("allinsafevpn","encryptedPath : "+encryptedPath);
-//            Log.d("allinsafevpn","encryptedPathOld : "+encryptedPathOld);
 
             if (encryptedPath.exists()) {
                 Log.d("allinsafevpn","encryptedPath exists : "+encryptedPath);

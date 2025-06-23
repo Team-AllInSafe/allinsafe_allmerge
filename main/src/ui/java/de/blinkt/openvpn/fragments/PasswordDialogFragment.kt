@@ -7,7 +7,6 @@ package de.blinkt.openvpn.core
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ComponentName
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle

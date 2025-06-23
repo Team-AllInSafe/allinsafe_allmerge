@@ -1,34 +1,38 @@
-<!--
-  ~ Copyright (c) 2012-2019 Arne Schwabe
-  ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--
+ This library wants SDK version 23 but we do runtime checks to not use it before
+        API 23
+    -->
+    <!-- ✅ 권한 추가 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-feature
-            android:name="android.software.leanback"
-            android:required="false" />
-    <uses-feature
-            android:name="android.hardware.touchscreen"
-            android:required="false" />
 
-    <!-- This library wants SDK version 23 but we do runtime checks to not use it before
-        API 23 -->
-    <uses-sdk tools:overrideLibrary="androidx.security"/>
-<!--    <application android:banner="@mipmap/banner_tv"> 기존의 배너를 제거하였음-->
+    <uses-sdk tools:overrideLibrary="androidx.security" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
     <application>
+        <!--전체 메인 화면-->
         <activity
-                android:exported="true"
-                android:name=".activities.MainActivity"
-                tools:ignore="ExportedActivity">
+            android:name=".allinsafemain.UnitedMainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="de.blinkt.openvpn.activities.VpnMainActivity"
+            android:exported="true"
+            tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
@@ -40,51 +44,75 @@
                 <data android:host="import-profile" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InternalWebView" />
+        <!--gtp 코드-->
 <!--        <activity-->
-<!--                android:name=".activities.CredentialsPopup"-->
-<!--                android:theme="@style/blinkt.dialog" />-->
-
-
+<!--            android:name=".allinsafemain.UnitedMainActivity"-->
+<!--            android:exported="false" />-->
 <!--        <activity-->
-<!--                android:name=".activities.LogWindow"-->
-<!--                android:allowTaskReparenting="true"-->
-<!--                android:label="@string/openvpn_log"-->
-<!--                android:launchMode="singleTask" />-->
+<!--            android:name="de.blinkt.openvpn.activities.VpnMainActivity"-->
+<!--            android:exported="true"-->
+<!--            tools:ignore="ExportedActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />-->
+<!--            </intent-filter>-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                <data android:scheme="openvpn" />-->
+<!--                <data android:host="import-profile" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+        <activity android:name="de.blinkt.openvpn.activities.InternalWebView" /> <!-- <activity -->
+        <!-- android:name=".activities.CredentialsPopup" -->
+        <!-- android:theme="@style/blinkt.dialog" /> -->
+        <!-- <activity -->
+        <!-- android:name=".activities.LogWindow" -->
+        <!-- android:allowTaskReparenting="true" -->
+        <!-- android:label="@string/openvpn_log" -->
+        <!-- android:launchMode="singleTask" /> -->
         <activity
-                android:name=".activities.VPNPreferences"
-                android:exported="false"
-                android:windowSoftInputMode="stateHidden" />
+            android:name="de.blinkt.openvpn.activities.VPNPreferences"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name="de.blinkt.openvpn.activities.FileSelect" />
 
-        <activity android:name=".activities.FileSelect" />
         <service
-                android:exported="true"
-                android:name=".OpenVPNTileService"
-                android:icon="@drawable/ic_quick"
-                android:label="@string/qs_title"
-                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-                android:value="true">
+            android:name=".OpenVPNTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_quick"
+            android:label="@string/qs_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:value="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.service.quicksettings.ACTIVE_TILE"
-                    android:value="false" />
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="false" />
         </service>
-        <!--//25.06.22 처내기 주석-->
+
         <activity
-                android:name=".activities.ConfigConverter"
-                android:exported="true"
-                android:excludeFromRecents="true"
-                android:label="Convert Config File"
-                android:taskAffinity=".ConfigConverter"
-                android:uiOptions="splitActionBarWhenNarrow"
-                tools:ignore="ExportedActivity">
+            android:name="de.blinkt.openvpn.activities.ConfigConverter"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="Convert Config File"
+            android:taskAffinity=".ConfigConverter"
+            android:uiOptions="splitActionBarWhenNarrow"
+            tools:ignore="ExportedActivity">
             <intent-filter
-                    android:label="@string/import_config"
-                    tools:ignore="AppLinkUrlError">
+                android:label="@string/import_config"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -93,8 +121,8 @@
                 <data android:mimeType="application/x-openvpn-profile" />
             </intent-filter>
             <intent-filter
-                    android:label="@string/import_config"
-                    tools:ignore="AppLinkUrlError">
+                android:label="@string/import_config"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -121,10 +149,10 @@
             </intent-filter>
         </activity> <!-- https://commonsware.com/blog/2019/03/27/death-external-storage-stay-away-files.html -->
         <activity-alias
-                android:exported="true"
-                android:name=".activities.ConfigConverterFile"
-                android:enabled="@bool/supportFileScheme"
-                android:targetActivity=".activities.ConfigConverter">
+            android:name=".activities.ConfigConverterFile"
+            android:enabled="@bool/supportFileScheme"
+            android:exported="true"
+            android:targetActivity="de.blinkt.openvpn.activities.ConfigConverter">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -140,38 +168,34 @@
                 <data android:pathPattern=".*..*.ovpn" />
                 <data android:pathPattern=".*.ovpn" />
             </intent-filter>
-        </activity-alias>
-
-<!--        <activity-->
-<!--                android:exported="true"-->
-<!--                android:name=".activities.CreateShortcuts"-->
-<!--                android:excludeFromRecents="true"-->
-<!--                android:label="@string/vpn_shortcut"-->
-<!--                android:taskAffinity=".CreateShortcuts"-->
-<!--                android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.CREATE_SHORTCUT" />-->
-
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
+        </activity-alias> <!-- <activity -->
+        <!-- android:exported="true" -->
+        <!-- android:name=".activities.CreateShortcuts" -->
+        <!-- android:excludeFromRecents="true" -->
+        <!-- android:label="@string/vpn_shortcut" -->
+        <!-- android:taskAffinity=".CreateShortcuts" -->
+        <!-- android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.CREATE_SHORTCUT" /> -->
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
-                android:exported="false"
-                android:name=".activities.OpenSSLSpeed"
-                android:label="@string/title_activity_open_sslspeed"
-                android:parentActivityName=".activities.MainActivity">
+            android:name="de.blinkt.openvpn.activities.OpenSSLSpeed"
+            android:exported="false"
+            android:label="@string/title_activity_open_sslspeed"
+            android:parentActivityName="de.blinkt.openvpn.activities.VpnMainActivity">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="de.blinkt.openvpn.activities.MainActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.blinkt.openvpn.activities.VpnMainActivity" />
         </activity>
 
-
         <provider
-                android:name=".FileProvider"
-                android:authorities="${applicationId}.FileProvider"
-                android:exported="true"
-                android:grantUriPermissions="true"
-                tools:ignore="ExportedContentProvider" />
+            android:name=".FileProvider"
+            android:authorities="${applicationId}.FileProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            tools:ignore="ExportedContentProvider" />
     </application>
+
 </manifest>

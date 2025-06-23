@@ -179,6 +179,10 @@ dependencies {
     // https://maven.google.com/web/index.html
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.android.view.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
 
     uiImplementation(libs.android.view.material)
     uiImplementation(libs.androidx.activity)

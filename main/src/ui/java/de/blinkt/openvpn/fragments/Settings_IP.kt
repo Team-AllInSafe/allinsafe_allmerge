@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.*
 import de.blinkt.openvpn.R
-import de.blinkt.openvpn.fragments.OpenVpnPreferencesFragment
 import de.blinkt.openvpn.VpnProfile
 
 class Settings_IP : OpenVpnPreferencesFragment(), Preference.OnPreferenceChangeListener {

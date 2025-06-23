@@ -17,7 +17,7 @@
 
 
     <application
-        android:name=".core.ICSOpenVPNApplication"
+        android:name="de.blinkt.openvpn.core.ICSOpenVPNApplication"
         android:allowBackup="true"
         android:appCategory="productivity"
         android:icon="@mipmap/ic_launcher"
@@ -31,7 +31,7 @@
             android:resource="@xml/app_restrictions" />
 
         <activity
-            android:name=".activities.DisconnectVPN"
+            android:name="de.blinkt.openvpn.activities.DisconnectVPN"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
@@ -40,7 +40,7 @@
 
 
         <service
-            android:name=".core.OpenVPNService"
+            android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:exported="true"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:foregroundServiceType="specialUse"
@@ -61,7 +61,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".core.OpenVPNStatusService"
+            android:name="de.blinkt.openvpn.core.OpenVPNStatusService"
             android:exported="false"
             android:process=":openvpn" />
 
@@ -86,7 +86,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".core.keepVPNAlive"
+        <service android:name="de.blinkt.openvpn.core.keepVPNAlive"
                 android:process=":openvpn"
                 android:exported="true"
                 android:permission="android.permission.BIND_JOB_SERVICE"/>

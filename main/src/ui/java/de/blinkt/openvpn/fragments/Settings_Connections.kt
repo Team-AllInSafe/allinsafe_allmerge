@@ -10,8 +10,6 @@ import android.view.*
 import android.widget.Checkable
 import android.widget.ImageButton
 import android.widget.TextView
-import de.blinkt.openvpn.fragments.Settings_Fragment
-import de.blinkt.openvpn.fragments.ConnectionsAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.blinkt.openvpn.R

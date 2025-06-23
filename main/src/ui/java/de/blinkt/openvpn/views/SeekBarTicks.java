@@ -10,7 +10,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.widget.SeekBar;
 
 import androidx.appcompat.widget.AppCompatSeekBar;
 

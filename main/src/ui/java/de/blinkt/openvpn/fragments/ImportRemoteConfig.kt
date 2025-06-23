@@ -20,11 +20,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import de.blinkt.openvpn.R
-//import de.blinkt.openvpn.activities.ConfigConverter
+import de.blinkt.openvpn.activities.ConfigConverter
 import de.blinkt.openvpn.core.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +31,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.Handshake.Companion.handshake
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.internal.tls.OkHostnameVerifier
 import java.io.IOException
 import java.security.MessageDigest
@@ -344,15 +342,14 @@ class ImportRemoteConfig : DialogFragment() {
                         showCRDialog(profile!!)
                     }
                 } else if (response.isSuccessful) {
-                      //25.06.22 처내기 주석
-//                    withContext(Dispatchers.Main) {
-//                        pleaseWait?.dismiss()
-//                        val startImport = Intent(activity, ConfigConverter::class.java)
-//                        startImport.action = ConfigConverter.IMPORT_PROFILE_DATA
-//                        startImport.putExtra(Intent.EXTRA_TEXT, profile)
-//                        startActivity(startImport)
-//                        dismiss()
-//                    }
+                    withContext(Dispatchers.Main) {
+                        pleaseWait?.dismiss()
+                        val startImport = Intent(activity, ConfigConverter::class.java)
+                        startImport.action = ConfigConverter.IMPORT_PROFILE_DATA
+                        startImport.putExtra(Intent.EXTRA_TEXT, profile)
+                        startActivity(startImport)
+                        dismiss()
+                    }
                 } else {
                     throw Exception("Invalid Response from server: \n${response.code} ${response.message} \n\n ${profile}")
                 }

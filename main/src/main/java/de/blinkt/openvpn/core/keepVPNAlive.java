@@ -12,7 +12,6 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.VpnService;
 import android.os.Build;
 import android.os.PersistableBundle;
 

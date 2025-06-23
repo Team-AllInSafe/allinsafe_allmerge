@@ -6,7 +6,6 @@ package de.blinkt.openvpn.core
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKey
 import java.io.File

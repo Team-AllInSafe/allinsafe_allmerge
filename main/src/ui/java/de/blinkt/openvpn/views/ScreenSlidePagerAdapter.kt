@@ -7,18 +7,11 @@ package de.blinkt.openvpn.views
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import de.blinkt.openvpn.R
 import java.util.Vector
 
 /**

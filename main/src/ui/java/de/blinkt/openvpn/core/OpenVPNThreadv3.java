@@ -19,12 +19,10 @@ import net.openvpn.ovpn3.ClientAPI_TransportStats;
 import net.openvpn.ovpn3.DnsAddress;
 import net.openvpn.ovpn3.DnsDomain;
 import net.openvpn.ovpn3.DnsOptions;
-import net.openvpn.ovpn3.DnsOptions_ServersMap;
 import net.openvpn.ovpn3.DnsServer;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import de.blinkt.openvpn.R;

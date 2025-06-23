@@ -8,17 +8,11 @@ package de.blinkt.openvpn.core;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.*;
-import android.os.Build;
 import android.provider.Settings;
-import android.text.TextUtils;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Vector;
-
-import de.blinkt.openvpn.R;
 
 public class NetworkUtils {
 

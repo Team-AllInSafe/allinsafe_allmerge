@@ -17,7 +17,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.VpnProfile
 import org.json.JSONObject

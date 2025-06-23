@@ -14,13 +14,18 @@ import android.preference.PreferenceActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.VpnProfile
 import de.blinkt.openvpn.core.ProfileManager
 import de.blinkt.openvpn.core.VpnStatus
+import de.blinkt.openvpn.fragments.Settings_Allowed_Apps
+import de.blinkt.openvpn.fragments.Settings_Authentication
+import de.blinkt.openvpn.fragments.Settings_Basic
+import de.blinkt.openvpn.fragments.Settings_Connections
+import de.blinkt.openvpn.fragments.Settings_IP
+import de.blinkt.openvpn.fragments.Settings_Obscure
+import de.blinkt.openvpn.fragments.Settings_Routing
+import de.blinkt.openvpn.fragments.ShowConfigFragment
 //import de.blinkt.openvpn.fragments.Settings_Allowed_Apps
 //import de.blinkt.openvpn.fragments.Settings_Authentication
 //import de.blinkt.openvpn.fragments.Settings_Basic
@@ -40,10 +45,10 @@ class VPNPreferences : BaseActivity(), VpnStatus.ProfileNotifyListener {
 //    private lateinit var mPagerAdapter: ScreenSlidePagerAdapter
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-//    protected fun isValidFragment(fragmentName: String): Boolean {
-//        for (c in validFragments) if (c.name == fragmentName) return true
-//        return false
-//    }
+    protected fun isValidFragment(fragmentName: String): Boolean {
+        for (c in validFragments) if (c.name == fragmentName) return true
+        return false
+    }
 
     override fun onStop() {
         super.onStop()
@@ -202,14 +207,14 @@ class VPNPreferences : BaseActivity(), VpnStatus.ProfileNotifyListener {
 
     companion object {
         val validFragments: Array<Class<*>> = arrayOf(
-//            Settings_Authentication::class.java,
-//            Settings_Basic::class.java,
-//            Settings_IP::class.java,
-//            Settings_Obscure::class.java,
-//            Settings_Routing::class.java,
-//            ShowConfigFragment::class.java,
-//            Settings_Connections::class.java,
-//            Settings_Allowed_Apps::class.java,
+            Settings_Authentication::class.java,
+            Settings_Basic::class.java,
+            Settings_IP::class.java,
+            Settings_Obscure::class.java,
+            Settings_Routing::class.java,
+            ShowConfigFragment::class.java,
+            Settings_Connections::class.java,
+            Settings_Allowed_Apps::class.java,
         )
     }
 

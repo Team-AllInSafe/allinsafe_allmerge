@@ -50,6 +50,7 @@ class VpnMainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("allinsafevpn","[VpnMainActivity.onCreate] is called")
         super.onCreate(savedInstanceState)
         //기존 ui
         //binding=MainActivityBinding.inflate(layoutInflater)
@@ -74,7 +75,7 @@ class VpnMainActivity : BaseActivity() {
 
             lateinit var profile: VpnProfile
 
-            if (isAleadyCreated) {
+            if (!isAleadyCreated) {
                 profile = parser.convertProfile()
                 if (profile.uuid == null) {
                     profile.uuid = UUID.randomUUID()
@@ -82,6 +83,10 @@ class VpnMainActivity : BaseActivity() {
                 profile.mName = "MyVPN"
                              profile.mUsername = id
                 profile.mPassword = pw
+
+                // 최근 사용한 vpn 프로필로 저장
+                ProfileManager.setConnectedVpnProfile(applicationContext,profile)
+
                 isAleadyCreated=true
             } else {
                 profile = ProfileManager.getLastConnectedProfile(applicationContext)
@@ -183,8 +188,7 @@ class VpnMainActivity : BaseActivity() {
                 val startReason = intent.getStringExtra(OpenVPNService.EXTRA_START_REASON)
                 val replace_running_vpn = true
 
-                // 최근 사용한 vpn 프로필로 저장
-                ProfileManager.setConnectedVpnProfile(this,profileToConnect)
+
 
                 // vpn 시작 요청
                 val startVPN: Intent = profileToConnect.getStartServiceIntent(applicationContext, startReason, replace_running_vpn)

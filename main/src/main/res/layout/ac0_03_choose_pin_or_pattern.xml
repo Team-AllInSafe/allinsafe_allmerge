@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증 방법 선택"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="48dp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="설정"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/btn_select_pattern"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="패턴 설정하기"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@android:color/holo_blue_bright" />
+
+    <Button
+        android:id="@+id/btn_select_pin"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="핀 설정하기"
+        android:textSize="16sp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@android:color/holo_green_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="인증"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/btn_verify_pattern"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="패턴으로 인증하기"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@android:color/holo_purple" />
+
+    <Button
+        android:id="@+id/btn_verify_pin"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="핀으로 인증하기"
+        android:textSize="16sp"
+        android:backgroundTint="@android:color/holo_orange_light" />
+
+    <Button
+        android:id="@+id/btn_verify_something"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="핀/패턴중 설정된거로 인증하기"
+        android:textSize="16sp"
+        android:backgroundTint="@color/ui_red" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="로그아웃 및 종료"
+        android:textSize="16sp"
+        android:backgroundTint="@color/ui_red" />
+</LinearLayout>

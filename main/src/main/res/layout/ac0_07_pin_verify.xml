@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/top_textview"
+            android:layout_marginLeft="50dp"
+            android:text="앱 잠금"/>
+    </LinearLayout>
+    <TextView
+        android:layout_height="130dp"
+        android:text="@string/applock_verify_pin"
+        style="@style/text_background"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:id="@+id/et_input_pin"
+        android:layout_width="360dp"
+        android:layout_height="60dp"
+        android:background="@drawable/btn_round_blue"
+        android:layout_marginTop="45dp"
+        android:layout_gravity="center"
+        android:hint="6자리 이상의 pin 번호"
+        android:textColorHint="@color/ui_beige"
+        android:paddingLeft="20dp"
+        android:textColor="@color/ui_beige"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/btn_bottom_finish"
+        style="@style/btn_bottom_finish"
+        android:text="pin 인증"/>
+</LinearLayout>

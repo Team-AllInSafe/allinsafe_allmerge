@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="32dp"
+    android:gravity="center"
+    android:background="#FFFFFF">
+
+    <!-- 안내 문구 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="새로운 PIN을 입력하세요"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <!-- PIN 입력 필드 -->
+    <EditText
+        android:id="@+id/et_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="PIN 입력"
+        android:inputType="numberPassword"
+        android:minHeight="48dp"
+        android:maxLength="6"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:importantForAutofill="no" />
+
+    <!-- PIN 확인 필드 -->
+    <EditText
+        android:id="@+id/et_confirm_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="PIN 확인"
+        android:inputType="numberPassword"
+        android:minHeight="48dp"
+        android:maxLength="6"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:importantForAutofill="no"
+        android:layout_marginTop="16dp" />
+
+    <!-- PIN 설정 버튼 -->
+    <Button
+        android:id="@+id/btn_set_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="설정"
+        android:layout_marginTop="24dp"
+        android:textAllCaps="false" />
+</LinearLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ac1_applock.Ac1_01_applock_init_main"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="켜기"
+        android:textSize="20dp"
+        android:id="@+id/onoffbtn"/>
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="잠금 앱 변경"
+        android:textSize="20dp"
+        android:id="@+id/editlockappsbtn"/>
+
+
+</LinearLayout>

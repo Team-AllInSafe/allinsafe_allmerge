@@ -38,7 +38,7 @@ class Ac0_00_main_init_main : ComponentActivity() {
             startActivity(intent)
         }
         binding.bluetoothManageButton.setOnClickListener {
-            Toast.makeText(this,"bluetoothManagement start", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this,"bluetoothManagement start", Toast.LENGTH_SHORT).show()
             // TODO: btmanage메인 액티비티 이동
             val intent=Intent(this@Ac0_00_main_init_main, Ac2_01_bluetooth_main::class.java)
             startActivity(intent)

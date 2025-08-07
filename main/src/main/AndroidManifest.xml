@@ -17,6 +17,17 @@
          this app needs the list the app in the allow/deny apps over the VPN -->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
             tools:ignore="QueryAllPackagesPermission" />
+    <!--25.08.07 앱잠금,블루투스,화면잠금 권한-->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="neverForLocation" />
 
 
     <application

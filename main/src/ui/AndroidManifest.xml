@@ -23,12 +23,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 <!--          AllinsafeMainActivity에서 AppCompat~를 상속 근데, 테마가 Material 어쩌구라  android:theme="@style/Theme.AllinSafe">-->
 
-            <!-- 25.08.02 로그인 화면을 완전 처음으로 세팅-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
 
         <!--spoofing-->
@@ -67,12 +61,6 @@
         </activity>
 
         <activity android:name="de.blinkt.openvpn.activities.InternalWebView" />
-        <!--25.08.02 필요없는거 삭제 시도1-->
-<!--        <activity-->
-<!--            android:name="de.blinkt.openvpn.activities.VPNPreferences"-->
-<!--            android:exported="false"-->
-<!--            android:windowSoftInputMode="stateHidden" />-->
-<!--        <activity android:name="de.blinkt.openvpn.activities.FileSelect" />-->
 
         <!--spoofing-->
         <activity android:name=".Ac5_02_spoofingdetect_process"
@@ -100,83 +88,7 @@
                 android:value="false" />
         </service>
 
-        <!--25.08.02 필요없는거 삭제 시도1-->
-<!--        <activity-->
-<!--            android:name="de.blinkt.openvpn.activities.ConfigConverter"-->
-<!--            android:excludeFromRecents="true"-->
-<!--            android:exported="true"-->
-<!--            android:label="Convert Config File"-->
-<!--            android:taskAffinity=".ConfigConverter"-->
-<!--            android:uiOptions="splitActionBarWhenNarrow"-->
-<!--            tools:ignore="ExportedActivity">-->
-<!--            <intent-filter-->
-<!--                android:label="@string/import_config"-->
-<!--                tools:ignore="AppLinkUrlError">-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-
-<!--                <data android:mimeType="application/x-openvpn-profile" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter-->
-<!--                android:label="@string/import_config"-->
-<!--                tools:ignore="AppLinkUrlError">-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-
-<!--                <data android:mimeType="application/ovpn" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter android:label="@string/import_config">-->
-
-<!--                &lt;!&ndash; http://stackoverflow.com/questions/7f030832/associating-certain-file-extension-to-my-android-application/7102838#7102838 &ndash;&gt;-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-
-<!--                <data android:mimeType="*/*" />-->
-<!--                <data android:scheme="content" />-->
-<!--                <data android:host="*" />-->
-<!--                <data android:pathPattern=".*..*..*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*.ovpn" />-->
-<!--            </intent-filter>-->
-<!--        </activity> &lt;!&ndash; https://commonsware.com/blog/2019/03/27/death-external-storage-stay-away-files.html &ndash;&gt;-->
-<!--        <activity-alias-->
-<!--            android:name=".activities.ConfigConverterFile"-->
-<!--            android:enabled="@bool/supportFileScheme"-->
-<!--            android:exported="true"-->
-<!--            android:targetActivity="de.blinkt.openvpn.activities.ConfigConverter">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-
-<!--                <data android:mimeType="*/*" />-->
-<!--                <data android:scheme="file" />-->
-<!--                <data android:host="*" />-->
-<!--                <data android:pathPattern=".*..*..*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*..*.ovpn" />-->
-<!--                <data android:pathPattern=".*.ovpn" />-->
-<!--            </intent-filter>-->
-<!--        </activity-alias>-->
-<!--        <activity-->
-<!--            android:name="de.blinkt.openvpn.activities.OpenSSLSpeed"-->
-<!--            android:exported="false"-->
-<!--            android:label="@string/title_activity_open_sslspeed"-->
-<!--            android:parentActivityName="de.blinkt.openvpn.activities.VpnMainActivity">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value="de.blinkt.openvpn.activities.VpnMainActivity" />-->
-<!--        </activity>-->
         <provider
             android:name=".FileProvider"
             android:authorities="${applicationId}.FileProvider"
@@ -228,6 +140,15 @@
         <activity
             android:name=".ac4_screenlock.Ac4_01_screenlock_main"
             android:exported="false" />
+        <activity
+            android:name=".ac2_btmanage.Ac2_02_bluetooth_trust_device"
+            android:exported="false" />
+        <activity
+            android:name=".ac2_btmanage.BluetoothMainActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ac2_btmanage.Ac2_01_bluetooth_main"
+            android:exported="false"/>
         <activity
             android:name=".ac0_login.Ac0_01_login"
             android:exported="true">

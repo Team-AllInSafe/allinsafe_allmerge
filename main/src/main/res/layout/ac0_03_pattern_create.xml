@@ -35,7 +35,7 @@
         android:layout_marginBottom="30dp"
         android:textAlignment="center" />
 
-    <com.naver.appLock.ac0_patternpin.PatternLockView
+    <de.blinkt.openvpn.ac0_patternpin.PatternLockView
         android:id="@+id/patternView"
         android:layout_width="350dp"
         android:layout_height="350dp"

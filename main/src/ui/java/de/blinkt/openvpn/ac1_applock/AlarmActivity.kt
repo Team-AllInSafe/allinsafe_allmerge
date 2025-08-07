@@ -1,11 +1,12 @@
-package com.naver.appLock.ac1_applock
+package de.blinkt.openvpn.ac1_applock
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-import com.naver.appLock.databinding.TempActivityAlarmBinding
+import de.blinkt.openvpn.databinding.TempActivityAlarmBinding
 
-class AlarmActivity : AppCompatActivity() {
+class AlarmActivity : ComponentActivity() {
     // 앱을 다시 켰을 때, 설정화면이 아닌 잠금 걸었던 락 페이지가 나오는 것을 막기 위한 플래그
     // 락 페이지 떴을 때 뒤로 갔다면, 다시 우리 앱이 켜졌을 때 mainactivity로 가게끔
     private var wasInBackground = false

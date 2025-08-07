@@ -1,4 +1,4 @@
-package com.naver.appLock.ac2_btmanage
+package de.blinkt.openvpn.ac2_btmanage
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter

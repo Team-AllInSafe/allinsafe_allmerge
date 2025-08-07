@@ -1,8 +1,8 @@
-package com.naver.appLock.ac4_screenlock.util
+package de.blinkt.openvpn.ac4_screenlock.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.naver.appLock.ac4_screenlock.pinlock.PinStorageManager
+import de.blinkt.openvpn.ac4_screenlock.pinlock.PinStorageManager
 
 object TwoFactorAuthManager {
     private const val PREF_NAME = "TwoFactorAuthPrefs"

@@ -1,11 +1,11 @@
-package com.naver.appLock.ac4_screenlock.pinlock
+package de.blinkt.openvpn.ac4_screenlock.pinlock
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.naver.appLock.databinding.ActivityPinSetupBinding
+import de.blinkt.openvpn.databinding.ActivityPinSetupBinding
 
 
 class PinSetupActivity : AppCompatActivity() {

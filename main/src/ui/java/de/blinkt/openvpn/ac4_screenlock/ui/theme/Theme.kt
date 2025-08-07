@@ -1,4 +1,4 @@
-//package com.naver.appLock.ac4_screenlock.ui.theme
+//package de.blinkt.openvpn.ac4_screenlock.ui.theme
 //
 //import android.app.Activity
 //import android.os.Build

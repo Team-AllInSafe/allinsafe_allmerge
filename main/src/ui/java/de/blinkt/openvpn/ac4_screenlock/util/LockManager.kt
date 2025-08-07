@@ -1,10 +1,10 @@
-package com.naver.appLock.ac4_screenlock.util
+package de.blinkt.openvpn.ac4_screenlock.util
 
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.widget.Toast
-import com.naver.appLock.ac4_screenlock.MyDeviceAdminReceiver
+import de.blinkt.openvpn.ac4_screenlock.MyDeviceAdminReceiver
 
 object LockManager {
 

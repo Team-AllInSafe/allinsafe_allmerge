@@ -1,4 +1,4 @@
-package com.naver.appLock.ac0_main
+package de.blinkt.openvpn.ac0_main
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.naver.appLock.R
-import com.naver.appLock.ac0_patternpin.Ac0_04_pattern_setup
-import com.naver.appLock.ac0_patternpin.Ac0_05_pattern_verify
-import com.naver.appLock.ac0_patternpin.Ac0_06_pin_setup
-import com.naver.appLock.ac0_patternpin.Ac0_08_pinpattern_forwarding
-import com.naver.appLock.databinding.Ac009UserInfoBinding
+import de.blinkt.openvpn.R
+import de.blinkt.openvpn.ac0_patternpin.Ac0_04_pattern_setup
+import de.blinkt.openvpn.ac0_patternpin.Ac0_05_pattern_verify
+import de.blinkt.openvpn.ac0_patternpin.Ac0_06_pin_setup
+import de.blinkt.openvpn.ac0_patternpin.Ac0_08_pinpattern_forwarding
+import de.blinkt.openvpn.databinding.Ac009UserInfoBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 

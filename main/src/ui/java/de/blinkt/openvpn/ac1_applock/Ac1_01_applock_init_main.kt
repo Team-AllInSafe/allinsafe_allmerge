@@ -1,4 +1,4 @@
-package com.naver.appLock.ac1_applock
+package de.blinkt.openvpn.ac1_applock
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.TargetApi
@@ -8,12 +8,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.naver.appLock.databinding.Ac101ApplockMainBinding
-import com.naver.appLock.databinding.ActivityMainBinding
+import de.blinkt.openvpn.databinding.Ac101ApplockMainBinding
+import de.blinkt.openvpn.databinding.ActivityMainBinding
 
-class Ac1_01_applock_init_main : AppCompatActivity() { @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private lateinit var binding: Ac101ApplockMainBinding
 
     // binding 최소 api 가 33 이라며 오류 뜨길래 TargetApi 추가

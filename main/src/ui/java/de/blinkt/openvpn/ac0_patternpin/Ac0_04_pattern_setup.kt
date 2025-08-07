@@ -1,4 +1,4 @@
-package com.naver.appLock.ac0_patternpin
+package de.blinkt.openvpn.ac0_patternpin
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.naver.appLock.databinding.Ac003PatternCreateBinding
+import de.blinkt.openvpn.databinding.Ac003PatternCreateBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

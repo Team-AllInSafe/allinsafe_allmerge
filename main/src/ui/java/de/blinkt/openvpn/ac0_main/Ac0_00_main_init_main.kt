@@ -1,4 +1,4 @@
-package com.naver.appLock.ac0_main
+package de.blinkt.openvpn.ac0_main
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.naver.appLock.R
-import com.naver.appLock.ac0_login.Ac0_01_login
-import com.naver.appLock.ac1_applock.Ac1_01_applock_init_main
-import com.naver.appLock.ac2_btmanage.Ac2_01_bluetooth_main
-import com.naver.appLock.ac4_screenlock.Ac4_01_screenlock_main
-import com.naver.appLock.databinding.Ac000MainInitMainBinding
+import de.blinkt.openvpn.R
+import de.blinkt.openvpn.SpoofingMainActivity
+import de.blinkt.openvpn.ac0_login.Ac0_01_login
+import de.blinkt.openvpn.ac1_applock.Ac1_01_applock_init_main
+import de.blinkt.openvpn.ac2_btmanage.Ac2_01_bluetooth_main
+import de.blinkt.openvpn.ac4_screenlock.Ac4_01_screenlock_main
+import de.blinkt.openvpn.activities.VpnMainActivity
+import de.blinkt.openvpn.databinding.Ac000MainInitMainBinding
 
 class Ac0_00_main_init_main : ComponentActivity() {
     lateinit var binding: Ac000MainInitMainBinding
@@ -23,8 +25,9 @@ class Ac0_00_main_init_main : ComponentActivity() {
         setContentView(binding.root)
 
         binding.vpnButton.setOnClickListener{
-            Toast.makeText(this,"vpn start", Toast.LENGTH_SHORT).show()
-            // TODO: vpn메인 액티비티 이동
+//            Toast.makeText(this,"vpn start", Toast.LENGTH_SHORT).show()
+            val intent= Intent(this, VpnMainActivity::class.java)
+            startActivity(intent)
         }
         binding.appLockButton.setOnClickListener {
             val intent= Intent(this, Ac1_01_applock_init_main::class.java)
@@ -46,7 +49,9 @@ class Ac0_00_main_init_main : ComponentActivity() {
             startActivity(intent)
         }
         binding.spoofingDetectButton.setOnClickListener {
-            Toast.makeText(this,"spoofingDetect start", Toast.LENGTH_SHORT).show()
+            val intent= Intent(this, SpoofingMainActivity::class.java)
+            startActivity(intent)
+//            Toast.makeText(this,"spoofingDetect start", Toast.LENGTH_SHORT).show()
             // TODO: 스푸핑 메인 액티비티 이동
         }
     }

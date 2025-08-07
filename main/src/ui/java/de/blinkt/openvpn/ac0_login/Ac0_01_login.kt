@@ -1,13 +1,13 @@
-package com.naver.appLock.ac0_login
+package de.blinkt.openvpn.ac0_login
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.naver.appLock.ac0_main.Ac0_00_main_init_main
-import com.naver.appLock.ac1_applock.Ac1_01_applock_init_main
-import com.naver.appLock.databinding.Ac001LoginBinding
+import de.blinkt.openvpn.ac0_main.Ac0_00_main_init_main
+import de.blinkt.openvpn.ac1_applock.Ac1_01_applock_init_main
+import de.blinkt.openvpn.databinding.Ac001LoginBinding
 
 class Ac0_01_login : ComponentActivity() {
     private lateinit var auth: FirebaseAuth

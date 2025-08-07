@@ -1,4 +1,4 @@
-package com.naver.appLock.ac0_patternpin
+package de.blinkt.openvpn.ac0_patternpin
 
 import android.content.Intent
 import android.os.Bundle

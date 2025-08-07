@@ -1,4 +1,4 @@
-package com.naver.appLock.ac1_applock
+package de.blinkt.openvpn.ac1_applock
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -10,12 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
-import com.naver.appLock.ac1_applock.AppLockAccessibilityService
-import com.naver.appLock.databinding.Ac102ActivityEditLockAppBinding
-import com.naver.appLock.databinding.Ac103AppListItemBinding
+import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
+import de.blinkt.openvpn.databinding.Ac102ActivityEditLockAppBinding
+import de.blinkt.openvpn.databinding.Ac103AppListItemBinding
 
-class EditLockAppActivity : AppCompatActivity() {
+class EditLockAppActivity : ComponentActivity() {
     private lateinit var binding: Ac102ActivityEditLockAppBinding
     data class AppInfo(
         val packageName: String,

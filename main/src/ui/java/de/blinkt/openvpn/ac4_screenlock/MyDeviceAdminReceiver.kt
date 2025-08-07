@@ -1,7 +1,7 @@
 //조건2:잠금 해제 실패 횟수 확인을 기능을 위한 리시버.
 //받아오는 관리자 권한 역시 횟수 확인을 위한 것이다.
 
-package com.naver.appLock.ac4_screenlock
+package de.blinkt.openvpn.ac4_screenlock
 
 import android.app.admin.DeviceAdminReceiver
 import android.content.ComponentName
@@ -9,9 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.naver.appLock.ac4_screenlock.util.LockLogManager
-import com.naver.appLock.ac4_screenlock.util.LockManager
-import com.naver.appLock.ac4_screenlock.util.LockReasonManager
+import de.blinkt.openvpn.ac4_screenlock.util.LockLogManager
+import de.blinkt.openvpn.ac4_screenlock.util.LockManager
+import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
 
 class MyDeviceAdminReceiver : DeviceAdminReceiver() {
 

@@ -1,11 +1,11 @@
-package com.naver.appLock.ac1_applock
+package de.blinkt.openvpn.ac1_applock
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import com.naver.appLock.ac0_patternpin.Ac0_08_pinpattern_forwarding
+import de.blinkt.openvpn.ac0_patternpin.Ac0_08_pinpattern_forwarding
 
 class AppLockAccessibilityService : AccessibilityService() {
     companion object {

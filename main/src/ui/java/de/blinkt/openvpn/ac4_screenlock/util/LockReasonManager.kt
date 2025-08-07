@@ -1,4 +1,4 @@
-package com.naver.appLock.ac4_screenlock.util
+package de.blinkt.openvpn.ac4_screenlock.util
 
 import android.content.Context
 import android.content.SharedPreferences

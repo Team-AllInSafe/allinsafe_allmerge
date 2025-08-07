@@ -1,4 +1,4 @@
-package com.naver.appLock.ac4_screenlock
+package de.blinkt.openvpn.ac4_screenlock
 
 
 import android.app.admin.DevicePolicyManager
@@ -9,15 +9,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.naver.appLock.ac4_screenlock.pinlock.PinLockActivity
-import com.naver.appLock.ac4_screenlock.pinlock.PinSetupActivity
-import com.naver.appLock.ac4_screenlock.pinlock.PinStorageManager
-import com.naver.appLock.ac4_screenlock.util.LockReasonManager
-import com.naver.appLock.ac4_screenlock.util.TwoFactorAuthManager
+import de.blinkt.openvpn.ac4_screenlock.pinlock.PinLockActivity
+import de.blinkt.openvpn.ac4_screenlock.pinlock.PinSetupActivity
+import de.blinkt.openvpn.ac4_screenlock.pinlock.PinStorageManager
+import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
+import de.blinkt.openvpn.ac4_screenlock.util.TwoFactorAuthManager
 import android.util.Log
-import com.naver.appLock.databinding.ActivityMainBinding
+import androidx.activity.ComponentActivity
+import de.blinkt.openvpn.databinding.ActivityMainBinding
 
-class Ac4_01_screenlock_main : AppCompatActivity() {
+class Ac4_01_screenlock_main : ComponentActivity() {
 
     private lateinit var dpm: DevicePolicyManager
     private lateinit var compName: ComponentName

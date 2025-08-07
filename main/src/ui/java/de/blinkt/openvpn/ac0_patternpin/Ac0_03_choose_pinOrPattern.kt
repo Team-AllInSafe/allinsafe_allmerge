@@ -1,10 +1,10 @@
-package com.naver.appLock.ac0_patternpin
+package de.blinkt.openvpn.ac0_patternpin
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.naver.appLock.databinding.Ac003ChoosePinOrPatternBinding
+import de.blinkt.openvpn.databinding.Ac003ChoosePinOrPatternBinding
 
 //test용 임시 액티비티이고 본 데모에선 활용하지 않을 예정입니다.
 class Ac0_03_choose_pinOrPattern : ComponentActivity() {

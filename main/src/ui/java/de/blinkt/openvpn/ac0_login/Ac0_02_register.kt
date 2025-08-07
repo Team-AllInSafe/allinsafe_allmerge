@@ -1,4 +1,4 @@
-package com.naver.appLock.ac0_login
+package de.blinkt.openvpn.ac0_login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.naver.appLock.databinding.Ac002RegisterBinding
+import de.blinkt.openvpn.databinding.Ac002RegisterBinding
 
 class Ac0_02_register : ComponentActivity() {
     private lateinit var binding: Ac002RegisterBinding

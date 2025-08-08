@@ -18,7 +18,9 @@ class SpoofingDetectionManager(
     val dnsDetector: DnsSpoofingDetector,
     private val alertManager: AlertManager
 ) {
+    @Volatile
     private var isDetecting = false
+
     private val detectionTimeoutMillis = 5_000L // 5초 제한
     private var detectionStartTime: Long = 0
 
@@ -42,12 +44,21 @@ class SpoofingDetectionManager(
 
                     stopDetection()
                     //break
+                    Log.d("allinsafe","[spoofing] while문이 자꾸 돌아가유")
+                    // 2025.08.08 5초가 지나면 탐지가 중단되도록 해놓았지만, 스레드가 죽지않고 while문은 계속 돌아간다 -> startDetection을 자꾸 부르는 존재가 있음
                     spoofingEnd()
                     //?
-                    if (!isDetecting)
+                    //2025.08.08 원래 (!isDetecting) 조건인데, 이러면 false여야만 isDetecting가 false가 되는게 아닌가?
+//                    if (isDetecting) {
+//                        isDetecting = false
+//                    }
+                    // 25.08.08 제미나이가 if문 쓸 필요없다고 지적하니 이제서야 필요없다는걸 깨달음
                     isDetecting = false
                     //25.06.24
 //                    LogManager.log("SpoofingManager", "탐지 종료")
+
+                    //2025.08.08 while문 조건 탈출을 기다릴 필요없이 바로 나가기 추가
+                    break
                     
                 }
 

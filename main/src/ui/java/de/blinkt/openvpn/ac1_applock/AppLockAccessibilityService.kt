@@ -26,7 +26,6 @@ class AppLockAccessibilityService : AccessibilityService() {
         super.onServiceConnected()
         onoff=loadOnoff(this)
         lockedPackageList=loadLockedApps(this).toList()
-
 //        Log.d("sua", "서비스 연결됨")
     }
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {

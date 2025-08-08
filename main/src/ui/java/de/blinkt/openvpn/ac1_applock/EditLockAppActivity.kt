@@ -12,9 +12,13 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
 import de.blinkt.openvpn.databinding.Ac102ActivityEditLockAppBinding
 import de.blinkt.openvpn.databinding.Ac103AppListItemBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditLockAppActivity : ComponentActivity() {
     private lateinit var binding: Ac102ActivityEditLockAppBinding
@@ -30,26 +34,63 @@ class EditLockAppActivity : ComponentActivity() {
         setContentView(binding.root)
 
         //초기화면에 앱 목록 짜넣기
-        val pm = packageManager
-        val apps = pm.getInstalledApplications(0)
-        // 시스템 앱 제외
-        val userapps = apps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
 
-        val appList = userapps.map {
-            val name = pm.getApplicationLabel(it).toString()
-            val packagename = it.packageName
-            val icon = pm.getApplicationIcon(it)
-            val isChecked = AppLockAccessibilityService.Companion.lockedPackageList.contains(it.packageName)
-            AppInfo(packagename,name, icon,isChecked)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val pm = packageManager
+            val apps = pm.getInstalledApplications(0)
+
+            //사용자가 직접 실행할 수 있는 앱만 필터링 <- 시스템 앱 다 걸러짐
+            val launchableApps = apps.filter {
+                pm.getLaunchIntentForPackage(it.packageName) != null
+            }
+
+            // 시스템 앱 제외
+            val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
+
+            // 앱 이름 가나다 정렬?
+
+            val appList = filteredApps.map {
+                val name = pm.getApplicationLabel(it).toString()
+                val packagename = it.packageName
+                val icon = pm.getApplicationIcon(it)
+                val isChecked = AppLockAccessibilityService.Companion.lockedPackageList.contains(it.packageName)
+                AppInfo(packagename,name, icon,isChecked)
+            }
+            // ui 변경은 메인스레드가 하도록
+            withContext(Dispatchers.Main) {
+                binding.loadingCircle.visibility=View.GONE
+                binding.appListView.visibility=View.VISIBLE
+                binding.appListView.adapter = AppListAdapter(this@EditLockAppActivity, appList)
+            }
         }
-        binding.appListView.adapter = AppListAdapter(this, appList)
+//        val pm = packageManager
+//        val apps = pm.getInstalledApplications(0)
+//
+//        //사용자가 직접 실행할 수 있는 앱만 필터링 <- 시스템 앱 다 걸러짐
+//        val launchableApps = apps.filter {
+//            pm.getLaunchIntentForPackage(it.packageName) != null
+//        }
+//
+//        // 시스템 앱 제외 <- 여기에서 실사용 앱들 다 썰린다. 다 걸려서 안보임,근데 시스템 앱도 안보이게 하는건 맞음
+//        val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
+//
+//        // 앱 이름 가나다 정렬?
+//
+//        val appList = filteredApps.map {
+//            val name = pm.getApplicationLabel(it).toString()
+//            val packagename = it.packageName
+//            val icon = pm.getApplicationIcon(it)
+//            val isChecked = AppLockAccessibilityService.Companion.lockedPackageList.contains(it.packageName)
+//            AppInfo(packagename,name, icon,isChecked)
+//        }
+//        binding.appListView.adapter = AppListAdapter(this, appList)
 
     }
 
     fun isSystemApp(appInfo: ApplicationInfo):Boolean{
         val flags = appInfo.flags
-        return (flags and ApplicationInfo.FLAG_SYSTEM == 0) &&
-                (flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP == 0)
+        return (flags and ApplicationInfo.FLAG_SYSTEM) != 0 && //플래그 없으면 0 : 시스템 앱 아님
+                (flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
     }
 
     @TargetApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -75,11 +116,9 @@ class EditLockAppActivity : ComponentActivity() {
             binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
                 app.isChecked = isChecked
                 //AppLockAccessibilityService에 있는 잠금 목록 업데이트
-//                Log.d("sua", "[잠금 목록 업데이트 전] lockedPackageList : $lockedPackageList")
                 AppLockAccessibilityService.Companion.lockedPackageList =
                     apps.filter { it.isChecked }.map { it.packageName }
 
-//                Log.d("sua", "[잠금 목록 업데이트 후] lockedPackageList : $lockedPackageList")
                 saveCheckedApps(context, AppLockAccessibilityService.Companion.lockedPackageList)
             }
 

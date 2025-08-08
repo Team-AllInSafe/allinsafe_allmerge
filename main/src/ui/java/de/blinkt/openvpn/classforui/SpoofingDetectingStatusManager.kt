@@ -44,6 +44,8 @@ object SpoofingDetectingStatusManager {
         }
     }
     fun spoofingEnd(){
+        // 25.08.08 자꾸된 스푸핑의 화면 납치를 고쳐보기위해. 이 함수가 자꾸 호출되어서 그런가?
+        Log.d("allinsafe","[spoofing] spoofingEnd() is called.")
         val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // context가 Activity가 아닐 수 있으므로
         completedPageStart()

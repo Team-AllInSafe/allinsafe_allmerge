@@ -3,6 +3,7 @@ package de.blinkt.openvpn.vpn
 import android.content.Intent
 import android.net.VpnService
 import android.os.*
+import android.util.Log
 import de.blinkt.openvpn.detection.SpoofingDetectionManager
 import de.blinkt.openvpn.detection.common.AlertManager
 import de.blinkt.openvpn.detection.arpdetector.ArpSpoofingDetector
@@ -40,6 +41,7 @@ class CustomVpnService : VpnService() {
 
     // 🔹 VPN 인터페이스를 설정하고 탐지기 초기화
     private fun startVpnSafely() {
+        Log.d("allinsafe", "[spoofing] startVpnSafely 실행")
         try {
             stopVpn()
 
@@ -85,6 +87,7 @@ class CustomVpnService : VpnService() {
 
     // 🔹 VPN 인터페이스로부터 실시간 패킷을 읽어오는 스레드 실행
     private fun startPacketCapture() {
+        Log.d("allinsafe", "[spoofing] startVpnSafely->startPacketCapture 실행")
         if (isCapturing) {
             LogManager.log("VPN", "이미 캡처 중")
             return
@@ -108,6 +111,7 @@ class CustomVpnService : VpnService() {
                         // ✅ 동시에 기존 방식도 유지
                         detectionManager?.analyzePacket(packetData)
 
+                        Log.d("allinsafe", "[spoofing] startVpnSafely->startPacketCapture->startDetection(while문 스레드) 실행")
                         detectionManager?.startDetection(packetData)
                     }
                 }

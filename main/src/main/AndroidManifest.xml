@@ -29,6 +29,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="neverForLocation" />
 
+    <!---->
+
+
 
     <application
         android:name="de.blinkt.openvpn.core.ICSOpenVPNApplication"

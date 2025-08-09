@@ -30,12 +30,9 @@ class VpnMainActivity : BaseActivity() {
     lateinit var binding: Ac301VpnInitMainBinding
     private var mSelectedProfile: VpnProfile? = null
     private var mSelectedProfileReason: String? = null
-//    private var isError = 1
-//    private var isOk = 0
     private var START_VPN_PROFILE = 11 // 그냥 아무 숫자 넣음
-//    private var isAleadyCreated=false
-//    private var fileCreated = false
     lateinit var profile: VpnProfile
+    private var isServiceBound = false // 바인드 플래그
 
     private var vpnService: IOpenVPNServiceInternal? = null
 
@@ -149,27 +146,7 @@ class VpnMainActivity : BaseActivity() {
                 // [debug] saveProfile 완료
 
                 isAleadyCreated=true */
-            //} else {
-//                profile = ProfileManager.getLastConnectedProfile(applicationContext)
-//                    ?: throw IllegalStateException("No previous profile found!")
-            //}
 
-//            // profile 저장.
-//            // 과정은 de.blinkt.openvpn.activities.VPNPrefervence.addProfile 함수 참고
-//            val pm = ProfileManager.getInstance(applicationContext) //checkInstance 로 instant 초기화
-//            // [debug] getInstance -> checkInstance -> loadVPNList -> 길이만큼 loadVpnEntry 반복
-//
-//            //profiles 해시맵 형태의 리스트? 같은 것에 추가
-//            pm.addProfile(profile)
-//
-//            // preference에 해시맵 저장. 원래 저장되어있던 옛날 버전 덮어쓰는 과정
-//            pm.saveProfileList(applicationContext)
-//            // [debug] saveProfileList 실행 완료
-//
-//            // 새로 저장된 vpn 프로필을 파일로 만드는 것 같음.
-//            // 왜 하는진 잘 모르겠으나, 기존의 코드에서 이렇게 처리하길래 넣음. 결국에 연결까지는 잘 되니 된거아니겠음~ 25.06.07
-//            ProfileManager.saveProfile(applicationContext, profile)
-//            // [debug] saveProfile 완료
 
             // 잘 저장됐는지 확인
             val reprofile = ProfileManager.get(applicationContext,profile.uuidString)
@@ -188,25 +165,19 @@ class VpnMainActivity : BaseActivity() {
                 mSelectedProfileReason = startReason //null 이어도 딱히 상관없는듯하여 null 체크 생략
                 launchVPN()
             }
-            {//            실제 연결을 하는 Vpnprepare를 불러오는 LaunchVPN 로 intent
-//            val intent = Intent(applicationContext, LaunchVPN::class.java)
-//            intent.action = Intent.ACTION_MAIN
-//            intent.putExtra(LaunchVPN.EXTRA_KEY, reprofile.uuidString)
-//            startActivity(intent)
-            }
         }
         //기존의 vpnDisconnect 버튼
         binding.btnVpnStop.setOnClickListener {
             // 연결 끊기
             Log.d("allinsafevpn","disconnect btn onclick")
             // 원래는 연결되어있는 애를 저장하며 쓰다가, 끊기면 preference에서 삭제하는 그런거겠지만,
-            // 난 그 profile 가지고 계속 쓸거니까 preference에서 삭제안하기로
+            // 우린 그 profile 가지고 계속 쓸거니까 preference에서 삭제안하기로
 //            ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)
             Log.d("allinsafevpn",vpnService.toString())
             vpnService?.stopVPN(false)
             Log.d("allinsafevpn","stopvpn 실행됨")
 
-            // 이걸왜 false로 하지??
+            // 이걸왜 false로 했지??
             //isAleadyCreated=false
         }
     }
@@ -214,7 +185,11 @@ class VpnMainActivity : BaseActivity() {
     //service 종료(서버와의 연결과는 상관없이)
     override fun onDestroy() {
         super.onDestroy()
-        unbindService(vpnServiceConnection)
+        if(isServiceBound){
+            unbindService(vpnServiceConnection)
+            isServiceBound=false
+        }
+
     }
 
     private fun launchVPN() {
@@ -226,10 +201,6 @@ class VpnMainActivity : BaseActivity() {
 
         // vpn 권한 받기
         if(intent != null){
-//            VpnStatus.updateStateString(
-//                "USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
-//                ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT
-//            )
             startActivityForResult(intent, START_VPN_PROFILE)
         }else{ // 이미 받았으면
             onActivityResult(START_VPN_PROFILE, RESULT_OK, null)
@@ -261,13 +232,11 @@ class VpnMainActivity : BaseActivity() {
                 val bindIntent = Intent(this, OpenVPNService::class.java)
                 bindIntent.setAction(OpenVPNService.START_SERVICE)
                 bindService(bindIntent, vpnServiceConnection, Context.BIND_AUTO_CREATE)
+                isServiceBound=true
             }
         } else if (resultCode == RESULT_CANCELED) {
             // User does not want us to start, so we just vanish
-//            VpnStatus.updateStateString(
-//                "USER_VPN_PERMISSION_CANCELLED", "", R.string.state_user_vpn_permission_cancelled,
-//                ConnectionStatus.LEVEL_NOTCONNECTED
-//            )
+
         }
     }
 

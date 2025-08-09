@@ -145,7 +145,7 @@ class CustomVpnService : VpnService() {
             delay(5000L)
             // 5초가 지났는데도 isCapturing이 여전히 true라면 타임아웃으로 간주
             if (isCapturing) {
-                Log.d("allinsafeSpoofing", "5초 타임아웃! VPN 인터페이스를 강제로 닫습니다.")
+                Log.d("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
                 try {
                     // scope 끄고,vpn 닫고, isCapturing false로
                     stopVpn()
@@ -163,63 +163,7 @@ class CustomVpnService : VpnService() {
         }
 
 
-// 기존 scope
-//        scope.launch {
-//            // 5초가 됐다면 null 반환,밑에서 res 검사해서 null이면 isCapturing = false & 검사결과 띄우기
-//            // 만약 5초가 되기 전에 둘 다 감지되어서 끝났다면 SpoofingDetextingStatusManager.checkIfAllCompleted에서 isCapturing = false
-//            val res= withTimeoutOrNull(5000L){
-//                // inputStream.read에서 패킷을 너무 오래 기다리면 성능이 떨어질 수 있음, io 전용 스레드 풀(여러 스레드의 묶음)에게 맡김
-//                withContext(Dispatchers.IO){
-//                    Log.d("allinsafeSpoofing","[spoofing scope] withContext(Dispatchers.IO)가 돌고 있어요")
-//                    try {
-//                        val fd = vpnInterface?.fileDescriptor ?: return@withContext
-//                        val inputStream = FileInputStream(fd)
-//                        LogManager.log("VPN", "패킷 캡처 스레드 시작")
-//
-//                        while (isCapturing) {
-////                            Log.d("allinsafeSpoofing","[spoofing scope] withContext(Dispatchers.IO)안에 while문이 돌고 있어요")
-//                            val length = inputStream.read(buffer.array()) // 패킷 올때까지 블로킹
-//                            if (length > 0) {
-//                                val packetData = buffer.array().copyOf(length)
-//
-//                                // ✅ 최근 패킷 저장 (외부 탐지기에서 접근 가능)
-//                                latestPacket = packetData
-//
-//                                // ✅ 동시에 기존 방식도 유지
-//                                detectionManager?.analyzePacket(packetData)
-//
-//                                //todo 이 부분이 문제
-////                                Log.d("allinsafe", "[spoofing] scope->startDetection(while문 스레드) 실행")
-////                                detectionManager?.startDetection(packetData)
-//
-//                                // 25.08.09 startDetection 안에서 탐지가 끝나면 isCapturing=false 되게 해놓음
-//                            }
-//                        }
-//                    }catch (e: IOException){
-//                        LogManager.log("VPN", "5초가 지나 코루틴이 끝났습니다")
-//                        throw e
-//                    } catch (e: CancellationException) {
-//                        // 5초 지나면 나오는 exception
-//                        Log.d("allinsafeSpoofing","[spoofing scope] 5초 지나면 나오는 exception")
-//                        LogManager.log("VPN", "5초가 지나 코루틴이 끝났습니다")
-//                        throw e
-//                    }
-//                    catch (e: Exception) {
-//                        LogManager.log("VPN", "캡처 중 오류: ${e.message}")
-//                    }
-//                }
-//            }
-//            Log.d("allinsafeSpoofing","[spoofing scope] withTimeoutOrNull가 끝났어요")
-//            if (res==null){ // 5초가 지나서 scope를 나옴
-//                Log.d("allinsafeSpoofing","[spoofing scope] res가 null이에요")
-//                isCapturing=false
-//                // 탐지 완료 화면 부르기
-//                spoofingEnd()
-//            }else{
-//                Log.d("allinsafeSpoofing","[spoofing scope] res가 null이 아니에요 ${res}")
-//            }
-//
-//        }
+
         // 기존 패킷 감지 로직(스레드 사용)
 //        packetCaptureThread = Thread {
 //            try {
@@ -238,7 +182,7 @@ class CustomVpnService : VpnService() {
 //                        // ✅ 동시에 기존 방식도 유지
 //                        detectionManager?.analyzePacket(packetData)
 //
-//                        //todo 이 부분이 존나 호출됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!!!
+//                        //여기 부분이 문제였음
 //                        Log.d("allinsafe", "[spoofing] onStartCommand->startVpnSafely->startPacketCapture->startDetection(while문 스레드) 실행")
 //                        detectionManager?.startDetection(packetData)
 //

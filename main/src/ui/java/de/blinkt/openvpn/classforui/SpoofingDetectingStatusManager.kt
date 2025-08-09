@@ -13,6 +13,7 @@ object SpoofingDetectingStatusManager {
     private var dnsSpoofDetectResult=SpoofDetectResult("Dns",0,"","","")
     private lateinit var context:Context
     private var isCompletedPageStart=false
+    public var isCapturing=false
     //나중에 더 확장해야겠지만 지금은 이것만 넣겠습니다.
     fun init(context: Context){
         this.context =context
@@ -35,16 +36,21 @@ object SpoofingDetectingStatusManager {
         if (arpSpoofDetectResult.getStatus() == 2 && dnsSpoofDetectResult.getStatus() == 2) {
             Log.d("ui","스푸핑 둘 다 완료됨")
             // 두 탐지 모두 완료됨 -> 다음 액티비티로 이동
-                val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)  // context가 Activity가 아닐 수 있으므로
-                completedPageStart()
-                context.startActivity(intent)
+
+            // 25.08.09 추가
+            isCapturing=false
+
+            //spooginEnd()랑 내용 똑같음
+            val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)  // context가 Activity가 아닐 수 있으므로
+            completedPageStart()
+            context.startActivity(intent)
 
             Log.d("ui","503액티비티 출력")
         }
     }
     fun spoofingEnd(){
-        // 25.08.08 자꾸된 스푸핑의 화면 납치를 고쳐보기위해. 이 함수가 자꾸 호출되어서 그런가?
+        // 25.08.08 스푸핑 화면 리다이렉팅 문제 때매 로그 찍어봄
         Log.d("allinsafe","[spoofing] spoofingEnd() is called.")
         val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // context가 Activity가 아닐 수 있으므로

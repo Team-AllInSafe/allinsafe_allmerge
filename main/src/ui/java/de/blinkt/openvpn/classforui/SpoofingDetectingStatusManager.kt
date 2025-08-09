@@ -50,8 +50,6 @@ object SpoofingDetectingStatusManager {
         }
     }
     fun spoofingEnd(){
-        // 25.08.08 스푸핑 화면 리다이렉팅 문제 때매 로그 찍어봄
-        Log.d("allinsafe","[spoofing] spoofingEnd() is called.")
         val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // context가 Activity가 아닐 수 있으므로
         completedPageStart()

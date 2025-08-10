@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import de.blinkt.openvpn.R
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
 import de.blinkt.openvpn.databinding.Ais07LockscreenPinVerifyBinding
 import kotlinx.coroutines.Dispatchers
@@ -44,13 +45,11 @@ class Ac0_07_pin_verify : ComponentActivity() {
             if (passwordVisible) {
                 // 비밀번호를 가리는 로직
                 binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                // TODO: 눈깔 아이콘 눈 감기기
-                //원래 이것까지 해야하는데 지금은 R.drawable이 안됨 ;;
-                //binding.btnViewPin.setImageResource(R.drawable.)
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_off)
             } else {
                 // 비밀번호를 평문으로 보이게 하는 로직
                 binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT
-                // TODO: 눈깡 아이콘 눈 띄우기
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_on)
             }
             passwordVisible = !passwordVisible
         }

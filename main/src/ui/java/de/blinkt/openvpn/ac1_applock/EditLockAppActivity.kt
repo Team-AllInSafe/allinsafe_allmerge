@@ -14,14 +14,14 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
-import de.blinkt.openvpn.databinding.OldAc102ActivityEditLockAppBinding
-import de.blinkt.openvpn.databinding.OldAc103AppListItemBinding
+import de.blinkt.openvpn.databinding.Ais12SelectAppBinding
+import de.blinkt.openvpn.databinding.Ais13SelectAppItemBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EditLockAppActivity : ComponentActivity() {
-    private lateinit var binding: OldAc102ActivityEditLockAppBinding
+    private lateinit var binding: Ais12SelectAppBinding
     data class AppInfo(
         val packageName: String,
         val name: String,
@@ -30,7 +30,7 @@ class EditLockAppActivity : ComponentActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= OldAc102ActivityEditLockAppBinding.inflate(layoutInflater)
+        binding= Ais12SelectAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //초기화면에 앱 목록 짜넣기
@@ -45,11 +45,11 @@ class EditLockAppActivity : ComponentActivity() {
             }
 
             // 시스템 앱 제외
-            val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
+//            val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
 
             // 앱 이름 가나다 정렬?
 
-            val appList = filteredApps.map {
+            val appList = launchableApps.map {
                 val name = pm.getApplicationLabel(it).toString()
                 val packagename = it.packageName
                 val icon = pm.getApplicationIcon(it)
@@ -58,9 +58,10 @@ class EditLockAppActivity : ComponentActivity() {
             }
             // ui 변경은 메인스레드가 하도록
             withContext(Dispatchers.Main) {
-                binding.loadingCircle.visibility=View.GONE
-                binding.appListView.visibility=View.VISIBLE
-                binding.appListView.adapter = AppListAdapter(this@EditLockAppActivity, appList)
+                //기존의 progressbar(로딩중 표시)를 삭제하였음.
+//                binding.loadingCircle.visibility=View.GONE
+//                binding.appListView.visibility=View.VISIBLE
+                binding.listviewApp.adapter = AppListAdapter(this@EditLockAppActivity, appList)
             }
         }
 //        val pm = packageManager
@@ -100,20 +101,20 @@ class EditLockAppActivity : ComponentActivity() {
         override fun getItemId(position: Int) = position.toLong()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val binding: OldAc103AppListItemBinding = if (convertView == null) {
-                OldAc103AppListItemBinding.inflate(LayoutInflater.from(context), parent, false)
+            val binding: Ais13SelectAppItemBinding = if (convertView == null) {
+                Ais13SelectAppItemBinding.inflate(LayoutInflater.from(context), parent, false)
             } else {
-                OldAc103AppListItemBinding.bind(convertView)
+                Ais13SelectAppItemBinding.bind(convertView)
             }
 
             val app = apps[position]
-            binding.checkBox.setOnCheckedChangeListener(null)
-            binding.appIcon.setImageDrawable(app.icon)
-            binding.appName.text = app.name
-            binding.checkBox.isChecked = app.isChecked
+            binding.checkbox.setOnCheckedChangeListener(null)
+            binding.ivAppIcon.setImageDrawable(app.icon)
+            binding.tvAppName.text = app.name
+            binding.checkbox.isChecked = app.isChecked
 
             // 체크박스 상태 변경시 데이터 반영됨
-            binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
                 app.isChecked = isChecked
                 //AppLockAccessibilityService에 있는 잠금 목록 업데이트
                 AppLockAccessibilityService.Companion.lockedPackageList =

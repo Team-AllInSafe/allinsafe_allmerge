@@ -15,8 +15,8 @@
         app:layout_constraintStart_toStartOf="@+id/space_left"
         app:layout_constraintTop_toTopOf="@+id/space_top" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_app"
+    <ListView
+        android:id="@+id/listview_app"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="50dp"
@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="@+id/space_left"
         app:layout_constraintTop_toBottomOf="@+id/imageButton">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </ListView>
     <!--    상하좌우 마진-->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/space_left"

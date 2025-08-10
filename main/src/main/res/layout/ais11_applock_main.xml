@@ -15,10 +15,12 @@
         app:layout_constraintTop_toTopOf="@+id/space_top" />
 <!--    활성화 표시(아이콘, 단어)-->
     <LinearLayout
+        android:id="@+id/top_active"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="30dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -83,19 +85,28 @@
             android:textSize="14sp"
             android:textColor="@color/ais_half_white" />
 <!--실행 버튼-->
-        <Button
-            android:id="@+id/btn_stop_applock"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_start_applock"
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/ais_round_white_full"
-            android:fontFamily="@font/pretendard_bold"
-            android:text="앱잠금 중단하기"
-            android:textColor="@color/ais_darkblue"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            app:cardBackgroundColor="@color/ais_mint"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="4dp" >
+
+            <TextView
+                android:id="@+id/tv_btn_start_applock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="앱잠금 실행하기"
+                android:textColor="@color/ais_darkblue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
 <!--부가기능 버튼-->
         <Button
             android:id="@+id/btn_select_app"

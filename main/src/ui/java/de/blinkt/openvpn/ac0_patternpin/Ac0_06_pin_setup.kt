@@ -1,6 +1,6 @@
 package de.blinkt.openvpn.ac0_patternpin
 
-import android.R
+import de.blinkt.openvpn.R
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
@@ -43,13 +43,11 @@ class Ac0_06_pin_setup : ComponentActivity() {
             if (passwordVisible) {
                 // 비밀번호를 가리는 로직
                 binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                // TODO: 눈깔 아이콘 눈 감기기
-                //원래 이것까지 해야하는데 지금은 R.drawable이 안됨 ;;
-                //binding.btnViewPin.setImageResource(R.drawable.)
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_off)
             } else {
                 // 비밀번호를 평문으로 보이게 하는 로직
                 binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT
-                // TODO: 눈깡 아이콘 눈 띄우기
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_on)
             }
             passwordVisible = !passwordVisible
         }

@@ -104,6 +104,11 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             stored.addAll(newOnes)
             prefs.edit().putStringSet(TRUSTED_KEY, stored).apply()
         }
+        // 3) UI용 loadDeviceLists 호출
+        loadDeviceLists { t, b ->
+            trustedDevices = t
+            blockedDevices = b
+        }
     }
 
     override fun onPause() {
@@ -231,4 +236,5 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             prefs.edit().putStringSet(BLOCKED_KEY, set).apply()
         }
     }
+
 }

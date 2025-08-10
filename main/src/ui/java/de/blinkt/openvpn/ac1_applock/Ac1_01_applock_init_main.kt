@@ -41,7 +41,9 @@ class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSIO
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             startActivity(intent)
         }
-
+        binding.btnBack.setOnClickListener{
+            finish()
+        }
         binding.btnStartApplock.setOnClickListener {
             val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
             val edit = pref.edit()
@@ -69,16 +71,14 @@ class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSIO
     fun turnoffUI(binding: Ais11ApplockMainBinding){
         //바꿔야할거 : 위 활성화 표시, 버튼 색, 버튼 텍스트
         binding.topActive.visibility= View.VISIBLE
-        val color = ContextCompat.getColor(this, R.color.ais_neongreenwhite)
-        binding.btnStartApplock.setBackgroundColor(color)
-        binding.tvBtnStartApplock.text="앱잠금 중단하기"
+        binding.btnStartApplock.background=getDrawable(R.drawable.ais_round_white_full)
+        binding.btnStartApplock.text="앱잠금 중단하기"
     }
     fun turnonUI(binding: Ais11ApplockMainBinding){
         //바꿔야할거 : 위 활성화 표시, 버튼 색, 버튼 텍스트
         binding.topActive.visibility= View.INVISIBLE
-        val color = ContextCompat.getColor(this, R.color.ais_mint)
-        binding.btnStartApplock.setBackgroundColor(color)
-        binding.tvBtnStartApplock.text="앱잠금 실행하기"
+        binding.btnStartApplock.background=getDrawable(R.drawable.ais_round_mint_full)
+        binding.btnStartApplock.text="앱잠금 실행하기"
     }
 
     // ACTION_ACCESSIBILITY_SETTINGS 권한 확인 함수

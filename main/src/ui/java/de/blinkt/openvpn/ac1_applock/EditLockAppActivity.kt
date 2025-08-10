@@ -34,7 +34,9 @@ class EditLockAppActivity : ComponentActivity() {
         setContentView(binding.root)
 
         //초기화면에 앱 목록 짜넣기
-
+        binding.btnBack.setOnClickListener{
+            finish()
+        }
         lifecycleScope.launch(Dispatchers.IO) {
             val pm = packageManager
             val apps = pm.getInstalledApplications(0)

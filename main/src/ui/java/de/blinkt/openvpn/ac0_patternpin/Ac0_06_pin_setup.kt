@@ -1,28 +1,29 @@
 package de.blinkt.openvpn.ac0_patternpin
 
+import android.R
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import de.blinkt.openvpn.databinding.OldAc006PinSetupBinding
+import de.blinkt.openvpn.databinding.Ais05LockscreenPinSettingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.util.Arrays
 
 
 class Ac0_06_pin_setup : ComponentActivity() {
-    lateinit var binding: OldAc006PinSetupBinding
+    lateinit var binding: Ais05LockscreenPinSettingBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var currentUserId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= OldAc006PinSetupBinding.inflate(layoutInflater)
+        binding= Ais05LockscreenPinSettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase 초기화
@@ -30,12 +31,27 @@ class Ac0_06_pin_setup : ComponentActivity() {
         firestore = FirebaseFirestore.getInstance()
         currentUserId = auth.currentUser?.uid
 
-        binding.backButton.setOnClickListener {
+        var passwordVisible=false
+        binding.btnBack.setOnClickListener {
             //설정 종료
             finish()
         }
-        binding.btnBottomFinish.setOnClickListener {
+        binding.btnSetPin.setOnClickListener {
             registerPin()
+        }
+        binding.btnViewPin.setOnClickListener {
+            if (passwordVisible) {
+                // 비밀번호를 가리는 로직
+                binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                // TODO: 눈깔 아이콘 눈 감기기
+                //원래 이것까지 해야하는데 지금은 R.drawable이 안됨 ;;
+                //binding.btnViewPin.setImageResource(R.drawable.)
+            } else {
+                // 비밀번호를 평문으로 보이게 하는 로직
+                binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT
+                // TODO: 눈깡 아이콘 눈 띄우기
+            }
+            passwordVisible = !passwordVisible
         }
     }
 

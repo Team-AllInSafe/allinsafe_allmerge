@@ -7,17 +7,17 @@ import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import de.blinkt.openvpn.databinding.OldAc002RegisterBinding
+import de.blinkt.openvpn.databinding.Ais01AuthRegisterBinding
 
 class Ac0_02_register : ComponentActivity() {
-    private lateinit var binding: OldAc002RegisterBinding
+    private lateinit var binding: Ais01AuthRegisterBinding
 
     //Firebase를 사용하는 권한
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = OldAc002RegisterBinding.inflate(layoutInflater)
+        binding = Ais01AuthRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //firebase 코드
@@ -27,8 +27,8 @@ class Ac0_02_register : ComponentActivity() {
 
 
         binding.btnRegister.setOnClickListener {
-            val id = binding.etInputId.text.toString()
-            val pw = binding.etInputPw.text.toString()
+            val id = binding.etInputEmail.text.toString()
+            val pw = binding.etInputPassword.text.toString()
             val username = binding.etInputUsername.text.toString()
             //id, pw, 이메일 칸이 비어있지 않은지 체크한다.
             if (validateInput(id, pw, username)) {
@@ -38,7 +38,7 @@ class Ac0_02_register : ComponentActivity() {
                 finish()
             }
         }
-        binding.backButton.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
     }

@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="initValue"
+            android:text="로딩중..."
             android:textColor="@color/ais_neongreenwhite"
             android:fontFamily="@font/pretendard_medium"
             android:textSize="16sp" />
@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="initValue"
+            android:text="로딩중..."
             android:textColor="@color/ais_neongreenwhite"
             android:fontFamily="@font/pretendard_medium"
             android:textSize="16sp" />
@@ -170,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="initValue"
+            android:text="로딩중..."
             android:textColor="@color/ais_neongreenwhite"
             android:fontFamily="@font/pretendard_medium"
             android:textSize="16sp" />

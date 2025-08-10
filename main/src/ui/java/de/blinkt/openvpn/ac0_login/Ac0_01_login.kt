@@ -7,14 +7,14 @@ import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
 import de.blinkt.openvpn.ac0_main.Ac0_00_main_init_main
 import de.blinkt.openvpn.ac1_applock.Ac1_01_applock_init_main
-import de.blinkt.openvpn.databinding.Ac001LoginBinding
+import de.blinkt.openvpn.databinding.OldAc001LoginBinding
 
 class Ac0_01_login : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var binding:Ac001LoginBinding
+    private lateinit var binding:OldAc001LoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=Ac001LoginBinding.inflate(layoutInflater)
+        binding=OldAc001LoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase Auth 인스턴스 초기화

@@ -26,12 +26,12 @@ class PatternLockView @JvmOverloads constructor(
     private var onPatternListener: OnPatternListener? = null
 
     // 색상 및 크기 상수
-    private val dotRadius = 60f
-    private val selectedDotRadius = 80f
+    private val dotRadius = 40f
+    private val selectedDotRadius = 50f
     private val lineWidth = 8f
-    private val dotColor = 0xFFEEE5D3.toInt()      // Color.GRAY 대신
+    private val dotColor = 0xFFF5F8DE.toInt()      // Color.GRAY 대신
     private val selectedDotColor = 0xFF44BBA4.toInt() // Color.BLUE 대신
-    private val lineColor = 0xFFEEE5D3.toInt()        // Color.BLUE 대신
+    private val lineColor = 0xFF44BBA4.toInt()        // Color.BLUE 대신
 
     init {
         paint.color = dotColor

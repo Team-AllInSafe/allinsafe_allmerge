@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/back_button"
+            style="@style/btn_topleft_back"/>
+        <TextView
+            style="@style/top_textview"
+            android:text="앱 잠금"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/input_pin"
+        android:layout_width="360dp"
+        android:layout_height="60dp"
+        android:background="@drawable/old_btn_round_blue"
+        android:layout_marginTop="45dp"
+        android:layout_gravity="center"
+        android:hint="6자리 이상의 pin 번호"
+        android:textColorHint="@color/ui_beige"
+        android:paddingLeft="20dp"
+        android:textColor="@color/ui_beige"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/btn_bottom_finish"
+        style="@style/btn_bottom_finish"
+        android:text="생성 완료"/>
+</LinearLayout>

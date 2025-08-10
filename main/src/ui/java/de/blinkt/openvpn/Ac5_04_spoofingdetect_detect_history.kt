@@ -7,15 +7,14 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import de.blinkt.openvpn.R
-import de.blinkt.openvpn.databinding.Ac504SpoofingdetectDetectHistoryBinding
-import de.blinkt.openvpn.databinding.Ac505SpoofingdetectItemDetectHistoryBinding
+import de.blinkt.openvpn.databinding.OldAc504SpoofingdetectDetectHistoryBinding
+import de.blinkt.openvpn.databinding.OldAc505SpoofingdetectItemDetectHistoryBinding
 
 class Ac5_04_spoofingdetect_detect_history : ComponentActivity() {
-    private lateinit var binding: Ac504SpoofingdetectDetectHistoryBinding
+    private lateinit var binding: OldAc504SpoofingdetectDetectHistoryBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=Ac504SpoofingdetectDetectHistoryBinding.inflate(layoutInflater)
+        binding=OldAc504SpoofingdetectDetectHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.backButton.setOnClickListener {
             finish()
@@ -35,7 +34,7 @@ data class HistoryItem(val date:String, val is_arp_spoofing_detected:Boolean, va
 //혹시 문제생길까봐 날짜는 string으로 처리했습니다. 데모 이후 Date타입으로 변경 예정입니다.
 //arp, dns spoofing은 스푸핑이 감지되었을때(스푸핑 당했을때) true, 아닌경우(정상) false입니다.
 
-class HistoryViewHolder(val binding: Ac505SpoofingdetectItemDetectHistoryBinding): RecyclerView.ViewHolder(binding.root)
+class HistoryViewHolder(val binding: OldAc505SpoofingdetectItemDetectHistoryBinding): RecyclerView.ViewHolder(binding.root)
 //class HistoryAdapter(val binding: Ac505SpoofingdetectItemDetectHistoryBinding):
 //        RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =HistoryViewHolder(
@@ -56,7 +55,7 @@ class HistoryViewAdapter(private val dataList: List<HistoryItem>) :
     RecyclerView.Adapter<HistoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        val binding = Ac505SpoofingdetectItemDetectHistoryBinding.inflate(
+        val binding = OldAc505SpoofingdetectItemDetectHistoryBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return HistoryViewHolder(binding)
@@ -69,20 +68,20 @@ class HistoryViewAdapter(private val dataList: List<HistoryItem>) :
         holder.binding.detectDate.text = item.date      // textTime은 바인딩된 뷰의 ID에 맞춰 수정
         if (item.is_arp_spoofing_detected) {
             holder.binding.arpBg.background =
-                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.btn_round_red)
+                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.old_btn_round_red)
             holder.binding.arpText.text = "탐지"
         } else {
             holder.binding.arpBg.background =
-                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.btn_round_green)
+                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.old_btn_round_green)
             holder.binding.arpText.text = "미탐지"
         }
         if (item.is_dns_spoofing_detected) {
             holder.binding.dnsBg.background =
-                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.btn_round_red)
+                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.old_btn_round_red)
             holder.binding.dnsText.text = "탐지"
         } else {
             holder.binding.dnsBg.background =
-                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.btn_round_green)
+                ContextCompat.getDrawable(holder.binding.root.context, R.drawable.old_btn_round_green)
             holder.binding.dnsText.text = "미탐지"
         }
     }

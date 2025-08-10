@@ -6,17 +6,17 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
-import de.blinkt.openvpn.databinding.Ac502SpoofingdetectProcessBinding
-import de.blinkt.openvpn.databinding.Ac506SpofingdetectItemLogBinding
+import de.blinkt.openvpn.databinding.OldAc502SpoofingdetectProcessBinding
 import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.content.Context
 import de.blinkt.openvpn.Ac5_03_spoofingdetect_completed
+import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
 
 class Ac5_02_spoofingdetect_process : ComponentActivity() {
-    private lateinit var binding: Ac502SpoofingdetectProcessBinding
+    private lateinit var binding: OldAc502SpoofingdetectProcessBinding
 
     // private var isArpSpoofingCompleted = false
     // private var isDnsSpoofingCompleted = false
@@ -33,7 +33,7 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // ✅ 탐지 결과 전환을 위해 정확한 Context 등록
         SpoofingDetectingStatusManager.init(this)
 
-        binding = Ac502SpoofingdetectProcessBinding.inflate(layoutInflater)
+        binding = OldAc502SpoofingdetectProcessBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // val adapter = LogViewAdapter(listOf("로그1", "로그2", "로그3").toMutableList())
@@ -94,7 +94,7 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
     //     }
     // }
 
-    fun detect_complete(binding: Ac502SpoofingdetectProcessBinding) {
+    fun detect_complete(binding: OldAc502SpoofingdetectProcessBinding) {
         // 실제 스푸핑 코드와 연동하였을 때 사용하기 위한 함수
         Toast.makeText(this.applicationContext, "스푸핑 탐지가 완료되었습니다!", Toast.LENGTH_LONG).show()
         val intent = Intent(this, Ac5_03_spoofingdetect_completed::class.java)
@@ -103,7 +103,7 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
 }
 
 // ✅ 로그 출력용 ViewHolder
-class LogViewHolder(var binding: Ac506SpofingdetectItemLogBinding) :
+class LogViewHolder(var binding: OldAc506SpoofingdetectItemLogBinding) :
     RecyclerView.ViewHolder(binding.root)
 
 // ✅ 로그 출력용 RecyclerView 어댑터
@@ -111,7 +111,7 @@ class LogViewAdapter(private val LogList: MutableList<String>) :
     RecyclerView.Adapter<LogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
-        val binding = Ac506SpofingdetectItemLogBinding.inflate(
+        val binding = OldAc506SpoofingdetectItemLogBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

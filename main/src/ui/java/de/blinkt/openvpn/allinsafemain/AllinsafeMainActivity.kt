@@ -11,13 +11,13 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import de.blinkt.openvpn.SpoofingMainActivity
 //import de.blinkt.openvpn.SpoofingMainActivity
-import de.blinkt.openvpn.databinding.Ac000MainInitMainBinding
 import de.blinkt.openvpn.activities.VpnMainActivity
+import de.blinkt.openvpn.databinding.OldAc000MainInitMainBinding
 
 class AllinsafeMainActivity :ComponentActivity() {
-    private lateinit var binding:Ac000MainInitMainBinding
+    private lateinit var binding:OldAc000MainInitMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding=Ac000MainInitMainBinding.inflate(layoutInflater)
+        binding=OldAc000MainInitMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 

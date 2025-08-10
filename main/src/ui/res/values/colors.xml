@@ -14,4 +14,16 @@
     <color name="ui_red">#E93769</color>
     <color name="ui_green">#44BBA4</color>
     <color name="transparent">#00000000</color>
+    
+<!--    여기서부턴 ui 개편 후 색상입니다.-->
+    <color name="ais_darkblue">#001149</color>
+    <color name="ais_neongreenwhite">#F5F8DE</color>
+    <color name="ais_blue">#233B6A</color>
+    <color name="ais_yellow">#FFBC56</color>
+    <color name="ais_red">#EB5160</color>
+    <color name="ais_mint">#44BBA4</color>
+    <color name="ais_half_white">#88f5f8de</color>
+    <color name="ais_half_red">#88EB5160</color>
+    <color name="ais_half_mint">#8844BBA4</color>
+    <color name="ais_half_blue">#88233B6A</color>
 </resources>

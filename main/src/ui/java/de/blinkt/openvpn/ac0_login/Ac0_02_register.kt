@@ -7,17 +7,17 @@ import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import de.blinkt.openvpn.databinding.Ac002RegisterBinding
+import de.blinkt.openvpn.databinding.OldAc002RegisterBinding
 
 class Ac0_02_register : ComponentActivity() {
-    private lateinit var binding: Ac002RegisterBinding
+    private lateinit var binding: OldAc002RegisterBinding
 
     //Firebase를 사용하는 권한
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = Ac002RegisterBinding.inflate(layoutInflater)
+        binding = OldAc002RegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //firebase 코드

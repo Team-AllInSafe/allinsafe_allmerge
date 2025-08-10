@@ -11,17 +11,16 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import de.blinkt.openvpn.databinding.Ac101ApplockMainBinding
-import de.blinkt.openvpn.databinding.ActivityMainBinding
+import de.blinkt.openvpn.databinding.OldAc101ApplockMainBinding
 
 class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private lateinit var binding: Ac101ApplockMainBinding
+    private lateinit var binding: OldAc101ApplockMainBinding
 
     // binding 최소 api 가 33 이라며 오류 뜨길래 TargetApi 추가
     @TargetApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ac101ApplockMainBinding.inflate(layoutInflater)
+        binding= OldAc101ApplockMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // 사용자가 권한을 확인하면, 화면에 뭔가 바뀔 때 마다 생기는 이벤트를 받아서 그 앱 이름을 확인함
         // 앱 이름 확인하고 잠금 대상이면 종료하는 로직은 AppLockAccessibilityService 에 있음

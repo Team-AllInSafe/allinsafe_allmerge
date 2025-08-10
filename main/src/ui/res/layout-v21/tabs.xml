@@ -8,7 +8,7 @@
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@drawable/bg_tabs"
+        android:background="@drawable/old_bg_tabs"
         android:layout_gravity="top"
         blinkt:pstsIndicatorColor="@color/accent"
         blinkt:pstsIndicatorHeight="3dp"

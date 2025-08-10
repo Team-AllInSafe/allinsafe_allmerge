@@ -15,13 +15,13 @@ import de.blinkt.openvpn.ac1_applock.Ac1_01_applock_init_main
 import de.blinkt.openvpn.ac2_btmanage.Ac2_01_bluetooth_main
 import de.blinkt.openvpn.ac4_screenlock.Ac4_01_screenlock_main
 import de.blinkt.openvpn.activities.VpnMainActivity
-import de.blinkt.openvpn.databinding.Ac000MainInitMainBinding
+import de.blinkt.openvpn.databinding.OldAc000MainInitMainBinding
 
 class Ac0_00_main_init_main : ComponentActivity() {
-    lateinit var binding: Ac000MainInitMainBinding
+    lateinit var binding: OldAc000MainInitMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ac000MainInitMainBinding.inflate(layoutInflater)
+        binding= OldAc000MainInitMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.vpnButton.setOnClickListener{

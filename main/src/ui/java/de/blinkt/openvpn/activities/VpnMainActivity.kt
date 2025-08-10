@@ -21,13 +21,13 @@ import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
-import de.blinkt.openvpn.databinding.Ac301VpnInitMainBinding
+import de.blinkt.openvpn.databinding.OldAc301VpnInitMainBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.UUID
 
 class VpnMainActivity : BaseActivity() {
-    lateinit var binding: Ac301VpnInitMainBinding
+    lateinit var binding: OldAc301VpnInitMainBinding
     private var mSelectedProfile: VpnProfile? = null
     private var mSelectedProfileReason: String? = null
 //    private var isError = 1
@@ -55,7 +55,7 @@ class VpnMainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("allinsafevpn","[VpnMainActivity.onCreate] is called")
         super.onCreate(savedInstanceState)
-        binding=Ac301VpnInitMainBinding.inflate(layoutInflater)
+        binding=OldAc301VpnInitMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //기존의 vpnConnect 버튼

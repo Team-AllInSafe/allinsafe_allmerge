@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import de.blinkt.openvpn.databinding.Ac006PinSetupBinding
+import de.blinkt.openvpn.databinding.OldAc006PinSetupBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -16,13 +16,13 @@ import java.util.Arrays
 
 
 class Ac0_06_pin_setup : ComponentActivity() {
-    lateinit var binding: Ac006PinSetupBinding
+    lateinit var binding: OldAc006PinSetupBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var currentUserId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ac006PinSetupBinding.inflate(layoutInflater)
+        binding= OldAc006PinSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase 초기화

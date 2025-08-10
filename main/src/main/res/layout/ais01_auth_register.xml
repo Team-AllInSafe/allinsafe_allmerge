@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ais_darkblue">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left">
+        <!--    상단바 : 뒤로가기, 제목-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ais_ic_back"
+                app:layout_constraintBaseline_toTopOf="@id/tv_title"
+                app:layout_constraintEnd_toStartOf="@+id/tv_title"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="회원가입"
+                android:textColor="@color/ais_neongreenwhite"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Username Input -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/et_input_username"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ais_round_white_edge"
+            android:fontFamily="@font/pretendard_medium"
+            android:hint="username"
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textColorHint="@color/ais_neongreenwhite"
+            android:textSize="16sp" />
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/et_input_email"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ais_round_white_edge"
+            android:fontFamily="@font/pretendard_medium"
+            android:hint="email"
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textColorHint="@color/ais_neongreenwhite"
+            android:textSize="16sp" />
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/et_input_password"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/ais_round_white_edge"
+            android:fontFamily="@font/pretendard_medium"
+            android:hint="password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textColorHint="@color/ais_neongreenwhite"
+            android:textSize="16sp" />
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/ais_round_mint_full"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="REGISTER"
+            android:textColor="@color/ais_darkblue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

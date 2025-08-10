@@ -60,7 +60,7 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
 ////        //ui확인을 위한 임시 부분임
 
         binding.backButton.setOnClickListener {
-            activity502?.finish()
+            activity502.finish()
             finish()
         }
         binding.btnShowDetectHistory.setOnClickListener {
@@ -88,7 +88,7 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             // 뒤로가기 실행시 실행할 동작코드 구현하기! (앱종료, 다이얼로그 띄우기 등등)
-          activity502?.finish()
+            activity502.finish()
             finish()
         }
     }

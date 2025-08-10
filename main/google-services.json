@@ -45,6 +45,25 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:495031531843:android:3571361482332e556497f6",
+        "android_client_info": {
+          "package_name": "com.example.allinsafe_screenlock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRpepLGllchRtRLFXrGOTsGxOeh6FYE0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:495031531843:android:0d67adb0086520ae6497f6",
         "android_client_info": {
           "package_name": "com.naver.appLock"

@@ -5,6 +5,7 @@ import android.util.Log
 import de.blinkt.openvpn.Ac5_03_spoofingdetect_completed
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager.completedPageStart
+import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager.isCapturing
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager.spoofingEnd
 import de.blinkt.openvpn.detection.arpdetector.ArpData
 import de.blinkt.openvpn.detection.arpdetector.ArpSpoofingDetector
@@ -18,10 +19,13 @@ class SpoofingDetectionManager(
     val dnsDetector: DnsSpoofingDetector,
     private val alertManager: AlertManager
 ) {
+    @Volatile
     private var isDetecting = false
+
     private val detectionTimeoutMillis = 5_000L // 5초 제한
     private var detectionStartTime: Long = 0
 
+    //25.08.09 스레드 무한 증식 문제로 5초 타이머를 따로 함수로 안빼고 vpnservice 클래스에서 직접 시간 재는 걸로 바꿨음
     fun startDetection(packetSource: ByteArray) {
 //        packetSource: () -> ByteArray?
         if (isDetecting) {
@@ -31,8 +35,6 @@ class SpoofingDetectionManager(
 
         isDetecting = true
         detectionStartTime = System.currentTimeMillis()
-        //25.06.24
-//        LogManager.log("SpoofingManager", "탐지 시작")
 
         Thread {
             while (isDetecting) {
@@ -40,17 +42,19 @@ class SpoofingDetectionManager(
                 //Log.d("spoofing_count","$elapsed 초 경과")
                 if (elapsed >= detectionTimeoutMillis) {
 
-                    stopDetection()
+                    stopDetection() // isDetecting = false
                     //break
+                    Log.d("allinsafe","[spoofing] while문이 자꾸 돌아가유")
+                    // 2025.08.08 5초가 지나면 탐지가 중단되도록 해놓았지만, 스레드가 죽지않고 while문은 계속 돌아간다 -> startDetection을 자꾸 부르는 존재가 있음
                     spoofingEnd()
-                    //?
-                    if (!isDetecting)
-                    isDetecting = false
-                    //25.06.24
-//                    LogManager.log("SpoofingManager", "탐지 종료")
-                    
-                }
 
+                    isDetecting = false
+                    //2025.08.08 while문 조건 탈출을 기다릴 필요없이 바로 나가기 추가
+
+                    //startPacketCapture의 flag 내리기
+                    isCapturing=false
+                    break
+                }
                 val packetData = packetSource
                 if (packetData != null) {
                     analyzePacket(packetData)
@@ -63,8 +67,11 @@ class SpoofingDetectionManager(
     }
 
     fun stopDetection() {
-        if (!isDetecting) return
-        isDetecting = false
+        if (isDetecting==false) {
+            return
+        }else{
+            isDetecting = false
+        }
         //25.06.24
 //        LogManager.log("SpoofingManager", "탐지 종료")
     }

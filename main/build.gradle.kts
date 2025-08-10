@@ -248,6 +248,11 @@ dependencies {
     // 중복
 //    implementation(libs.androidx.core.ktx)
     implementation("androidx.compose.runtime:runtime:1.5.4")
+
+    //앱잠금 앱 목록 불러올 때 시간 감축을 위한 코루틴(멀티스레드)
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    //25.08.09 스푸핑 탐지시 코루틴을 위한 lifecycleServiceScope
+    implementation("androidx.lifecycle:lifecycle-service:2.9.2")
 }
 
 fun DependencyHandler.uiImplementation(dependencyNotation: Any): Dependency? =

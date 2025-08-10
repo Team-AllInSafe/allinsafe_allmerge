@@ -3,21 +3,39 @@ package de.blinkt.openvpn.vpn
 import android.content.Intent
 import android.net.VpnService
 import android.os.*
+import android.util.Log
+import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager.isCapturing
+import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager.spoofingEnd
 import de.blinkt.openvpn.detection.SpoofingDetectionManager
 import de.blinkt.openvpn.detection.common.AlertManager
 import de.blinkt.openvpn.detection.arpdetector.ArpSpoofingDetector
 import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.detection.dns.DnsSpoofingDetector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.FileInputStream
+import java.io.IOException
 import java.nio.ByteBuffer
+import kotlin.coroutines.cancellation.CancellationException
 
 class CustomVpnService : VpnService() {
 
     private var vpnInterface: ParcelFileDescriptor? = null
     private var packetCaptureThread: Thread? = null
-    private var isCapturing = false
+    private var packetCaptureJob: Job? = null
+//    private var isCapturing = false
     private var detectionManager: SpoofingDetectionManager? = null
     private val buffer = ByteBuffer.allocate(32767)
+
+    //25.08.09 스레드 대신 scope를 사용한 메모리 친화적 멀티태스킹 ^^
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.Default + job)
 
     companion object {
         // 🔹 가장 최근에 수신한 패킷을 외부에서 읽을 수 있도록 저장
@@ -33,6 +51,8 @@ class CustomVpnService : VpnService() {
 
     // 🔹 서비스가 시작될 때 호출됨
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // 한번 실행됨
+//        Log.d("allinsafe", "[spoofing] customvpnservice onStartCommand 실행")
         LogManager.log("VPN", "VPN 서비스 시작 요청")
         startVpnSafely()
         return START_STICKY
@@ -40,6 +60,8 @@ class CustomVpnService : VpnService() {
 
     // 🔹 VPN 인터페이스를 설정하고 탐지기 초기화
     private fun startVpnSafely() {
+        // 한번 실행됨
+//        Log.d("allinsafe", "[spoofing] onStartCommand->startVpnSafely 실행")
         try {
             stopVpn()
 
@@ -91,14 +113,16 @@ class CustomVpnService : VpnService() {
         }
         isCapturing = true
 
-        packetCaptureThread = Thread {
+        packetCaptureJob=scope.launch(Dispatchers.IO){
+            // 25.08.09 5초가 지났다면 밑의 타이머 코루틴으로 인해 stopvpn이 실행되면서 iscapture false되어 while문 끝남
+
+            // inputStream.read에서 패킷을 너무 오래 기다리면 성능이 떨어질 수 있음, io 전용 스레드 풀(여러 스레드의 묶음)에게 맡김
             try {
-                val fd = vpnInterface?.fileDescriptor ?: return@Thread
+                val fd = vpnInterface?.fileDescriptor ?: return@launch
                 val inputStream = FileInputStream(fd)
                 LogManager.log("VPN", "패킷 캡처 스레드 시작")
-
                 while (isCapturing) {
-                    val length = inputStream.read(buffer.array())
+                    val length = inputStream.read(buffer.array()) // 패킷 올때까지 블로킹
                     if (length > 0) {
                         val packetData = buffer.array().copyOf(length)
 
@@ -108,14 +132,68 @@ class CustomVpnService : VpnService() {
                         // ✅ 동시에 기존 방식도 유지
                         detectionManager?.analyzePacket(packetData)
 
-                        detectionManager?.startDetection(packetData)
+                        //25.08.09 기존에 아래 함수에서 카운트하던 타이머를 밑에 scope 코루틴으로 빼버림
+//                        detectionManager?.startDetection(packetData)
                     }
                 }
             } catch (e: Exception) {
                 LogManager.log("VPN", "캡처 중 오류: ${e.message}")
             }
         }
-        packetCaptureThread?.start()
+        //5초 타이머
+        scope.launch {
+            delay(5000L)
+            // 5초가 지났는데도 isCapturing이 여전히 true라면 타임아웃으로 간주
+            if (isCapturing) {
+                Log.d("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
+                try {
+                    // scope 끄고,vpn 닫고, isCapturing false로
+                    stopVpn()
+                    // ui 화면을 다루기 때문에 main에서 하게 함
+                    withContext(Dispatchers.Main){
+                        spoofingEnd()
+                    }
+
+                } catch (e: IOException) {
+                    // 이미 닫혔을 경우 등
+                    Log.d("allinsafespoofing","뭔가 스푸핑 탐지 타이머가 잘못 끝남")
+                }
+            }
+
+        }
+
+
+
+        // 기존 패킷 감지 로직(스레드 사용)
+//        packetCaptureThread = Thread {
+//            try {
+//                val fd = vpnInterface?.fileDescriptor ?: return@Thread
+//                val inputStream = FileInputStream(fd)
+//                LogManager.log("VPN", "패킷 캡처 스레드 시작")
+//
+//                while (isCapturing) {
+//                    val length = inputStream.read(buffer.array()) //25.08.09 혹시 이거 blocking인가? ㅇㅇ 패킷 올때까지
+//                    if (length > 0) {
+//                        val packetData = buffer.array().copyOf(length)
+//
+//                        // ✅ 최근 패킷 저장 (외부 탐지기에서 접근 가능)
+//                        latestPacket = packetData
+//
+//                        // ✅ 동시에 기존 방식도 유지
+//                        detectionManager?.analyzePacket(packetData)
+//
+//                        //여기 부분이 문제였음
+//                        Log.d("allinsafe", "[spoofing] onStartCommand->startVpnSafely->startPacketCapture->startDetection(while문 스레드) 실행")
+//                        detectionManager?.startDetection(packetData)
+//
+//                        // 25.08.09 startDetection 안에서 탐지가 끝나면 isCapturing=false 되게 해놓음
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                LogManager.log("VPN", "캡처 중 오류: ${e.message}")
+//            }
+//        }
+//        packetCaptureThread?.start()
     }
 
     // 🔹 캡처 스레드 중단
@@ -123,12 +201,18 @@ class CustomVpnService : VpnService() {
         isCapturing = false
         packetCaptureThread?.interrupt()
         packetCaptureThread = null
+
+        packetCaptureJob?.cancel()
+        packetCaptureJob=null
     }
 
     // 🔹 VPN 인터페이스 종료
     private fun stopVpn() {
         stopPacketCapture()
-        vpnInterface?.close()
+//        vpnInterface?.close()
+        if (vpnInterface!=null){
+            vpnInterface?.close()
+        }
         vpnInterface = null
         LogManager.log("VPN", "VPN 인터페이스 종료")
     }
@@ -137,6 +221,7 @@ class CustomVpnService : VpnService() {
     override fun onDestroy() {
         super.onDestroy()
         stopVpn()
+        job.cancel() // scope 종료
         LogManager.log("VPN", "VPN 서비스 종료")
     }
 

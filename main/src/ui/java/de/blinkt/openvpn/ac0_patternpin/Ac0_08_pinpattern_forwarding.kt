@@ -2,6 +2,7 @@ package de.blinkt.openvpn.ac0_patternpin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
@@ -57,7 +58,9 @@ class Ac0_08_pinpattern_forwarding : ComponentActivity() {
                         }
                     }
                 } catch (e: Exception) {
+                    Log.d("allinsafe",e.message.toString())
                     Toast.makeText(this@Ac0_08_pinpattern_forwarding, "잠금 화면 연결에 실패했습니다 : ${e.message}", Toast.LENGTH_SHORT).show()
+                    // PERMISSION_DENIED: Missing or insufficient permissions.
                 }
             }
         }

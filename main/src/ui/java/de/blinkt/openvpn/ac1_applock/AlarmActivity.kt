@@ -38,14 +38,6 @@ class AlarmActivity : ComponentActivity() {
 
         if (wasInBackground) {
             wasInBackground = false // 플래그 초기화
-
-            // MainActivity로 이동
-//            val intent = Intent(this, Ac1_01_applock_init_main::class.java).apply {
-//                //Intent.setFlags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            }
-//            startActivity(intent)
-            // AlarmActivity 종료
             finish()
         }
     }

@@ -100,6 +100,21 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/btn_verify_pin"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/ais_round_mint_full"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="PIN 인증하기"
+        android:textColor="@color/ais_darkblue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/space_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/space_left"
         android:layout_width="wrap_content"

@@ -12,22 +12,21 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import de.blinkt.openvpn.R
+import de.blinkt.openvpn.ac0_login.Ac0_01_login
 import de.blinkt.openvpn.ac0_patternpin.Ac0_04_pattern_setup
-import de.blinkt.openvpn.ac0_patternpin.Ac0_05_pattern_verify
 import de.blinkt.openvpn.ac0_patternpin.Ac0_06_pin_setup
-import de.blinkt.openvpn.ac0_patternpin.Ac0_08_pinpattern_forwarding
-import de.blinkt.openvpn.databinding.OldAc009UserInfoBinding
+import de.blinkt.openvpn.databinding.Ais04MainUserprofileBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class Ac0_09_user_info : ComponentActivity() {
-    lateinit var binding: OldAc009UserInfoBinding
+    lateinit var binding: Ais04MainUserprofileBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var currentUserId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= OldAc009UserInfoBinding.inflate(layoutInflater)
+        binding= Ais04MainUserprofileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase 초기화
@@ -56,23 +55,37 @@ class Ac0_09_user_info : ComponentActivity() {
                     else{
                         lockMethod="error"
                     }
-                    binding.tvLockmethod.text=lockMethod
+                    binding.tvLockMethod.text=lockMethod
 
                 } catch (e: Exception) {
                     Toast.makeText(this@Ac0_09_user_info, "데이터 로드 실패: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        binding.backButton.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
-        binding.btnPinSet.setOnClickListener {
+        binding.btnSetPin.setOnClickListener {
             val intent = Intent(this@Ac0_09_user_info, Ac0_06_pin_setup::class.java)
             startActivity(intent)
         }
-        binding.btnPatternSet.setOnClickListener {
+        binding.btnSetPattern.setOnClickListener {
             val intent = Intent(this@Ac0_09_user_info, Ac0_04_pattern_setup::class.java)
             startActivity(intent)
+        }
+        binding.btnLogout.setOnClickListener{
+            // Firebase 로그아웃
+            auth.signOut()
+            Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+
+            // 로그인 화면으로 이동
+            val intent = Intent(this, Ac0_01_login::class.java)
+
+            // 액티비티 스택에 있는 모든 이전 액티비티를 제거하는 플래그
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+            finish()
         }
     }
 }

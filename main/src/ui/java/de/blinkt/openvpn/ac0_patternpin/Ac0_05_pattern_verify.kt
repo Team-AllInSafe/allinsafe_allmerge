@@ -9,13 +9,13 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
-import de.blinkt.openvpn.databinding.OldAc004PatternVerifyBinding
+import de.blinkt.openvpn.databinding.Ais08LockscreenPatternVerifyBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.math.BigInteger
 
 class Ac0_05_pattern_verify : ComponentActivity() {
-    private lateinit var binding: OldAc004PatternVerifyBinding
+    private lateinit var binding: Ais08LockscreenPatternVerifyBinding
     private lateinit var patternView: PatternLockView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -23,7 +23,7 @@ class Ac0_05_pattern_verify : ComponentActivity() {
     private var isSettingMode = true // true: 패턴 설정, false: 패턴 검증
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=OldAc004PatternVerifyBinding.inflate(layoutInflater)
+        binding=Ais08LockscreenPatternVerifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Firebase 초기화
         auth = FirebaseAuth.getInstance()

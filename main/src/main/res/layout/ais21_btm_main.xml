@@ -4,21 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ais_darkblue">
-<!--    뒤로가기버튼-->
+    <!--    뒤로가기버튼-->
     <ImageButton
+        android:id="@+id/btn_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@color/transparent"
         android:src="@drawable/ais_ic_back"
-        app:layout_constraintStart_toStartOf="@+id/space_left"
-        android:layout_marginTop="100dp"
-        app:layout_constraintTop_toTopOf="@+id/space_top" />
-<!--    활성화 표시(아이콘, 단어)-->
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--    활성화 표시(아이콘, 단어)-->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="30dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -38,7 +42,7 @@
             android:layout_gravity="center_vertical"
             android:textSize="16sp" />
     </LinearLayout>
-<!--    전체 ui-->
+    <!--    전체 ui-->
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -46,7 +50,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-<!--        아이콘 + 배경-->
+        <!--        아이콘 + 배경-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -56,49 +60,49 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ais_ic_lock"
+                android:src="@drawable/ais_ic_btmanage"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-<!--        제목-->
+        <!--        제목-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/pretendard_bold"
-            android:text="앱잠금"
+            android:text="블루투스 보안"
             android:textColor="@color/ais_neongreenwhite"
             android:textSize="28sp" />
-<!--부가설명-->
+        <!--부가설명-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:text="중요한 앱들을 보호하세요"
+            android:text="블루투스 기기 페어링을 관리하세요"
             android:fontFamily="@font/pretendard_medium"
             android:textSize="14sp"
             android:textColor="@color/ais_half_white" />
-<!--실행 버튼-->
+        <!--실행 버튼-->
         <Button
-            android:id="@+id/btn_stop_applock"
+            android:id="@+id/btn_start_btmanage"
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/ais_round_white_full"
+            android:background="@drawable/ais_round_mint_full"
             android:fontFamily="@font/pretendard_bold"
-            android:text="앱잠금 중단하기"
+            android:text="블루투스 보안 실행하기"
             android:textColor="@color/ais_darkblue"
             android:textSize="16sp"
             android:textStyle="bold" />
-<!--부가기능 버튼-->
+        <!--부가기능 버튼-->
         <Button
-            android:id="@+id/btn_select_app"
+            android:id="@+id/btn_view_devices"
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -106,7 +110,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/ais_round_white_edge"
             android:fontFamily="@font/pretendard_bold"
-            android:text="잠글 앱 변경하기"
+            android:text="기기 목록 조회하기"
             android:textColor="@color/ais_neongreenwhite"
             android:textSize="16sp"
             android:textStyle="bold" />

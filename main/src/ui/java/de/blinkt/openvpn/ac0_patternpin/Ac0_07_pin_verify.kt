@@ -3,20 +3,22 @@ package de.blinkt.openvpn.ac0_patternpin
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import de.blinkt.openvpn.R
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
-import de.blinkt.openvpn.databinding.OldAc007PinVerifyBinding
+import de.blinkt.openvpn.databinding.Ais07LockscreenPinVerifyBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class Ac0_07_pin_verify : ComponentActivity() {
-    private lateinit var binding: OldAc007PinVerifyBinding
+    private lateinit var binding: Ais07LockscreenPinVerifyBinding
     private lateinit var patternView: PatternLockView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -24,23 +26,37 @@ class Ac0_07_pin_verify : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding= OldAc007PinVerifyBinding.inflate(layoutInflater)
+        binding= Ais07LockscreenPinVerifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Firebase 초기화
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         currentUserId = auth.currentUser?.uid
 
+        var passwordVisible=false
+
 //        binding.backButton.setOnClickListener {
 //            finish()
 //        }
-        binding.btnBottomFinish.setOnClickListener {
+        binding.btnVerifyPin.setOnClickListener {
             verifyPin()
+        }
+        binding.btnViewPin.setOnClickListener {
+            if (passwordVisible) {
+                // 비밀번호를 가리는 로직
+                binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_off)
+            } else {
+                // 비밀번호를 평문으로 보이게 하는 로직
+                binding.inputPin.inputType = InputType.TYPE_CLASS_TEXT
+                binding.btnViewPin.setImageResource(R.drawable.ais_ic_eye_on)
+            }
+            passwordVisible = !passwordVisible
         }
     }
 
     private fun verifyPin(){
-        val inputPin=binding.etInputPin.text.toString().trim()
+        val inputPin=binding.inputPin.text.toString().trim()
         currentUserId?.let { userId ->
             lifecycleScope.launch {
                 try {

@@ -7,14 +7,14 @@ import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
 import de.blinkt.openvpn.ac0_main.Ac0_00_main_init_main
 import de.blinkt.openvpn.ac1_applock.Ac1_01_applock_init_main
-import de.blinkt.openvpn.databinding.OldAc001LoginBinding
+import de.blinkt.openvpn.databinding.Ais00AuthLoginBinding
 
 class Ac0_01_login : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
-    private lateinit var binding:OldAc001LoginBinding
+    private lateinit var binding: Ais00AuthLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=OldAc001LoginBinding.inflate(layoutInflater)
+        binding=Ais00AuthLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase Auth 인스턴스 초기화
@@ -25,8 +25,8 @@ class Ac0_01_login : ComponentActivity() {
 
 
         binding.btnLogin.setOnClickListener {
-            val email = binding.etInputId.text.toString().trim()
-            val password = binding.etInputPw.text.toString().trim()
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
             if (currentUser != null) {
                 //이미 로그인되어 있으면 메인 액티비티로 이동
                 Toast.makeText(this,"이미 로그인되어있습니다. ${currentUser.email}",Toast.LENGTH_SHORT).show()
@@ -41,7 +41,7 @@ class Ac0_01_login : ComponentActivity() {
             }
 
         }
-        binding.btnRegister.setOnClickListener {
+        binding.tvSignupLink.setOnClickListener {
             val intent= Intent(this, Ac0_02_register::class.java)
             startActivity(intent)
         }

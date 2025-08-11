@@ -19,13 +19,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
+        android:fontFamily="@font/pretendard_medium"
         android:maxLines="2"
         android:text="app name init"
         android:textColor="@color/ais_neongreenwhite"
-        android:fontFamily="@font/pretendard_medium"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_app_icon"
-        app:layout_constraintEnd_toStartOf="@+id/checkBox2"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox"
         app:layout_constraintStart_toEndOf="@+id/iv_app_icon"
         app:layout_constraintTop_toTopOf="@+id/iv_app_icon" />
 

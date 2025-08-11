@@ -201,6 +201,7 @@ class Ac4_01_screenlock_main : ComponentActivity() {
 
     // 알림표시 권한 받기
     fun requestNotificationPermission() {
+        Log.d("allinsafescreenlock","화면 잠금 권한 얻기 시작 requestNotificationPermission")
         // 안드로이드 13 (API 33) 이상 버전에서만 권한 확인
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // 권한이 이미 허용되었는지 확인
@@ -208,6 +209,12 @@ class Ac4_01_screenlock_main : ComponentActivity() {
             if (permissionState != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없으면 요청 다이얼로그 실행
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }else{
+                Log.d("allinsafescreenlock", " 알림 권한 있음")
+                // 다른 앱 위에 띄우기 권한 없으면 받게 하기
+                getPermissionOverlayWindow(this)
+                // 서비스 시작
+                startLockService()
             }
         }
     }

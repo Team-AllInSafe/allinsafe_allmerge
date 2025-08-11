@@ -25,6 +25,7 @@ class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSIO
         // 사용자가 권한을 확인하면, 화면에 뭔가 바뀔 때 마다 생기는 이벤트를 받아서 그 앱 이름을 확인함
         // 앱 이름 확인하고 잠금 대상이면 종료하는 로직은 AppLockAccessibilityService 에 있음
 
+        // 화면에 표시되는 버튼 text 동기화
         if(AppLockAccessibilityService.Companion.onoff){
             binding.onoffbtn.text="끄기"
 

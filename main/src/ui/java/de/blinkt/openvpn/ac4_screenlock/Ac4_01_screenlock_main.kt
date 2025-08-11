@@ -1,11 +1,16 @@
 package de.blinkt.openvpn.ac4_screenlock
 
 
+import android.Manifest
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,26 +21,57 @@ import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
 import de.blinkt.openvpn.ac4_screenlock.util.TwoFactorAuthManager
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import de.blinkt.openvpn.databinding.Ais40ScreenlockMainInactivateBinding
 import de.blinkt.openvpn.databinding.OldAc401ScreenlockMainBinding
 
 class Ac4_01_screenlock_main : ComponentActivity() {
 
     private lateinit var dpm: DevicePolicyManager
     private lateinit var compName: ComponentName
-    private lateinit var binding: OldAc401ScreenlockMainBinding
+//    private lateinit var binding: OldAc401ScreenlockMainBinding
+    private lateinit var binding: Ais40ScreenlockMainInactivateBinding
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                getPermissionOverlayWindow(this)
+                startLockService()
+            } else {
+                Log.d("allinsafescreenlock","화면 잠금 권한 얻기 실패")
+                Toast.makeText(this,"권한을 허용해주세요",Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= OldAc401ScreenlockMainBinding.inflate(layoutInflater)
+//        binding= OldAc401ScreenlockMainBinding.inflate(layoutInflater)
+        binding= Ais40ScreenlockMainInactivateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 화면 잠금 시작 버튼
+        binding.btnStartScreenlock.setOnClickListener {
+            Log.d("allinsafescreenlock","시작 버튼 클릭")
+            //
+            LockReasonManager.saveReason(this,"자동 잠금 테스트")
+            // 권한 받고 받으면 실행
+            requestNotificationPermission()
+            // 권한 얻기. 권한 있으면 넘어감
+//            getPermissionOverlayWindow(this)
+//            startLockService()
+        }
+
+        // 화면 잠금 기능 끄기
+        binding.btnStopScrlock.setOnClickListener {
+            stopLockService()
+//            binding.btnStopScrlock.visibility=View.GONE
+//            binding.btnStartScreenlock.visibility=View.VISIBLE
+        }
+
+        // 기존 로직 25.08.11 주석
+        /*
         dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         compName = ComponentName(this, MyDeviceAdminReceiver::class.java)
-
-//        val btnRequestAdmin = findViewById<Button>(R.id.btn_request_admin
-//        val btnLockNow = findViewById<Button>(R.id.btn_lock_now)
-//        val switch2FA = findViewById<Switch>(R.id.switch_2fa)
-//        val btnSetPin = findViewById<Button>(R.id.btn_set_pin)
         val btnRequestAdmin = binding.btnRequestAdmin
         val btnLockNow = binding.btnLockNow
         val switch2FA = binding.switch2fa
@@ -87,11 +123,13 @@ class Ac4_01_screenlock_main : ComponentActivity() {
         btnSetPin.setOnClickListener {
             startActivity(Intent(this, PinSetupActivity::class.java))
         }
+        */
     }
 
     override fun onResume() {
         super.onResume()
 
+        /*
         val is2FA = TwoFactorAuthManager.is2FAEnabled(this)
         val hasPin = PinStorageManager.isPinSet(this)
         val hasReason = LockReasonManager.hasReason(this)
@@ -107,5 +145,42 @@ class Ac4_01_screenlock_main : ComponentActivity() {
         } else {
             Log.d("PinFlowCheck", "❌ 조건 불충족 → 인증 화면 안뜸")
         }
+        */
+    }
+
+    fun getPermissionOverlayWindow(context: Context){
+        if(!Settings.canDrawOverlays(context)) {
+            Log.d("allinsafescreen","다른 앱 위 뜨기 권한 없음")
+            val intent=Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:"+context.packageName))
+            context.startActivity(intent)
+        }else{ // 권한 있으면
+            Log.d("allinsafescreen","다른 앱 위 뜨기 권한 있음")
+//            startLockService()
+        }
+    }
+
+    // 알림표시 권한 받기
+    fun requestNotificationPermission() {
+        // 안드로이드 13 (API 33) 이상 버전에서만 권한 확인
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // 권한이 이미 허용되었는지 확인
+            val permissionState = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            if (permissionState != PackageManager.PERMISSION_GRANTED) {
+                // 권한이 없으면 요청 다이얼로그 실행
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    // 서비스 시작 함수
+    private fun startLockService(){
+        val serviceIntent = Intent(this, LockScreenService::class.java)
+        ContextCompat.startForegroundService(this, serviceIntent)
+    }
+    // 서비스 종료 함수
+    private fun stopLockService(){
+        val serviceIntent = Intent(this, LockScreenService::class.java)
+        stopService(serviceIntent)
     }
 }

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="androidx.security" />
+
     <!--
  This library wants SDK version 23 but we do runtime checks to not use it before
         API 23
     -->
-
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -18,71 +19,72 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="neverForLocation" />
 
-    <uses-sdk tools:overrideLibrary="androidx.security"/>
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-    <application>
 
-        <!--전체 메인 화면-->
+    <application>
+        <service
+            android:name=".ac4_screenlock.LockScreenService"
+            android:enabled="true"
+            android:foregroundServiceType="specialUse"
+            android:exported="true"></service>
+        <!-- 전체 메인 화면 -->
         <activity
             android:name=".allinsafemain.AllinsafeMainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-<!--          AllinsafeMainActivity에서 AppCompat~를 상속 근데, 테마가 Material 어쩌구라  android:theme="@style/Theme.AllinSafe">-->
 
-        </activity>
+            <!-- AllinsafeMainActivity에서 AppCompat~를 상속 근데, 테마가 Material 어쩌구라  android:theme="@style/Theme.AllinSafe"> -->
 
-        <!--spoofing-->
+        </activity> <!-- spoofing -->
         <activity
             android:name=".SpoofingMainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-        <!-- ✅ VpnService 등록 -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity> <!-- ✅ VpnService 등록 -->
         <service
             android:name=".vpn.CustomVpnService"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
-        </service>
-
-        <!--vpn 메인 페이지-->
+        </service> <!-- vpn 메인 페이지 -->
         <activity
-            android:name="de.blinkt.openvpn.activities.VpnMainActivity"
+            android:name=".activities.VpnMainActivity"
             android:exported="true"
-            tools:ignore="ExportedActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="openvpn" />
                 <data android:host="import-profile" />
             </intent-filter>
         </activity>
-
-        <activity android:name="de.blinkt.openvpn.activities.InternalWebView" />
-
-        <!--spoofing-->
-        <activity android:name=".Ac5_02_spoofingdetect_process"
+        <activity android:name=".activities.InternalWebView" /> <!-- spoofing -->
+        <activity
+            android:name=".Ac5_02_spoofingdetect_process"
             android:exported="false"
-            android:taskAffinity="com.ui.multiFinish"/>
-        <activity android:name=".Ac5_03_spoofingdetect_completed"
+            android:taskAffinity="com.ui.multiFinish" />
+        <activity
+            android:name=".Ac5_03_spoofingdetect_completed"
             android:exported="false"
-            android:taskAffinity="com.ui.multiFinish"/>
-        <activity android:name=".Ac5_04_spoofingdetect_detect_history"
-            android:exported="false"/>
+            android:taskAffinity="com.ui.multiFinish" />
+        <activity
+            android:name=".Ac5_04_spoofingdetect_detect_history"
+            android:exported="false" />
 
         <service
             android:name=".OpenVPNTileService"
@@ -100,19 +102,12 @@
                 android:value="false" />
         </service>
 
-
         <provider
             android:name=".FileProvider"
             android:authorities="${applicationId}.FileProvider"
             android:exported="true"
             android:grantUriPermissions="true"
-            tools:ignore="ExportedContentProvider" />
-
-
-
-
-
-        <!--25.08.02 앱-화면잠금,블루투스 합병 -> 필요없는 vpn 파일들 삭제 후 다시 하겠음-->
+            tools:ignore="ExportedContentProvider" /> <!-- 25.08.02 앱-화면잠금,블루투스 합병 -> 필요없는 vpn 파일들 삭제 후 다시 하겠음 -->
         <activity
             android:name=".ac0_main.Ac0_09_user_info"
             android:exported="false" />
@@ -157,13 +152,14 @@
             android:exported="false" />
         <activity
             android:name=".ac2_btmanage.BluetoothMainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ac2_btmanage.Ac2_01_bluetooth_main"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ac0_login.Ac0_01_login"
             android:exported="true">
+
             <!-- 25.08.02 로그인 메인 화면 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -171,6 +167,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".ac1_applock.AppLockAccessibilityService"
             android:exported="false"
@@ -184,50 +181,44 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <receiver android:name=".OnBootReceiver"
+        <receiver
+            android:name=".OnBootReceiver"
             android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
-        </receiver>
-        <!-- ✅ PIN 설정 액티비티 -->
+        </receiver> <!-- ✅ PIN 설정 액티비티 -->
         <activity
-            android:name="de.blinkt.openvpn.ac4_screenlock.pinlock.PinSetupActivity"
+            android:name=".ac4_screenlock.pinlock.PinSetupActivity"
             android:exported="false"
             android:label="PIN 설정"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <!-- ✅ PIN 입력 액티비티 -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- ✅ PIN 입력 액티비티 -->
         <activity
-            android:name="de.blinkt.openvpn.ac4_screenlock.pinlock.PinLockActivity"
+            android:name=".ac4_screenlock.pinlock.PinLockActivity"
             android:exported="false"
             android:label="PIN 인증"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <!-- ✅ Device Admin 수신자 -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- ✅ Device Admin 수신자 -->
         <receiver
-            android:name="de.blinkt.openvpn.ac4_screenlock.MyDeviceAdminReceiver"
-            android:permission="android.permission.BIND_DEVICE_ADMIN"
-            android:exported="false">
+            android:name=".ac4_screenlock.MyDeviceAdminReceiver"
+            android:exported="false"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_receiver" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
-        </receiver>
-
-        <!-- ✅ 잠금 해제 감지 리시버 -->
+        </receiver> <!-- ✅ 잠금 해제 감지 리시버 -->
         <receiver
-            android:name="de.blinkt.openvpn.ac4_screenlock.receiver.LockStatusReceiver"
+            android:name=".ac4_screenlock.receiver.LockStatusReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

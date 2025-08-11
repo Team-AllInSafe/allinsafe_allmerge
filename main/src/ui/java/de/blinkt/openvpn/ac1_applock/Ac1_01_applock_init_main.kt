@@ -47,7 +47,7 @@ class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSIO
         binding.btnStartApplock.setOnClickListener {
             val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
             val edit = pref.edit()
-            edit.putBoolean("onoff",!AppLockAccessibilityService.Companion.onoff) // 기존 상태 반전
+            edit.putBoolean("applock_onoff",!AppLockAccessibilityService.Companion.onoff) // 기존 상태 반전
             edit.apply()
             AppLockAccessibilityService.Companion.onoff =!AppLockAccessibilityService.Companion.onoff
 

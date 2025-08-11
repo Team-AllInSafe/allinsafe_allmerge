@@ -5,16 +5,16 @@ import android.net.VpnService
 import android.os.*
 import androidx.activity.ComponentActivity
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
+import de.blinkt.openvpn.databinding.Ais50SpoofMainInactivateBinding
 import de.blinkt.openvpn.detection.SpoofingDetectionManager
 import de.blinkt.openvpn.detection.arpdetector.ArpSpoofingDetector
 import de.blinkt.openvpn.detection.common.AlertManager
 import de.blinkt.openvpn.detection.dns.DnsSpoofingDetector
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import de.blinkt.openvpn.vpn.CustomVpnService
-import de.blinkt.openvpn.databinding.OldAc501SpoofingdetectInitMainBinding
 
 class SpoofingMainActivity : ComponentActivity() {
-    private lateinit var binding: OldAc501SpoofingdetectInitMainBinding
+    private lateinit var binding: Ais50SpoofMainInactivateBinding
     private lateinit var detectionManager: SpoofingDetectionManager
 
     private val vpnRequestCode = 1000
@@ -35,16 +35,16 @@ class SpoofingMainActivity : ComponentActivity() {
 
         SpoofingDetectingStatusManager.init(this)
 
-        binding = OldAc501SpoofingdetectInitMainBinding.inflate(layoutInflater)
+        binding = Ais50SpoofMainInactivateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 🔙 뒤로가기 버튼
-        binding.backButton.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
         // ▶️ 탐지 시작 버튼
-        binding.btnDetectStart.setOnClickListener {
+        binding.btnStartSpoofdetect.setOnClickListener {
             // 더미 패킷 삽입 예약
             if (insertArpDummyPacket) {
                 DummyPacketInjector.injectDummyArpData()
@@ -56,18 +56,18 @@ class SpoofingMainActivity : ComponentActivity() {
             // VPN 권한 요청
             startVpnService()
         }
-
-        // 🔹 더미 패킷 삽입 예약
-        binding.btnArpDummyPacket.setOnClickListener {
-            insertArpDummyPacket = true
-        }
-
-        binding.btnDnsDummyPacket.setOnClickListener {
-            insertDnsDummyPacket = true
-        }
+//        25.08.11 얘네 필요한가?-김윤영
+//        // 🔹 더미 패킷 삽입 예약
+//        binding.btnArpDummyPacket.setOnClickListener {
+//            insertArpDummyPacket = true
+//        }
+//
+//        binding.btnDnsDummyPacket.setOnClickListener {
+//            insertDnsDummyPacket = true
+//        }
 
         // 📜 탐지 기록 보기
-        binding.btnShowDetectHistory.setOnClickListener {
+        binding.btnViewSpoofdetectHistory.setOnClickListener {
             val intent = Intent(this, Ac5_04_spoofingdetect_detect_history::class.java)
             startActivity(intent)
         }

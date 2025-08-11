@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.view.View
 //import androidx.core.app.ActivityCompat.startActivityForResult
 //import com.google.firestore.v1.FirestoreGrpc.bindService
 import de.blinkt.openvpn.R
@@ -21,13 +22,14 @@ import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
-import de.blinkt.openvpn.databinding.OldAc301VpnInitMainBinding
+import de.blinkt.openvpn.databinding.Ais11ApplockMainBinding
+import de.blinkt.openvpn.databinding.Ais31VpnMainBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.UUID
 
 class VpnMainActivity : BaseActivity() {
-    lateinit var binding: OldAc301VpnInitMainBinding
+    lateinit var binding: Ais31VpnMainBinding
     private var mSelectedProfile: VpnProfile? = null
     private var mSelectedProfileReason: String? = null
     private var START_VPN_PROFILE = 11 // 그냥 아무 숫자 넣음
@@ -35,7 +37,6 @@ class VpnMainActivity : BaseActivity() {
     private var isServiceBound = false // 바인드 플래그
 
     private var vpnService: IOpenVPNServiceInternal? = null
-
     private val vpnServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             vpnService = IOpenVPNServiceInternal.Stub.asInterface(service)
@@ -52,135 +53,182 @@ class VpnMainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("allinsafevpn","[VpnMainActivity.onCreate] is called")
         super.onCreate(savedInstanceState)
-        binding=OldAc301VpnInitMainBinding.inflate(layoutInflater)
+        binding=Ais31VpnMainBinding.inflate(layoutInflater)
+
+        //sharedPreference로 앱 활성화 여부를 가져옵니다.
+        val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
+        var isAppActive=pref.getBoolean("vpn_onoff", false) //만약 저장된 값이 없을경우(초기상태) false입니다.
+
         setContentView(binding.root)
-
+        if (isAppActive){
+            //기능이 실행중(중지버튼 떠야함)
+            setUiActive(binding)
+        }
+        else{
+            //기능 실행 전(시작버튼 떠야함)
+            setUiInactive(binding)
+        }
+        binding.btnBack.setOnClickListener{
+            finish()
+        }
         //기존의 vpnConnect 버튼
-        binding.btnVpnStart.setOnClickListener {
+        binding.btnOnoffVpn.setOnClickListener {
+            if (isAppActive){
+                //기능 중지
+                // 1. sharedPreference에 앱 비활성화 저장
+                pref.edit().putBoolean("vpn_onoff", false).apply()
+                // 2. ui 기능 중지 상태로 바꿈
+                setUiInactive(binding)
+                // 3. vpn 멈춤(진짜 기능
+                vpnStop()
+            }
+            else{
+                //기능 실행
+                // 1. sharedPreference에 앱 활성화 저장
+                pref.edit().putBoolean("vpn_onoff", true).apply()
+                // 2. ui 기능 작동 상태로 바꿈
+                setUiActive(binding)
+                // 3. vpn 시작(진짜 기능
+                vpnStart()
+            }
+        }
+    }
 
-            // 25.08.02 이거 어케 해야되는데 todo 계정 보안 개심각!!!!!!!!!!!!!!!!!!!
-            val id="sua"
-            val pw="sua123"
+    fun vpnStart(){
+        // 25.08.02 이거 어케 해야되는데 todo 계정 보안 개심각!!!!!!!!!!!!!!!!!!!
+        val id="sua"
+        val pw="sua123"
 
-            // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
-            // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
+        // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
+        // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
 //            val inputStream = assets.open("client.ovpn")
 //            val reader = BufferedReader(InputStreamReader(inputStream))
 //            val parser = ConfigParser()
 //            parser.parseConfig(reader)
 //
 
-            try{
-                profile = ProfileManager.getLastConnectedProfile(applicationContext)
-            }catch(e: Exception){ //IllegalStateException  NullPointerException e
-                val inputStream = assets.open("client.ovpn")
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val parser = ConfigParser()
-                parser.parseConfig(reader)
+        try{
+            profile = ProfileManager.getLastConnectedProfile(applicationContext)
+        }catch(e: Exception){ //IllegalStateException  NullPointerException e
+            val inputStream = assets.open("client.ovpn")
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val parser = ConfigParser()
+            parser.parseConfig(reader)
 
-                //불러온 파일을 프로필 형식으로 파싱해서 profile 자료형에 선언?할당?
-                profile = parser.convertProfile()
-                if (profile.uuid == null) {
-                    profile.uuid = UUID.randomUUID()
-                }
-                profile.mName = "MyVPN"
-                profile.mUsername = id
-                profile.mPassword = pw
-
-                // 최근 사용한 vpn 프로필로 저장
-                ProfileManager.setConnectedVpnProfile(applicationContext,profile)
-
-                // profile 파일로 저장.
-                // 과정은 de.blinkt.openvpn.activities.VPNPrefervence.addProfile 함수 참고
-                val pm = ProfileManager.getInstance(applicationContext) //checkInstance 로 instant 초기화
-                // [debug] getInstance -> checkInstance -> loadVPNList -> 길이만큼 loadVpnEntry 반복
-
-                //profiles 해시맵 형태의 리스트? 같은 것에 추가
-                pm.addProfile(profile)
-
-                // preference에 해시맵 저장. 원래 저장되어있던 옛날 버전 덮어쓰는 과정
-                pm.saveProfileList(applicationContext)
-                // [debug] saveProfileList 실행 완료
-
-                // 새로 저장된 vpn 프로필을 파일로 만드는 것 같음.
-                // 왜 하는진 잘 모르겠으나, 기존의 코드에서 이렇게 처리하길래 넣음. 결국에 연결까지는 잘 되니 된거아니겠음~ 25.06.07
-                ProfileManager.saveProfile(applicationContext, profile)
-                // [debug] saveProfile 완료
+            //불러온 파일을 프로필 형식으로 파싱해서 profile 자료형에 선언?할당?
+            profile = parser.convertProfile()
+            if (profile.uuid == null) {
+                profile.uuid = UUID.randomUUID()
             }
-            /*
-            if (!isAleadyCreated) {
-                // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
-                // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
-                val inputStream = assets.open("client.ovpn")
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val parser = ConfigParser()
-                parser.parseConfig(reader)
+            profile.mName = "MyVPN"
+            profile.mUsername = id
+            profile.mPassword = pw
 
-                //불러온 파일을 프로필 형식으로 파싱해서 profile 자료형에 선언?할당?
-                profile = parser.convertProfile()
-                if (profile.uuid == null) {
-                    profile.uuid = UUID.randomUUID()
-                }
-                profile.mName = "MyVPN"
-                profile.mUsername = id
-                profile.mPassword = pw
+            // 최근 사용한 vpn 프로필로 저장
+            ProfileManager.setConnectedVpnProfile(applicationContext,profile)
 
-                // 최근 사용한 vpn 프로필로 저장
-                ProfileManager.setConnectedVpnProfile(applicationContext,profile)
+            // profile 파일로 저장.
+            // 과정은 de.blinkt.openvpn.activities.VPNPrefervence.addProfile 함수 참고
+            val pm = ProfileManager.getInstance(applicationContext) //checkInstance 로 instant 초기화
+            // [debug] getInstance -> checkInstance -> loadVPNList -> 길이만큼 loadVpnEntry 반복
 
-                // profile 파일로 저장.
-                // 과정은 de.blinkt.openvpn.activities.VPNPrefervence.addProfile 함수 참고
-                val pm = ProfileManager.getInstance(applicationContext) //checkInstance 로 instant 초기화
-                // [debug] getInstance -> checkInstance -> loadVPNList -> 길이만큼 loadVpnEntry 반복
+            //profiles 해시맵 형태의 리스트? 같은 것에 추가
+            pm.addProfile(profile)
 
-                //profiles 해시맵 형태의 리스트? 같은 것에 추가
-                pm.addProfile(profile)
+            // preference에 해시맵 저장. 원래 저장되어있던 옛날 버전 덮어쓰는 과정
+            pm.saveProfileList(applicationContext)
+            // [debug] saveProfileList 실행 완료
 
-                // preference에 해시맵 저장. 원래 저장되어있던 옛날 버전 덮어쓰는 과정
-                pm.saveProfileList(applicationContext)
-                // [debug] saveProfileList 실행 완료
+            // 새로 저장된 vpn 프로필을 파일로 만드는 것 같음.
+            // 왜 하는진 잘 모르겠으나, 기존의 코드에서 이렇게 처리하길래 넣음. 결국에 연결까지는 잘 되니 된거아니겠음~ 25.06.07
+            ProfileManager.saveProfile(applicationContext, profile)
+            // [debug] saveProfile 완료
+        }
+        /*
+        if (!isAleadyCreated) {
+            // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
+            // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
+            val inputStream = assets.open("client.ovpn")
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            val parser = ConfigParser()
+            parser.parseConfig(reader)
 
-                // 새로 저장된 vpn 프로필을 파일로 만드는 것 같음.
-                // 왜 하는진 잘 모르겠으나, 기존의 코드에서 이렇게 처리하길래 넣음. 결국에 연결까지는 잘 되니 된거아니겠음~ 25.06.07
-                ProfileManager.saveProfile(applicationContext, profile)
-                // [debug] saveProfile 완료
+            //불러온 파일을 프로필 형식으로 파싱해서 profile 자료형에 선언?할당?
+            profile = parser.convertProfile()
+            if (profile.uuid == null) {
+                profile.uuid = UUID.randomUUID()
+            }
+            profile.mName = "MyVPN"
+            profile.mUsername = id
+            profile.mPassword = pw
 
-                isAleadyCreated=true */
+            // 최근 사용한 vpn 프로필로 저장
+            ProfileManager.setConnectedVpnProfile(applicationContext,profile)
+
+            // profile 파일로 저장.
+            // 과정은 de.blinkt.openvpn.activities.VPNPrefervence.addProfile 함수 참고
+            val pm = ProfileManager.getInstance(applicationContext) //checkInstance 로 instant 초기화
+            // [debug] getInstance -> checkInstance -> loadVPNList -> 길이만큼 loadVpnEntry 반복
+
+            //profiles 해시맵 형태의 리스트? 같은 것에 추가
+            pm.addProfile(profile)
+
+            // preference에 해시맵 저장. 원래 저장되어있던 옛날 버전 덮어쓰는 과정
+            pm.saveProfileList(applicationContext)
+            // [debug] saveProfileList 실행 완료
+
+            // 새로 저장된 vpn 프로필을 파일로 만드는 것 같음.
+            // 왜 하는진 잘 모르겠으나, 기존의 코드에서 이렇게 처리하길래 넣음. 결국에 연결까지는 잘 되니 된거아니겠음~ 25.06.07
+            ProfileManager.saveProfile(applicationContext, profile)
+            // [debug] saveProfile 완료
+
+            isAleadyCreated=true */
 
 
-            // 잘 저장됐는지 확인
-            val reprofile = ProfileManager.get(applicationContext,profile.uuidString)
+        // 잘 저장됐는지 확인
+        val reprofile = ProfileManager.get(applicationContext,profile.uuidString)
 //            Log.d("allinsafevpn","[after get] reprofile is $reprofile")
 
-            if(reprofile==null){
-                Log.d("allinsafevpn","reprofile is null")
-            }
-            val profileToConnect = ProfileManager.getInstance(applicationContext).getProfileByName(reprofile.name)
-            val startReason = intent.getStringExtra(OpenVPNService.EXTRA_START_REASON)
-
-            if (profileToConnect == null) {
-                Log.d("allinsafevpn","profileToConnect is null")
-            } else {
-                mSelectedProfile = profileToConnect
-                mSelectedProfileReason = startReason //null 이어도 딱히 상관없는듯하여 null 체크 생략
-                launchVPN()
-            }
+        if(reprofile==null){
+            Log.d("allinsafevpn","reprofile is null")
         }
-        //기존의 vpnDisconnect 버튼
-        binding.btnVpnStop.setOnClickListener {
-            // 연결 끊기
-            Log.d("allinsafevpn","disconnect btn onclick")
-            // 원래는 연결되어있는 애를 저장하며 쓰다가, 끊기면 preference에서 삭제하는 그런거겠지만,
-            // 우린 그 profile 가지고 계속 쓸거니까 preference에서 삭제안하기로
-//            ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)
-            Log.d("allinsafevpn",vpnService.toString())
-            vpnService?.stopVPN(false)
-            Log.d("allinsafevpn","stopvpn 실행됨")
+        val profileToConnect = ProfileManager.getInstance(applicationContext).getProfileByName(reprofile.name)
+        val startReason = intent.getStringExtra(OpenVPNService.EXTRA_START_REASON)
 
-            // 이걸왜 false로 했지??
-            //isAleadyCreated=false
+        if (profileToConnect == null) {
+            Log.d("allinsafevpn","profileToConnect is null")
+        } else {
+            mSelectedProfile = profileToConnect
+            mSelectedProfileReason = startReason //null 이어도 딱히 상관없는듯하여 null 체크 생략
+            launchVPN()
         }
     }
+
+    fun vpnStop(){
+        // 연결 끊기
+        Log.d("allinsafevpn","disconnect btn onclick")
+        // 원래는 연결되어있는 애를 저장하며 쓰다가, 끊기면 preference에서 삭제하는 그런거겠지만,
+        // 우린 그 profile 가지고 계속 쓸거니까 preference에서 삭제안하기로
+//            ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)
+        Log.d("allinsafevpn",vpnService.toString())
+        vpnService?.stopVPN(false)
+        Log.d("allinsafevpn","stopvpn 실행됨")
+
+        // 이걸왜 false로 했지??
+        //isAleadyCreated=false
+    }
+
+    fun setUiActive(binding: Ais31VpnMainBinding){
+        binding.topActive.visibility=View.VISIBLE
+        binding.btnOnoffVpn.background=getDrawable(R.drawable.ais_round_white_full)
+        binding.btnOnoffVpn.text="VPN 중단하기"
+    }
+    fun setUiInactive(binding: Ais31VpnMainBinding){
+        binding.topActive.visibility=View.INVISIBLE
+        binding.btnOnoffVpn.background=getDrawable(R.drawable.ais_round_mint_full)
+        binding.btnOnoffVpn.text="VPN 실행하기"
+    }
+
 
     //service 종료(서버와의 연결과는 상관없이)
     override fun onDestroy() {

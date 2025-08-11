@@ -6,17 +6,15 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
-import de.blinkt.openvpn.databinding.OldAc502SpoofingdetectProcessBinding
 import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.content.Context
-import de.blinkt.openvpn.Ac5_03_spoofingdetect_completed
+import de.blinkt.openvpn.databinding.Ais51SpoofDetectingBinding
 import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
 
 class Ac5_02_spoofingdetect_process : ComponentActivity() {
-    private lateinit var binding: OldAc502SpoofingdetectProcessBinding
+    private lateinit var binding: Ais51SpoofDetectingBinding
 
     // private var isArpSpoofingCompleted = false
     // private var isDnsSpoofingCompleted = false
@@ -33,30 +31,30 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // ✅ 탐지 결과 전환을 위해 정확한 Context 등록
         SpoofingDetectingStatusManager.init(this)
 
-        binding = OldAc502SpoofingdetectProcessBinding.inflate(layoutInflater)
+        binding = Ais51SpoofDetectingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // val adapter = LogViewAdapter(listOf("로그1", "로그2", "로그3").toMutableList())
         // binding.recyclerLog.adapter = adapter
 
         val adapter = LogViewAdapter(LogManager.getLogs().toMutableList())
-        binding.recyclerLog.adapter = adapter
+        binding.spoofRecyclerview.adapter = adapter
 
         // ✅ 옵저버 등록해서 로그가 추가될 때마다 RecyclerView 갱신
         LogManager.addObserver { updatedLogs ->
             adapter.updateLogs(updatedLogs)
-            binding.recyclerLog.scrollToPosition(adapter.itemCount - 1) // 마지막 로그로 스크롤
+            binding.spoofRecyclerview.scrollToPosition(adapter.itemCount - 1) // 마지막 로그로 스크롤
         }
-
-        binding.backButton.setOnClickListener {
-            finish()
-        }
+//        25.08.11 스푸핑 탐지중 뒤로가기 버튼 x
+//        binding.backButton.setOnClickListener {
+//            finish()
+//        }
 
         // tempDetect_for10sec(binding) {
         //     detect_complete(binding)
         // }
 
-        binding.progressbar.setProgress(1)
+        binding.progressBar.setProgress(1)
         // binding.textviewProcess.text = "검사중..."
 
         binding.btnArpDummyPacket.setOnClickListener {
@@ -94,7 +92,7 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
     //     }
     // }
 
-    fun detect_complete(binding: OldAc502SpoofingdetectProcessBinding) {
+    fun detect_complete(binding: Ais51SpoofDetectingBinding) {
         // 실제 스푸핑 코드와 연동하였을 때 사용하기 위한 함수
         Toast.makeText(this.applicationContext, "스푸핑 탐지가 완료되었습니다!", Toast.LENGTH_LONG).show()
         val intent = Intent(this, Ac5_03_spoofingdetect_completed::class.java)

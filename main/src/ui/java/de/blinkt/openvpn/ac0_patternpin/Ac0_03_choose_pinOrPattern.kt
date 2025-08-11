@@ -4,18 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.google.firebase.auth.FirebaseAuth
-import de.blinkt.openvpn.databinding.Ac003ChoosePinOrPatternBinding
+import de.blinkt.openvpn.databinding.OldAc003ChoosePinOrPatternBinding
 
 //test용 임시 액티비티이고 본 데모에선 활용하지 않을 예정입니다.
 class Ac0_03_choose_pinOrPattern : ComponentActivity() {
-    private lateinit var binding: Ac003ChoosePinOrPatternBinding
+    private lateinit var binding: OldAc003ChoosePinOrPatternBinding
     private lateinit var auth: FirebaseAuth
 //    private lateinit var database: LoginDatabase
     //private var currentUserId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = Ac003ChoosePinOrPatternBinding.inflate(layoutInflater)
+        binding = OldAc003ChoosePinOrPatternBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()

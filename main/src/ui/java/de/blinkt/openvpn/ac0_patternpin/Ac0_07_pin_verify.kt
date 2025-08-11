@@ -9,14 +9,14 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
-import de.blinkt.openvpn.databinding.Ac007PinVerifyBinding
+import de.blinkt.openvpn.databinding.OldAc007PinVerifyBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class Ac0_07_pin_verify : ComponentActivity() {
-    private lateinit var binding: Ac007PinVerifyBinding
+    private lateinit var binding: OldAc007PinVerifyBinding
     private lateinit var patternView: PatternLockView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -24,7 +24,7 @@ class Ac0_07_pin_verify : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding= Ac007PinVerifyBinding.inflate(layoutInflater)
+        binding= OldAc007PinVerifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Firebase 초기화
         auth = FirebaseAuth.getInstance()

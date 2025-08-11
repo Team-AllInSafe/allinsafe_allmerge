@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/ais_darkblue">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/ais_round_mint_full"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left"
+        app:layout_constraintTop_toTopOf="@+id/space_top">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ais_ic_spoofdetect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="스푸핑 탐지 완료"
+        android:textColor="@color/ais_neongreenwhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/result_arp"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ais_round_blue_full_mint_edge"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <ImageView
+            android:id="@+id/ic_arp_result"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ais_ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_arp_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="ARP 스푸핑 탐지 결과 기본값"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_arp_result"
+            app:layout_constraintStart_toEndOf="@+id/ic_arp_result"
+            app:layout_constraintTop_toTopOf="@+id/ic_arp_result" />
+
+        <TextView
+            android:id="@+id/tv_arp_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:layout_marginTop="5dp"
+            android:text="ARP 스푸핑 탐지 결과 설명 기본값"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/ic_arp_result"
+            app:layout_constraintTop_toBottomOf="@+id/ic_arp_result" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/result_dns"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ais_round_blue_full_mint_edge"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left"
+        app:layout_constraintTop_toBottomOf="@+id/result_arp">
+
+        <ImageView
+            android:id="@+id/ic_dns_result"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ais_ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_dns_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="DNS 스푸핑 탐지 결과 기본값"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_dns_result"
+            app:layout_constraintStart_toEndOf="@+id/ic_dns_result"
+            app:layout_constraintTop_toTopOf="@+id/ic_dns_result" />
+
+        <TextView
+            android:id="@+id/tv_dns_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="DNS 스푸핑 탐지 결과 설명 기본값"
+            android:textColor="@color/ais_neongreenwhite"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@+id/ic_dns_result"
+            app:layout_constraintTop_toBottomOf="@+id/ic_dns_result" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/ais_blue"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/space_bottom"
+        app:layout_constraintEnd_toStartOf="@+id/space_right"
+        app:layout_constraintStart_toStartOf="@+id/space_left"
+        app:layout_constraintTop_toBottomOf="@+id/result_dns">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ais_ic_caution_mint"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="실시간 탐지 로그"
+                android:textColor="@color/ais_neongreenwhite"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/spoof_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    <!--    상하좌우 마진-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/space_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

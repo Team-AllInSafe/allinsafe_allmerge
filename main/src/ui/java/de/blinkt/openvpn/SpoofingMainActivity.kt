@@ -11,10 +11,10 @@ import de.blinkt.openvpn.detection.common.AlertManager
 import de.blinkt.openvpn.detection.dns.DnsSpoofingDetector
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import de.blinkt.openvpn.vpn.CustomVpnService
-import de.blinkt.openvpn.databinding.Ac501SpoofingdetectInitMainBinding
+import de.blinkt.openvpn.databinding.OldAc501SpoofingdetectInitMainBinding
 
 class SpoofingMainActivity : ComponentActivity() {
-    private lateinit var binding: Ac501SpoofingdetectInitMainBinding
+    private lateinit var binding: OldAc501SpoofingdetectInitMainBinding
     private lateinit var detectionManager: SpoofingDetectionManager
 
     private val vpnRequestCode = 1000
@@ -35,7 +35,7 @@ class SpoofingMainActivity : ComponentActivity() {
 
         SpoofingDetectingStatusManager.init(this)
 
-        binding = Ac501SpoofingdetectInitMainBinding.inflate(layoutInflater)
+        binding = OldAc501SpoofingdetectInitMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 🔙 뒤로가기 버튼

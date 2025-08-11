@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import de.blinkt.openvpn.ac4_screenlock.Ac4_01_screenlock_main
 import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
-import de.blinkt.openvpn.databinding.Ac000MainInitMainBinding
+import de.blinkt.openvpn.databinding.OldAc000MainInitMainBinding
 import de.blinkt.openvpn.databinding.ActivityPinLockBinding
 
 class PinLockActivity : AppCompatActivity() {

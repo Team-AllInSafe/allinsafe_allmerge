@@ -8,19 +8,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import de.blinkt.openvpn.Ac5_04_spoofingdetect_detect_history
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
-import de.blinkt.openvpn.databinding.Ac503SpoofingdetectCompletedBinding
-import de.blinkt.openvpn.databinding.Ac506SpofingdetectItemLogBinding
+import de.blinkt.openvpn.databinding.OldAc503SpoofingdetectCompletedBinding
+import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
 import de.blinkt.openvpn.detection.common.LogManager
 
 
 class Ac5_03_spoofingdetect_completed : ComponentActivity() {
     lateinit var activity502:Ac5_02_spoofingdetect_process
-    private lateinit var binding: Ac503SpoofingdetectCompletedBinding
+    private lateinit var binding: OldAc503SpoofingdetectCompletedBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = Ac503SpoofingdetectCompletedBinding.inflate(layoutInflater)
+        binding = OldAc503SpoofingdetectCompletedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         activity502= Ac5_02_spoofingdetect_process.activity502!!
         val adapter =CompletedLogViewAdapter(LogManager.getLogs().toMutableList())
@@ -93,30 +92,30 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
             finish()
         }
     }
-    fun set_arp_normal(binding: Ac503SpoofingdetectCompletedBinding){
-        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.btn_round_green)
+    fun set_arp_normal(binding: OldAc503SpoofingdetectCompletedBinding){
+        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_green)
         binding.arpText.text="미탐지"
     }
-    fun set_arp_abnormal(binding: Ac503SpoofingdetectCompletedBinding){
-        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.btn_round_red)
+    fun set_arp_abnormal(binding: OldAc503SpoofingdetectCompletedBinding){
+        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_red)
         binding.arpText.text="탐지"
     }
-    fun set_dns_normal(binding: Ac503SpoofingdetectCompletedBinding){
-        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.btn_round_green)
+    fun set_dns_normal(binding: OldAc503SpoofingdetectCompletedBinding){
+        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_green)
         binding.dnsText.text="미탐지"
     }
-    fun set_dns_abnormal(binding: Ac503SpoofingdetectCompletedBinding){
-        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.btn_round_red)
+    fun set_dns_abnormal(binding: OldAc503SpoofingdetectCompletedBinding){
+        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_red)
         binding.dnsText.text="탐지"
     }
 }
 
-class CompletedLogViewHolder(var binding: Ac506SpofingdetectItemLogBinding): RecyclerView.ViewHolder(binding.root)
+class CompletedLogViewHolder(var binding: OldAc506SpoofingdetectItemLogBinding): RecyclerView.ViewHolder(binding.root)
 class CompletedLogViewAdapter(private val LogList: MutableList<String>) :
     RecyclerView.Adapter<LogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
-        val binding= Ac506SpofingdetectItemLogBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding= OldAc506SpoofingdetectItemLogBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return LogViewHolder(binding)
     }
 

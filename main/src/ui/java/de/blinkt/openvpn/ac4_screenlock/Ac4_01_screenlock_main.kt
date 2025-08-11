@@ -16,17 +16,17 @@ import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
 import de.blinkt.openvpn.ac4_screenlock.util.TwoFactorAuthManager
 import android.util.Log
 import androidx.activity.ComponentActivity
-import de.blinkt.openvpn.databinding.ActivityMainBinding
+import de.blinkt.openvpn.databinding.OldAc401ScreenlockMainBinding
 
 class Ac4_01_screenlock_main : ComponentActivity() {
 
     private lateinit var dpm: DevicePolicyManager
     private lateinit var compName: ComponentName
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: OldAc401ScreenlockMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
+        binding= OldAc401ScreenlockMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager

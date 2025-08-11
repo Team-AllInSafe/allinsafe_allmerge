@@ -14,14 +14,14 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
-import de.blinkt.openvpn.databinding.Ac102ActivityEditLockAppBinding
-import de.blinkt.openvpn.databinding.Ac103AppListItemBinding
+import de.blinkt.openvpn.databinding.OldAc102ActivityEditLockAppBinding
+import de.blinkt.openvpn.databinding.OldAc103AppListItemBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EditLockAppActivity : ComponentActivity() {
-    private lateinit var binding: Ac102ActivityEditLockAppBinding
+    private lateinit var binding: OldAc102ActivityEditLockAppBinding
     data class AppInfo(
         val packageName: String,
         val name: String,
@@ -30,7 +30,7 @@ class EditLockAppActivity : ComponentActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ac102ActivityEditLockAppBinding.inflate(layoutInflater)
+        binding= OldAc102ActivityEditLockAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //초기화면에 앱 목록 짜넣기
@@ -100,10 +100,10 @@ class EditLockAppActivity : ComponentActivity() {
         override fun getItemId(position: Int) = position.toLong()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val binding: Ac103AppListItemBinding = if (convertView == null) {
-                Ac103AppListItemBinding.inflate(LayoutInflater.from(context), parent, false)
+            val binding: OldAc103AppListItemBinding = if (convertView == null) {
+                OldAc103AppListItemBinding.inflate(LayoutInflater.from(context), parent, false)
             } else {
-                Ac103AppListItemBinding.bind(convertView)
+                OldAc103AppListItemBinding.bind(convertView)
             }
 
             val app = apps[position]

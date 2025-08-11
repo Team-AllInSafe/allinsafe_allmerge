@@ -16,18 +16,18 @@ import de.blinkt.openvpn.ac0_patternpin.Ac0_04_pattern_setup
 import de.blinkt.openvpn.ac0_patternpin.Ac0_05_pattern_verify
 import de.blinkt.openvpn.ac0_patternpin.Ac0_06_pin_setup
 import de.blinkt.openvpn.ac0_patternpin.Ac0_08_pinpattern_forwarding
-import de.blinkt.openvpn.databinding.Ac009UserInfoBinding
+import de.blinkt.openvpn.databinding.OldAc009UserInfoBinding
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class Ac0_09_user_info : ComponentActivity() {
-    lateinit var binding: Ac009UserInfoBinding
+    lateinit var binding: OldAc009UserInfoBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private var currentUserId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ac009UserInfoBinding.inflate(layoutInflater)
+        binding= OldAc009UserInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase 초기화

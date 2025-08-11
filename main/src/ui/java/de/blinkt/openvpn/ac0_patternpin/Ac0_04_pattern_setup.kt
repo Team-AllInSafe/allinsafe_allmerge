@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import de.blinkt.openvpn.databinding.Ac003PatternCreateBinding
+import de.blinkt.openvpn.databinding.OldAc003PatternCreateBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import java.util.Arrays
 
 class Ac0_04_pattern_setup : ComponentActivity() {
-private lateinit var binding: Ac003PatternCreateBinding
+private lateinit var binding: OldAc003PatternCreateBinding
     private lateinit var patternView: PatternLockView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -24,7 +24,7 @@ private lateinit var binding: Ac003PatternCreateBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=Ac003PatternCreateBinding.inflate(layoutInflater)
+        binding=OldAc003PatternCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Firebase 초기화

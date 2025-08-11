@@ -236,4 +236,5 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             prefs.edit().putStringSet(BLOCKED_KEY, set).apply()
         }
     }
+
 }

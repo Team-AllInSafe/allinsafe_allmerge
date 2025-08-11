@@ -13,25 +13,20 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import de.blinkt.openvpn.ac4_screenlock.pinlock.PinLockActivity
-import de.blinkt.openvpn.ac4_screenlock.pinlock.PinSetupActivity
-import de.blinkt.openvpn.ac4_screenlock.pinlock.PinStorageManager
 import de.blinkt.openvpn.ac4_screenlock.util.LockReasonManager
-import de.blinkt.openvpn.ac4_screenlock.util.TwoFactorAuthManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import de.blinkt.openvpn.databinding.Ais40ScreenlockMainInactivateBinding
-import de.blinkt.openvpn.databinding.OldAc401ScreenlockMainBinding
+import de.blinkt.openvpn.databinding.Ais41ScreenlockMainBinding
+import de.blinkt.openvpn.R
 
 class Ac4_01_screenlock_main : ComponentActivity() {
 
     private lateinit var dpm: DevicePolicyManager
     private lateinit var compName: ComponentName
 //    private lateinit var binding: OldAc401ScreenlockMainBinding
-    private lateinit var binding: Ais40ScreenlockMainInactivateBinding
+    private lateinit var binding: Ais41ScreenlockMainBinding
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -46,27 +41,58 @@ class Ac4_01_screenlock_main : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        binding= OldAc401ScreenlockMainBinding.inflate(layoutInflater)
-        binding= Ais40ScreenlockMainInactivateBinding.inflate(layoutInflater)
+        binding= Ais41ScreenlockMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //sharedPreference로 앱 활성화 여부를 가져옵니다.
+        val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
+        var isAppActive=pref.getBoolean("screenlock_onoff", false) //만약 저장된 값이 없을경우(초기상태) false입니다.
 
+        setContentView(binding.root)
+        if (isAppActive){
+            //기능이 실행중(중지버튼 떠야함)
+            setUiActive(binding)
+        }
+        else{
+            //기능 실행 전(시작버튼 떠야함)
+            setUiInactive(binding)
+        }
+        binding.btnBack.setOnClickListener{
+            finish()
+        }
         // 화면 잠금 시작 버튼
-        binding.btnStartScreenlock.setOnClickListener {
-            Log.d("allinsafescreenlock","시작 버튼 클릭")
-            //
-            LockReasonManager.saveReason(this,"자동 잠금 테스트")
-            // 권한 받고 받으면 실행
-            requestNotificationPermission()
-            // 권한 얻기. 권한 있으면 넘어감
+        binding.btnOnoffScreenlock.setOnClickListener {
+            Log.d("allinsafescreenlock","onoff 버튼 클릭")
+            if (isAppActive){
+                //기능 중지
+                // 1. sharedPreference에 앱 비활성화 저장
+                pref.edit().putBoolean("screenlock_onoff", false).apply()
+                // 2. ui 기능 중지 상태로 바꿈
+                setUiInactive(binding)
+                // 3. vpn 멈춤(진짜 기능
+                stopLockService()
+            }
+            else{
+                //기능 실행
+                // 1. sharedPreference에 앱 활성화 저장
+                pref.edit().putBoolean("screenlock_onoff", true).apply()
+                // 2. ui 기능 작동 상태로 바꿈
+                setUiActive(binding)
+                // 3. vpn 시작(진짜 기능
+                LockReasonManager.saveReason(this,"자동 잠금 테스트")
+                // 권한 받고 받으면 실행
+                requestNotificationPermission()
+                // 권한 얻기. 권한 있으면 넘어감
 //            getPermissionOverlayWindow(this)
 //            startLockService()
+            }
         }
 
-        // 화면 잠금 기능 끄기
-        binding.btnStopScrlock.setOnClickListener {
-            stopLockService()
-//            binding.btnStopScrlock.visibility=View.GONE
-//            binding.btnStartScreenlock.visibility=View.VISIBLE
-        }
+//        // 화면 잠금 기능 끄기
+//        binding.btnStartScreenlock.setOnClickListener {
+//            stopLockService()
+////            binding.btnStopScrlock.visibility=View.GONE
+////            binding.btnStartScreenlock.visibility=View.VISIBLE
+//        }
 
         // 기존 로직 25.08.11 주석
         /*
@@ -124,6 +150,19 @@ class Ac4_01_screenlock_main : ComponentActivity() {
             startActivity(Intent(this, PinSetupActivity::class.java))
         }
         */
+    }
+
+    fun setUiInactive(binding: Ais41ScreenlockMainBinding){
+        //바꿀점 : 상단 활성화, 버튼 배경, 버튼 글씨
+        binding.topActive.visibility=View.INVISIBLE
+        binding.btnOnoffScreenlock.background=getDrawable(R.drawable.ais_round_mint_full)
+        binding.btnOnoffScreenlock.text="화면잠금 실행하기"
+    }
+    fun setUiActive(binding: Ais41ScreenlockMainBinding){
+        //바꿀점 : 상단 활성화, 버튼 배경, 버튼 글씨
+        binding.topActive.visibility= View.VISIBLE
+        binding.btnOnoffScreenlock.background=getDrawable(R.drawable.ais_round_white_full)
+        binding.btnOnoffScreenlock.text="화면잠금 중단하기"
     }
 
     override fun onResume() {

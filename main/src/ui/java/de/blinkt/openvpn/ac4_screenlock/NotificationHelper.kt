@@ -40,7 +40,8 @@ object NotificationHelper {
 //        val notificationId = 1 // 알림마다 고유 ID 부여
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.allinsafeicon) //todo 앱이름 바뀌면 수정 필요
+            //.setSmallIcon(R.drawable.allinsafeicon) //todo 앱이름 바뀌면 수정 필요
+            .setSmallIcon(R.mipmap.ic_launcher) //왜 이걸해도 앱 아이콘이 안 보이지?
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.ac1_applock.AppLockAccessibilityService
+import de.blinkt.openvpn.ac4_screenlock.pinlock.PinLockActivity
 import de.blinkt.openvpn.databinding.Ais07LockscreenPinVerifyBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,7 +93,7 @@ class Ac0_07_pin_verify : ComponentActivity() {
                                     startActivity(launchIntent)
                                 }
                             }
-                            finish()
+                            finishAffinity()
                         }
                         else{
                             Toast.makeText(this@Ac0_07_pin_verify,"pin 불일치", Toast.LENGTH_SHORT).show()
@@ -103,5 +104,16 @@ class Ac0_07_pin_verify : ComponentActivity() {
                 }
             }
         }
+    }
+    // ✅ 뒤로가기 버튼 차단
+    @Suppress("MissingSuperCall")
+    override fun onBackPressed() {}
+
+    // ✅ 홈 버튼 및 최근앱 버튼 눌렀을 때 재진입
+    override fun onUserLeaveHint() {
+        val intent = Intent(this, Ac0_08_pinpattern_forwarding::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(intent)
     }
 }

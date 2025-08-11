@@ -86,7 +86,7 @@
             android:textSize="14sp"
             android:textColor="@color/ais_half_white" />
         <Button
-            android:id="@+id/btn_start_screenlock"
+            android:id="@+id/btn_onoff_screenlock"
             android:layout_width="200dp"
             android:layout_height="60dp"
             android:layout_gravity="center"

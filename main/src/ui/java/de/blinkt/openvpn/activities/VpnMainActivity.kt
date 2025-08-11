@@ -76,7 +76,9 @@ class VpnMainActivity : BaseActivity() {
             if (isAppActive){
                 //기능 중지
                 // 1. sharedPreference에 앱 비활성화 저장
+                //Log.d("vpnonoff", "set vpn off")
                 pref.edit().putBoolean("vpn_onoff", false).apply()
+                isAppActive=false
                 // 2. ui 기능 중지 상태로 바꿈
                 setUiInactive(binding)
                 // 3. vpn 멈춤(진짜 기능
@@ -86,6 +88,7 @@ class VpnMainActivity : BaseActivity() {
                 //기능 실행
                 // 1. sharedPreference에 앱 활성화 저장
                 pref.edit().putBoolean("vpn_onoff", true).apply()
+                isAppActive=true
                 // 2. ui 기능 작동 상태로 바꿈
                 setUiActive(binding)
                 // 3. vpn 시작(진짜 기능

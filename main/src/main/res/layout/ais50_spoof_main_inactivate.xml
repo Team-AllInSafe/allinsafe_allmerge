@@ -7,6 +7,7 @@
 
     <!--    뒤로가기버튼-->
     <ImageButton
+        android:id="@+id/btn_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@color/transparent"
@@ -80,6 +81,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="15dp"
+            android:visibility="gone"
             android:background="@drawable/ais_round_white_edge"
             android:fontFamily="@font/pretendard_bold"
             android:text="과거 탐지 기록 조회하기"

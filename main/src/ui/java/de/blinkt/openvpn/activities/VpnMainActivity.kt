@@ -57,7 +57,6 @@ class VpnMainActivity : BaseActivity() {
 
         //sharedPreference로 앱 활성화 여부를 가져옵니다.
         val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
-        val edit = pref.edit()
         var isAppActive=pref.getBoolean("vpn_onoff", false) //만약 저장된 값이 없을경우(초기상태) false입니다.
 
         setContentView(binding.root)

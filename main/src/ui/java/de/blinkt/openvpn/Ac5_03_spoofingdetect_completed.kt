@@ -9,24 +9,24 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
-import de.blinkt.openvpn.databinding.OldAc503SpoofingdetectCompletedBinding
+import de.blinkt.openvpn.databinding.Ais52SpoofCompletedBinding
 import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
 import de.blinkt.openvpn.detection.common.LogManager
 
 
 class Ac5_03_spoofingdetect_completed : ComponentActivity() {
     lateinit var activity502:Ac5_02_spoofingdetect_process
-    private lateinit var binding: OldAc503SpoofingdetectCompletedBinding
+    private lateinit var binding: Ais52SpoofCompletedBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = OldAc503SpoofingdetectCompletedBinding.inflate(layoutInflater)
+        binding = Ais52SpoofCompletedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         activity502= Ac5_02_spoofingdetect_process.activity502!!
         val adapter =CompletedLogViewAdapter(LogManager.getLogs().toMutableList())
-        binding.recyclerLog.adapter=adapter
+        binding.spoofRecyclerview.adapter=adapter
         LogManager.addObserver { updatedLogs ->
             adapter.updateLogs(updatedLogs)
-            binding.recyclerLog.scrollToPosition(adapter.itemCount - 1)
+            binding.spoofRecyclerview.scrollToPosition(adapter.itemCount - 1)
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 ////        //ui확인을 위한 임시 부분임
@@ -59,14 +59,14 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
 //        }
 ////        //ui확인을 위한 임시 부분임
 
-        binding.backButton.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             activity502.finish()
             finish()
         }
-        binding.btnShowDetectHistory.setOnClickListener {
-            var intent = Intent(this, Ac5_04_spoofingdetect_detect_history::class.java)
-            startActivity(intent)
-        }
+//        binding.btnShowDetectHistory.setOnClickListener {
+//            var intent = Intent(this, Ac5_04_spoofingdetect_detect_history::class.java)
+//            startActivity(intent)
+//        }
 
         if (SpoofingDetectingStatusManager.getArpSeverity() == "CRITICAL"
             || SpoofingDetectingStatusManager.getArpSeverity()=="WARNING") {
@@ -92,21 +92,39 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
             finish()
         }
     }
-    fun set_arp_normal(binding: OldAc503SpoofingdetectCompletedBinding){
-        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_green)
-        binding.arpText.text="미탐지"
+    fun set_arp_normal(binding: Ais52SpoofCompletedBinding){
+        binding.icArpResult.setImageResource(R.drawable.ais_ic_safeshield)
+        binding.tvArpResult.setTextColor(
+            ContextCompat.getColor(this, R.color.ais_mint)
+        )
+        binding.tvArpResult.text="ARP 스푸핑 미탐지"
+        binding.tvArpDetail.text="ARP 캐시 변조가 탐지되지 않았습니다."
     }
-    fun set_arp_abnormal(binding: OldAc503SpoofingdetectCompletedBinding){
-        binding.arpBg.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_red)
-        binding.arpText.text="탐지"
+    fun set_arp_abnormal(binding: Ais52SpoofCompletedBinding){
+        binding.icArpResult.setImageResource(R.drawable.ais_ic_dangershield)
+        binding.resultArp.background=getDrawable(R.drawable.ais_round_blue_full_red_edge)
+        binding.tvArpResult.setTextColor(
+            ContextCompat.getColor(this, R.color.ais_red)
+        )
+        binding.tvArpResult.text="ARP 스푸핑 탐지"
+        binding.tvArpDetail.text="ARP 캐시 변조가 탐지되었습니다."
     }
-    fun set_dns_normal(binding: OldAc503SpoofingdetectCompletedBinding){
-        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_green)
-        binding.dnsText.text="미탐지"
+    fun set_dns_normal(binding: Ais52SpoofCompletedBinding){
+        binding.icDnsResult.setImageResource(R.drawable.ais_ic_safeshield)
+        binding.tvDnsResult.setTextColor(
+            ContextCompat.getColor(this, R.color.ais_mint)
+        )
+        binding.tvDnsResult.text="DNS 스푸핑 미탐지"
+        binding.tvDnsDetail.text="DNS 패킷 변조가 탐지되지 않았습니다."
     }
-    fun set_dns_abnormal(binding: OldAc503SpoofingdetectCompletedBinding){
-        binding.dnsView.background = ContextCompat.getDrawable(binding.root.context, R.drawable.old_btn_round_red)
-        binding.dnsText.text="탐지"
+    fun set_dns_abnormal(binding: Ais52SpoofCompletedBinding){
+        binding.icDnsResult.setImageResource(R.drawable.ais_ic_dangershield)
+        binding.resultDns.background=getDrawable(R.drawable.ais_round_blue_full_red_edge)
+        binding.tvDnsResult.setTextColor(
+            ContextCompat.getColor(this, R.color.ais_red)
+        )
+        binding.tvDnsResult.text="DNS 스푸핑 탐지"
+        binding.tvDnsDetail.text="DNS 패킷 변조가 탐지되었습니다."
     }
 }
 

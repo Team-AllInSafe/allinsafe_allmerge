@@ -145,7 +145,7 @@ class CustomVpnService : VpnService() {
             delay(5000L)
             // 5초가 지났는데도 isCapturing이 여전히 true라면 타임아웃으로 간주
             if (isCapturing) {
-                Log.d("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
+                LogManager.log("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
                 try {
                     // scope 끄고,vpn 닫고, isCapturing false로
                     stopVpn()
@@ -156,7 +156,7 @@ class CustomVpnService : VpnService() {
 
                 } catch (e: IOException) {
                     // 이미 닫혔을 경우 등
-                    Log.d("allinsafespoofing","뭔가 스푸핑 탐지 타이머가 잘못 끝남")
+                    LogManager.log("allinsafespoofing","뭔가 스푸핑 탐지 타이머가 잘못 끝남")
                 }
             }
 

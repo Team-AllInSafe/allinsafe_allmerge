@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.classforui.SpoofingDetectingStatusManager
 import de.blinkt.openvpn.databinding.Ais52SpoofCompletedBinding
@@ -24,6 +25,7 @@ class Ac5_03_spoofingdetect_completed : ComponentActivity() {
         activity502= Ac5_02_spoofingdetect_process.activity502!!
         val adapter =CompletedLogViewAdapter(LogManager.getLogs().toMutableList())
         binding.spoofRecyclerview.adapter=adapter
+        binding.spoofRecyclerview.layoutManager = LinearLayoutManager(this)
         LogManager.addObserver { updatedLogs ->
             adapter.updateLogs(updatedLogs)
             binding.spoofRecyclerview.scrollToPosition(adapter.itemCount - 1)

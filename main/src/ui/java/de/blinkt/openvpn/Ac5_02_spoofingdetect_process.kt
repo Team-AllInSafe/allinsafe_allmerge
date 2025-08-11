@@ -10,6 +10,7 @@ import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.blinkt.openvpn.databinding.Ais51SpoofDetectingBinding
 import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
 
@@ -38,6 +39,7 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // binding.recyclerLog.adapter = adapter
 
         val adapter = LogViewAdapter(LogManager.getLogs().toMutableList())
+        binding.spoofRecyclerview.layoutManager = LinearLayoutManager(this)
         binding.spoofRecyclerview.adapter = adapter
 
         // ✅ 옵저버 등록해서 로그가 추가될 때마다 RecyclerView 갱신

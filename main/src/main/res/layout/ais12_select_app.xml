@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/space_bottom"
         app:layout_constraintEnd_toStartOf="@+id/space_right"
         app:layout_constraintStart_toStartOf="@+id/space_left"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton">
+        app:layout_constraintTop_toBottomOf="@+id/btn_back">
 
     </ListView>
     <!--    상하좌우 마진-->

@@ -185,7 +185,8 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
     private fun loadDeviceLists() {
         val prefs = getSharedPreferences(prefs, MODE_PRIVATE)
         val trusted = prefs.getStringSet(trustedKey, emptySet()) ?: emptySet()
-        val blocked = prefs.getStringSet(blockedKey, emptySet()) ?: emptySet()
+        //실제 데이터 대신 더미 사용
+        //val blocked = prefs.getStringSet(blockedKey, emptySet()) ?: emptySet()
         val bonded = bluetoothAdapter?.bondedDevices ?: emptySet()
 
         val trustedList = trusted.mapNotNull { addr ->
@@ -194,17 +195,24 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
                 Device(it.name ?: "알 수 없는 기기", it.address, DeviceType.TRUSTED)
             }
         }
-        val blockedList = blocked.map { addr ->
-            //TrustedDevice(addr, "알 수 없는 기기", false)
-            //임의의 데이터
-            //근데 너무 더미데이터인거 티나나?
-            Device("Device C", "00:11:22:33:44:55", DeviceType.BLOCKED)
-            Device("Device D", "99:88:77:66:55:44", DeviceType.BLOCKED)
-        }
+        //여기에 더미데이터 넣을려했다가 취소함
+//        val blockedList = blocked.map { addr ->
+//            //TrustedDevice(addr, "알 수 없는 기기", false)
+//            //임의의 데이터
+//            //근데 너무 더미데이터인거 티나나?
+//            Device("악성 기기", "00:11:22:33:44:55", DeviceType.BLOCKED)
+//            //Device("Device D", "99:88:77:66:55:44", DeviceType.BLOCKED)
+//        }
+        // 더미 차단 기기 목록 생성
+        val dummyBlockedDevices = listOf(
+            Device("차단된 기기 Alpha", "00:AA:BB:CC:DD:EE", DeviceType.BLOCKED),
+            Device("차단된 기기 Beta", "FF:11:22:33:44:55", DeviceType.BLOCKED),
+            Device("악성 기기 Gamma", "DE:AD:BE:EF:00:00", DeviceType.BLOCKED)
+        )
 
         // UI 상태 업데이트
         trustedDevices = trustedList
-        blockedDevices = blockedList
+        blockedDevices = dummyBlockedDevices
     }
 
     private fun removeFromTrustedList(address: String) {

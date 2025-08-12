@@ -80,13 +80,16 @@ class BtmViewDeviceAdapter(private var devices: List<Device>) : RecyclerView.Ada
                 // 신뢰 기기 아이템의 삭제 버튼 클릭 리스너
                 trustedHolder.btnDeviceDelete.setOnClickListener {
                     Toast.makeText(holder.itemView.context, "${device.name} (신뢰 기기) 삭제 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-                    // 여기에 삭제 로직을 구현하면 됩니다.
+                    // TODO: 삭제 로직
                 }
             }
             VIEW_TYPE_BLOCKED -> {
                 val blockedHolder = holder as BlockedDeviceViewHolder
                 blockedHolder.deviceNameTextView.text = device.name
                 blockedHolder.deviceAddressTextView.text = device.address
+                blockedHolder.btnDeviceDelete.setOnClickListener{
+                    // TODO: 삭제 로직
+                }
             }
         }
     }

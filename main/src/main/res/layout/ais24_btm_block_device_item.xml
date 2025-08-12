@@ -32,7 +32,7 @@
         android:layout_marginVertical="10dp"
         android:layout_marginHorizontal="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_delete"
+        app:layout_constraintEnd_toStartOf="@+id/btn_block_delete"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
         app:layout_constraintTop_toTopOf="parent">
 

@@ -1,4 +1,4 @@
-package de.blinkt.openvpn.ac2_btmanage // 패키지 이름 일치
+package de.blinkt.openvpn.ac2_btmanage
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -7,26 +7,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresPermission
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.blinkt.openvpn.databinding.Ais22BtmViewDeviceBinding
@@ -34,40 +21,39 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-//data class TrustedDevice(val address: String, val name: String, val isConnected: Boolean = false)
-//// 기기 유형을 정의하는 enum 클래스
 enum class DeviceType {
     TRUSTED, BLOCKED
 }
 
-// 기기 정보를 담는 데이터 클래스
 data class Device(
     val name: String,
     val address: String,
-    val type: DeviceType // 기기 유형을 나타내는 속성 추가
+    val type: DeviceType
 )
-@OptIn(ExperimentalMaterial3Api::class)
+
 class Ac2_02_bluetooth_trust_device : ComponentActivity() {
-    lateinit var binding: Ais22BtmViewDeviceBinding
-    private val prefs = "prefs"
+
+    private lateinit var binding: Ais22BtmViewDeviceBinding
+    private val prefsName = "prefs"
     private val trustedKey = "trusted"
     private val blockedKey = "blocked"
 
+    // 1. 어댑터와 데이터 목록을 클래스 멤버 변수로 선언
+    private lateinit var deviceAdapter: BtmViewDeviceAdapter
+    private var trustedDeviceList = mutableListOf<Device>()
+    private var blockedDeviceList = mutableListOf<Device>()
+    private var currentDisplayType = DeviceType.TRUSTED // 현재 보여주는 목록 타입을 추적
+
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager
-        bluetoothManager.adapter
+        (getSystemService(Context.BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager).adapter
     }
 
-//    private var trustedDevices by mutableStateOf<List<TrustedDevice>>(emptyList())
-//    private var blockedDevices by mutableStateOf<List<TrustedDevice>>(emptyList())
-    private var trustedDevices by mutableStateOf<List<Device>>(emptyList())
-    private var blockedDevices by mutableStateOf<List<Device>>(emptyList())
-
+    // UI 실시간 갱신을 위한 리시버
     private val bondStateReceiver = object : BroadcastReceiver() {
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onReceive(ctx: Context?, intent: Intent?) {
             if (intent?.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
-                syncAndLoadDeviceLists()
+                syncAndLoadDeviceLists() // 페어링 상태 변경 시, 목록을 다시 로드하여 UI에 반영
             }
         }
     }
@@ -75,73 +61,151 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= Ais22BtmViewDeviceBinding.inflate(layoutInflater)
+        binding = Ais22BtmViewDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.recyclerviewDevices.layoutManager = LinearLayoutManager(this)
-        lateinit var deviceAdapter: BtmViewDeviceAdapter
-        trustedDevices = trustedDevices
-        blockedDevices = blockedDevices
 
-        // 초기 화면에는 신뢰 기기 목록을 보여줍니다.
-        deviceAdapter = BtmViewDeviceAdapter(trustedDevices)
-        binding.recyclerviewDevices.adapter = deviceAdapter
-
-        binding.btnBack.setOnClickListener{
-            finish()
-        }
-        binding.topbarTrustBackground.setOnClickListener{
-            deviceAdapter.updateData(trustedDevices)
-        }
-        binding.topbarBlockBackground.setOnClickListener{
-            deviceAdapter.updateData(blockedDevices)
-        }
-//        setContent {
-//            MaterialTheme {
-//                Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-//                    TrustDeviceScreen(
-//                        trustedDevices = trustedDevices,
-//                        blockedDevices = blockedDevices,
-//                        onRemoveTrusted = { addr ->
-//                            lifecycleScope.launch {
-//                                val unpairSuccess = unpairDevice(addr)
-//                                if (unpairSuccess) {
-//                                    removeFromTrustedList(addr)
-//                                    loadDeviceLists()
-//                                    Toast.makeText(this@Ac2_02_bluetooth_trust_device, "기기를 목록에서 제거했습니다.", Toast.LENGTH_SHORT).show()
-//                                } else {
-//                                    Toast.makeText(this@Ac2_02_bluetooth_trust_device, "기기 페어링 해제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
-//                        },
-//                        onRemoveBlocked = { addr ->
-//                            removeFromBlockedList(addr)
-//                            loadDeviceLists()
-//                        }
-//                    )
-//                }
-//            }
-//        }
+        // 이 함수를 호출하도록 구조화
+        setupRecyclerView()
+        setupClickListeners()
     }
-    // 차단 기기 데이터를 가져오는 가상의 함수입니다.
-//    private fun getBlockedDevices(): List<Device> {
-//        return listOf(
-//            // DeviceType.BLOCKED 속성을 추가합니다.
-//            Device("Device C", "00:11:22:33:44:55", DeviceType.BLOCKED),
-//            Device("Device D", "99:88:77:66:55:44", DeviceType.BLOCKED)
-//        )
-//    }
+    private fun setupRecyclerView() {
+        // 어댑터 생성 시, 빈 MutableList의 타입을 <Device>로 명확히 지정합니다.
+        deviceAdapter = BtmViewDeviceAdapter(mutableListOf<Device>()) { device, position ->
+            // 두 번째 인수인 삭제 콜백 람다는 그대로 둡니다.
+            handleDeviceDeletion(device, position)
+        }
+
+        binding.recyclerviewDevices.layoutManager = LinearLayoutManager(this)
+        binding.recyclerviewDevices.adapter = deviceAdapter
+    }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     override fun onResume() {
         super.onResume()
         val filter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         registerReceiver(bondStateReceiver, filter)
-        syncAndLoadDeviceLists()
+        syncAndLoadDeviceLists() // 화면에 진입할 때마다 최신 목록 로드
     }
 
     override fun onPause() {
         super.onPause()
         unregisterReceiver(bondStateReceiver)
+    }
+
+    private fun setupClickListeners() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+        binding.topbarTrustBackground.setOnClickListener {
+            currentDisplayType = DeviceType.TRUSTED
+            deviceAdapter.updateData(trustedDeviceList) // 신뢰 목록으로 UI 갱신
+        }
+        binding.topbarBlockBackground.setOnClickListener {
+            currentDisplayType = DeviceType.BLOCKED
+            deviceAdapter.updateData(blockedDeviceList) // 차단 목록으로 UI 갱신
+        }
+    }
+// in Ac2_02_bluetooth_trust_device.kt
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    private fun handleDeviceDeletion(device: Device, position: Int) {
+        val friendlyName = device.name
+        when (device.type) {
+            DeviceType.TRUSTED -> {
+                lifecycleScope.launch {
+                    val unpairSuccess = unpairDevice(device.address)
+                    if (unpairSuccess) {
+                        removeFromPreferences(trustedKey, device.address)
+
+                        // ✅ Activity의 원본 데이터 리스트에서 아이템 제거
+                        if (position < trustedDeviceList.size) {
+                            trustedDeviceList.removeAt(position)
+                        }
+
+                        // ✅ 어댑터의 UI에서 아이템 제거
+                        deviceAdapter.removeItem(position)
+                        Toast.makeText(this@Ac2_02_bluetooth_trust_device, "$friendlyName 의 연결을 끊고 신뢰 목록에서 해제했습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@Ac2_02_bluetooth_trust_device, "기기 페어링 해제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            DeviceType.BLOCKED -> {
+                removeFromPreferences(blockedKey, device.address)
+
+                // ✅ Activity의 원본 데이터 리스트에서 아이템 제거
+                if (position < blockedDeviceList.size) {
+                    blockedDeviceList.removeAt(position)
+                }
+
+                // ✅ 어댑터의 UI에서 아이템 제거
+                deviceAdapter.removeItem(position)
+                Toast.makeText(this, "[$friendlyName] 은(는) 더 이상 차단되지 않습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    private fun syncAndLoadDeviceLists() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) return
+
+        val prefs = getSharedPreferences(prefsName, MODE_PRIVATE)
+        val storedTrusted = prefs.getStringSet(trustedKey, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        val bondedNow = bluetoothAdapter?.bondedDevices?.map { it.address }?.toSet() ?: emptySet()
+
+        // 시스템 설정에서 페어링이 해제된 경우, 앱의 신뢰 목록에서도 동기화
+        val unbondedExternally = storedTrusted - bondedNow
+        if (unbondedExternally.isNotEmpty()) {
+            storedTrusted.removeAll(unbondedExternally)
+            prefs.edit().putStringSet(trustedKey, storedTrusted).apply()
+        }
+
+        loadDeviceLists()
+    }
+
+    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    private fun loadDeviceLists() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) return
+
+        val prefs = getSharedPreferences(prefsName, MODE_PRIVATE)
+        val allBondedDevices = bluetoothAdapter?.bondedDevices ?: emptySet()
+
+        // 1. 실제 신뢰 기기 목록을 불러옵니다.
+        val trustedAddresses = prefs.getStringSet(trustedKey, emptySet()) ?: emptySet()
+        trustedDeviceList = trustedAddresses.mapNotNull { addr ->
+            allBondedDevices.find { it.address == addr }?.let {
+                Device(it.name ?: "알 수 없는 기기", it.address, DeviceType.TRUSTED)
+            }
+        }.toMutableList()
+
+        // 2. 실제 차단 기기 목록을 불러옵니다.
+        val blockedAddresses = prefs.getStringSet(blockedKey, emptySet()) ?: emptySet()
+        val realBlockedList = blockedAddresses.map { addr ->
+            Device("차단된 기기", addr, DeviceType.BLOCKED)
+        }.toMutableList()
+
+        // 3. ✅ 발표 시나리오를 위한 더미 차단 기기 데이터를 생성합니다.
+        val dummyBlockedDevices = listOf(
+            Device("의심스러운 마우스", "AA:11:BB:22:CC:33", DeviceType.BLOCKED),
+            Device("악성 키보드", "DE:AD:BE:EF:00:00", DeviceType.BLOCKED),
+            Device("알 수 없는 장치", "00:00:00:00:00:00", DeviceType.BLOCKED)
+        )
+
+        // 4. ✅ 실제 차단 목록과 더미 목록을 합쳐 최종 차단 목록을 완성합니다.
+        blockedDeviceList.clear()
+        blockedDeviceList.addAll(realBlockedList)
+        blockedDeviceList.addAll(dummyBlockedDevices)
+
+        // 5. 현재 선택된 탭에 맞춰 UI를 갱신합니다.
+        val listToDisplay = if (currentDisplayType == DeviceType.TRUSTED) trustedDeviceList else blockedDeviceList
+        deviceAdapter.updateData(listToDisplay)
+    }
+
+    private fun removeFromPreferences(key: String, address: String) {
+        val prefs = getSharedPreferences(prefsName, MODE_PRIVATE)
+        val set = prefs.getStringSet(key, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        if (set.remove(address)) {
+            prefs.edit().putStringSet(key, set).apply()
+        }
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -150,165 +214,14 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
 
         if (deviceToUnpair != null) {
             try {
+                // 페어링 해제 메서드 호출
                 val method = deviceToUnpair.javaClass.getMethod("removeBond")
-                val success = method.invoke(deviceToUnpair) as? Boolean ?: false
-                return@withContext success
+                return@withContext method.invoke(deviceToUnpair) as? Boolean ?: false
             } catch (e: Exception) {
                 Log.e("TrustDevice", "페어링 해제 실패: $address", e)
                 return@withContext false
             }
         }
-        return@withContext true // 페어링 목록에 없으면 이미 해제된 것으로 간주
+        return@withContext true // 이미 페어링 목록에 없으면 성공으로 간주
     }
-
-    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
-    private fun syncAndLoadDeviceLists() {
-        val prefs = getSharedPreferences(prefs, MODE_PRIVATE)
-        val storedTrusted = prefs.getStringSet(trustedKey, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
-        val bondedNow = bluetoothAdapter?.bondedDevices?.map { it.address }?.toSet() ?: emptySet()
-
-        val unbondedExternally = storedTrusted - bondedNow
-        if (unbondedExternally.isNotEmpty()) {
-            storedTrusted.removeAll(unbondedExternally)
-        }
-
-        val newOnes = bondedNow - storedTrusted
-        if (newOnes.isNotEmpty()) {
-            storedTrusted.addAll(newOnes)
-        }
-
-        prefs.edit().putStringSet(trustedKey, storedTrusted).apply()
-        loadDeviceLists()
-    }
-
-    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
-    private fun loadDeviceLists() {
-        val prefs = getSharedPreferences(prefs, MODE_PRIVATE)
-        val trusted = prefs.getStringSet(trustedKey, emptySet()) ?: emptySet()
-        //실제 데이터 대신 더미 사용
-        //val blocked = prefs.getStringSet(blockedKey, emptySet()) ?: emptySet()
-        val bonded = bluetoothAdapter?.bondedDevices ?: emptySet()
-
-        val trustedList = trusted.mapNotNull { addr ->
-            bonded.find { it.address == addr }?.let {
-                //TrustedDevice(it.address, it.name ?: "알 수 없는 기기", true)
-                Device(it.name ?: "알 수 없는 기기", it.address, DeviceType.TRUSTED)
-            }
-        }
-        //여기에 더미데이터 넣을려했다가 취소함
-//        val blockedList = blocked.map { addr ->
-//            //TrustedDevice(addr, "알 수 없는 기기", false)
-//            //임의의 데이터
-//            //근데 너무 더미데이터인거 티나나?
-//            Device("악성 기기", "00:11:22:33:44:55", DeviceType.BLOCKED)
-//            //Device("Device D", "99:88:77:66:55:44", DeviceType.BLOCKED)
-//        }
-        // 더미 차단 기기 목록 생성
-        val dummyBlockedDevices = listOf(
-            Device("차단된 기기 Alpha", "00:AA:BB:CC:DD:EE", DeviceType.BLOCKED),
-            Device("차단된 기기 Beta", "FF:11:22:33:44:55", DeviceType.BLOCKED),
-            Device("악성 기기 Gamma", "DE:AD:BE:EF:00:00", DeviceType.BLOCKED)
-        )
-
-        // UI 상태 업데이트
-        trustedDevices = trustedList
-        blockedDevices = dummyBlockedDevices
-    }
-
-    private fun removeFromTrustedList(address: String) {
-        val prefs = getSharedPreferences(prefs, MODE_PRIVATE)
-        val set = prefs.getStringSet(trustedKey, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
-        if (set.remove(address)) {
-            prefs.edit().putStringSet(trustedKey, set).apply()
-        }
-    }
-
-    private fun removeFromBlockedList(address: String) {
-        val prefs = getSharedPreferences(prefs, MODE_PRIVATE)
-        val set = prefs.getStringSet(blockedKey, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
-        if (set.remove(address)) {
-            prefs.edit().putStringSet(blockedKey, set).apply()
-        }
-    }
-
-    // 이 부분은 추후 Figma 디자인에 맞춰 수정
-//    @Composable
-//    private fun TrustDeviceScreen(
-//        trustedDevices: List<TrustedDevice>,
-//        blockedDevices: List<TrustedDevice>,
-//        onRemoveTrusted: (String) -> Unit,
-//        onRemoveBlocked: (String) -> Unit
-//    ) {
-//        var selectedTab by remember { mutableStateOf(0) }
-//
-//        Column(Modifier.fillMaxSize()) {
-//            TopAppBar(
-//                title = { Text("기기 관리", fontWeight = FontWeight.Bold) },
-//                navigationIcon = {
-//                    IconButton(onClick = { finish() }) {
-//                        Icon(Icons.Default.ArrowBack, contentDescription = "뒤로가기")
-//                    }
-//                }
-//            )
-//
-//            TabRow(selectedTab, Modifier.fillMaxWidth()) {
-//                Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 }) {
-//                    Text("신뢰 기기 (${trustedDevices.size})", modifier = Modifier.padding(16.dp))
-//                }
-//                Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 }) {
-//                    Text("차단 기기 (${blockedDevices.size})", modifier = Modifier.padding(16.dp))
-//                }
-//            }
-//
-//            val list = if (selectedTab == 0) trustedDevices else blockedDevices
-//            val removeCallback = if (selectedTab == 0) onRemoveTrusted else onRemoveBlocked
-//            val emptyMsg = if (selectedTab == 0) "등록된 신뢰 기기가 없습니다." else "차단된 기기가 없습니다."
-//
-//            if (list.isEmpty()) {
-//                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    Text(emptyMsg, fontSize = 16.sp, color = Color.Gray)
-//                }
-//            } else {
-//                LazyColumn(
-//                    Modifier.fillMaxSize(),
-//                    contentPadding = PaddingValues(16.dp),
-//                    verticalArrangement = Arrangement.spacedBy(8.dp)
-//                ) {
-//                    items(list, key = { it.address }) { dev ->
-//                        DeviceRow(dev) { removeCallback(dev.address) }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    @Composable
-//    private fun DeviceRow(device: TrustedDevice, onRemove: () -> Unit) {
-//        Card(
-//            Modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 4.dp),
-//            elevation = CardDefaults.cardElevation(2.dp)
-//        ) {
-//            Row(
-//                Modifier
-//                    .fillMaxWidth()
-//                    .padding(16.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Column(modifier = Modifier.weight(1f)) {
-//                    Text(device.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-//                    Spacer(Modifier.height(4.dp))
-//                    Text(device.address, fontSize = 12.sp, color = Color.Gray)
-//                    if (device.isConnected) {
-//                        Text("연결됨", fontSize = 12.sp, color = Color(0xFF00C853))
-//                    }
-//                }
-//                IconButton(onClick = onRemove) {
-//                    Icon(Icons.Default.Delete, contentDescription = "제거", tint = Color.Gray)
-//                }
-//            }
-//        }
-//    }
 }

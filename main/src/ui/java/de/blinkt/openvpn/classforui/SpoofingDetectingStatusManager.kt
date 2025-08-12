@@ -7,13 +7,15 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import de.blinkt.openvpn.Ac5_03_spoofingdetect_completed
+import de.blinkt.openvpn.vpn.CustomVpnService
 
 object SpoofingDetectingStatusManager {
     private var arpSpoofDetectResult=SpoofDetectResult("Arp",0,"","","")
     private var dnsSpoofDetectResult=SpoofDetectResult("Dns",0,"","","")
     private lateinit var context:Context
     private var isCompletedPageStart=false
-    public var isCapturing=false
+    @Volatile
+    var isCapturing=false
     //나중에 더 확장해야겠지만 지금은 이것만 넣겠습니다.
     fun init(context: Context){
         this.context =context
@@ -40,6 +42,13 @@ object SpoofingDetectingStatusManager {
             // 25.08.09 추가
             isCapturing=false
 
+            //stopVpn(),stopTimer() 함수 부르기
+            Log.d("allinsafespoofing","stopVpn() checkIfAllCompleted에서 실행")
+            val vpnstopintent=Intent(context,CustomVpnService::class.java)
+            vpnstopintent.action=CustomVpnService.ACTION_VPN_STOP
+            context.startService(vpnstopintent)
+
+
             //spooginEnd()랑 내용 똑같음
             val intent = Intent(context, Ac5_03_spoofingdetect_completed::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)  // context가 Activity가 아닐 수 있으므로
@@ -54,7 +63,6 @@ object SpoofingDetectingStatusManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // context가 Activity가 아닐 수 있으므로
         completedPageStart()
         context.startActivity(intent)
-
     }
     fun completedPageStart(){
         isCompletedPageStart=true

@@ -29,7 +29,6 @@ class CustomVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private var packetCaptureThread: Thread? = null
     private var packetCaptureJob: Job? = null
-    private var timerJob: Job? = null
 //    private var isCapturing = false
     private var detectionManager: SpoofingDetectionManager? = null
     private val buffer = ByteBuffer.allocate(32767)
@@ -41,7 +40,6 @@ class CustomVpnService : VpnService() {
     companion object {
         // 🔹 가장 최근에 수신한 패킷을 외부에서 읽을 수 있도록 저장
         private var latestPacket: ByteArray? = null
-        const val ACTION_VPN_STOP = "de.blinkt.openvpn.action.VPN_STOP"
         // 🔹 외부 탐지 매니저에서 호출하여 최근 패킷 1개를 가져감
         fun getLatestPacket(): ByteArray? {
             val packet = latestPacket
@@ -54,13 +52,6 @@ class CustomVpnService : VpnService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // 한번 실행됨
 //        Log.d("allinsafe", "[spoofing] customvpnservice onStartCommand 실행")
-
-        if (intent?.action == ACTION_VPN_STOP) {
-            LogManager.log("VPN", "Stop Action 수신. VPN을 종료합니다.")
-            stopTimer()
-            stopVpn()
-            return START_NOT_STICKY // 서비스를 종료할 것이므로 START_NOT_STICKY 반환
-        }
 
         LogManager.log("VPN", "VPN 서비스 시작 요청")
         startVpnSafely()
@@ -150,11 +141,11 @@ class CustomVpnService : VpnService() {
             }
         }
         //5초 타이머
-        timerJob=scope.launch {
+        scope.launch {
             delay(5000L)
             // 5초가 지났는데도 isCapturing이 여전히 true라면 타임아웃으로 간주
             if (isCapturing) {
-                Log.d("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
+                LogManager.log("allinsafeSpoofing", "5초 타임아웃! stopvpn!")
                 try {
                     // scope 끄고,vpn 닫고, isCapturing false로
                     stopVpn()
@@ -165,12 +156,11 @@ class CustomVpnService : VpnService() {
 
                 } catch (e: IOException) {
                     // 이미 닫혔을 경우 등
-                    Log.d("allinsafespoofing","뭔가 스푸핑 탐지 타이머가 잘못 끝남")
+                    LogManager.log("allinsafespoofing","뭔가 스푸핑 탐지 타이머가 잘못 끝남")
                 }
             }
 
         }
-
 
 
         // 기존 패킷 감지 로직(스레드 사용)
@@ -208,22 +198,17 @@ class CustomVpnService : VpnService() {
     // 🔹 캡처 스레드 중단
     private fun stopPacketCapture() {
         isCapturing = false
-//        packetCaptureThread?.interrupt()
-//        packetCaptureThread = null
+        packetCaptureThread?.interrupt()
+        packetCaptureThread = null
 
         packetCaptureJob?.cancel()
         packetCaptureJob=null
     }
 
-    fun stopTimer(){
-        timerJob?.cancel()
-        timerJob=null
-    }
 
 //     🔹 VPN 인터페이스 종료
     private fun stopVpn() {
-        Log.d("allinsafespoofing","stopVpn() 실행됨")
-        stopPacketCapture()
+         stopPacketCapture()
 //        vpnInterface?.close()
         if (vpnInterface!=null){
             vpnInterface?.close()

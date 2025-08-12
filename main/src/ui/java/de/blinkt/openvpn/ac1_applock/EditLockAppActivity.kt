@@ -133,6 +133,7 @@ class EditLockAppActivity : ComponentActivity() {
             prefs.edit()
                 .putStringSet("locked_apps", checkedApps.toSet())
                 .apply()
+
         }
     }
 }

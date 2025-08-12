@@ -61,7 +61,7 @@
 
 
     <ImageView
-        android:id="@+id/item_delete"
+        android:id="@+id/btn_block_delete"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ais_ic_trashcan"

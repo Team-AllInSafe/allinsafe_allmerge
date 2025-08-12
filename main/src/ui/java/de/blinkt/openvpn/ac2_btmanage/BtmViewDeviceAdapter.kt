@@ -3,21 +3,28 @@ package de.blinkt.openvpn.ac2_btmanage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import de.blinkt.openvpn.R
+import de.blinkt.openvpn.databinding.Ais23BtmTrustDeviceItemBinding
 
-// 기기 유형을 정의하는 enum 클래스
-enum class DeviceType {
-    TRUSTED, BLOCKED
-}
+////// 기기 유형을 정의하는 enum 클래스
+//enum class DeviceType {
+//    TRUSTED, BLOCKED
+//}
+//
+//// 기기 정보를 담는 데이터 클래스
+//data class Device(
+//    val name: String,
+//    val address: String,
+//    val type: DeviceType // 기기 유형을 나타내는 속성 추가
+//)
 
-// 기기 정보를 담는 데이터 클래스
-data class Device(
-    val name: String,
-    val address: String,
-    val type: DeviceType // 기기 유형을 나타내는 속성 추가
-)
+//현정언니 파일에서 사용하는 데이터 클래스
+//data class TrustedDevice(val address: String, val name: String, val isConnected: Boolean = false)
+
 
 class BtmViewDeviceAdapter(private var devices: List<Device>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // 뷰 타입 상수를 정의합니다.
@@ -28,15 +35,17 @@ class BtmViewDeviceAdapter(private var devices: List<Device>) : RecyclerView.Ada
     class TrustedDeviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val deviceNameTextView: TextView = itemView.findViewById(R.id.btm_trust_device_name)
         val deviceAddressTextView: TextView = itemView.findViewById(R.id.btm_trust_device_address)
+        val btnDeviceDelete: ImageView=itemView.findViewById(R.id.btn_trust_delete)
     }
 
     // 차단 기기 아이템의 뷰 홀더
     class BlockedDeviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val deviceNameTextView: TextView = itemView.findViewById(R.id.btm_block_device_name)
         val deviceAddressTextView: TextView = itemView.findViewById(R.id.btm_block_device_address)
+        val btnDeviceDelete: ImageView=itemView.findViewById(R.id.btn_block_delete)
     }
 
-    // 아이템의 뷰 타입을 반환하는 메서드를 오버라이드합니다.
+//    // 아이템의 뷰 타입을 반환하는 메서드를 오버라이드합니다.
     override fun getItemViewType(position: Int): Int {
         return when (devices[position].type) {
             DeviceType.TRUSTED -> VIEW_TYPE_TRUSTED
@@ -68,6 +77,11 @@ class BtmViewDeviceAdapter(private var devices: List<Device>) : RecyclerView.Ada
                 val trustedHolder = holder as TrustedDeviceViewHolder
                 trustedHolder.deviceNameTextView.text = device.name
                 trustedHolder.deviceAddressTextView.text = device.address
+                // 신뢰 기기 아이템의 삭제 버튼 클릭 리스너
+                trustedHolder.btnDeviceDelete.setOnClickListener {
+                    Toast.makeText(holder.itemView.context, "${device.name} (신뢰 기기) 삭제 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+                    // 여기에 삭제 로직을 구현하면 됩니다.
+                }
             }
             VIEW_TYPE_BLOCKED -> {
                 val blockedHolder = holder as BlockedDeviceViewHolder

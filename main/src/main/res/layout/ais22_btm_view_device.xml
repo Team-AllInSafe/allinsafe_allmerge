@@ -129,7 +129,7 @@
         android:id="@+id/recyclerview_devices"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/space_bottom"
         app:layout_constraintEnd_toStartOf="@+id/space_right"
         app:layout_constraintStart_toStartOf="@+id/space_left"

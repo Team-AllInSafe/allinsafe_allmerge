@@ -317,6 +317,7 @@ class VpnMainActivity : BaseActivity() {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }else{
                 Log.d("allinsafescreenlock", " 알림 권한 있음")
+                launchVPN()
             }
         }
     }

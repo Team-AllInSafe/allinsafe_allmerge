@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.content.pm.ShortcutManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -69,6 +70,8 @@ import de.blinkt.openvpn.activities.DisconnectVPN;
 import de.blinkt.openvpn.api.ExternalAppDatabase;
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
 import de.blinkt.openvpn.core.VpnStatus.StateListener;
+
+import de.blinkt.openvpn.ac4_screenlock.NotificationHelper;
 
 public class OpenVPNService extends VpnService implements StateListener, Callback, ByteCountListener, IOpenVPNServiceInternal {
     public static final String START_SERVICE = "de.blinkt.openvpn.START_SERVICE";
@@ -539,12 +542,38 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         // Always show notification here to avoid problem with startForeground timeout
         VpnStatus.logInfo(R.string.building_configration);
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M  || (!foregroundNotificationVisible())) {
 
-            VpnStatus.updateStateString("VPN_GENERATE_CONFIG", "", R.string.building_configration, ConnectionStatus.LEVEL_START);
-            showNotification(VpnStatus.getLastCleanLogMessage(this),
-                    VpnStatus.getLastCleanLogMessage(this), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, ConnectionStatus.LEVEL_START, null);
+        //todo 25.08.11 알림 띄우는거 지우기 1
+        // 대신에 내 알림만 띄우기 ------
+
+        final int NOTIFICATION_ID = 1;
+
+        // 알림 채널 생성 (여러번 호출돼도 최초 이후 무시됨)
+        MyNotificationHelper.createNotificationChannel(this);
+
+        // Notification 객체 받기
+        Notification notification = MyNotificationHelper.showBasicNotification(
+                this,
+                "AllinSafe VPN",
+                "AllinSafe VPN이 실행 중입니다"
+        );
+
+        // 포그라운드 실행 & 고정 알림 띄우기
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            Log.d("allinsafescreenlock", "[screenlock test] 빌드 버전 분기 진입");
+
+            // todo 구글스토어에 올릴 때 소명 필요
+            int serviceType = ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE;
+            startForeground(NOTIFICATION_ID, notification, serviceType);
+        } else {
+            startForeground(NOTIFICATION_ID, notification);
         }
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M  || (!foregroundNotificationVisible())) {
+//
+//            VpnStatus.updateStateString("VPN_GENERATE_CONFIG", "", R.string.building_configration, ConnectionStatus.LEVEL_START);
+//            showNotification(VpnStatus.getLastCleanLogMessage(this),
+//                    VpnStatus.getLastCleanLogMessage(this), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, ConnectionStatus.LEVEL_START, null);
+//        }
 
         /* start the OpenVPN process itself in a background thread */
         mCommandHandler.post(() -> startOpenVPN(intent, startId));
@@ -634,9 +663,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         launchVPNIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         launchVPNIntent.setAction(Intent.ACTION_MAIN);
 
-
-        showNotification(getString(R.string.permission_requested),
-                "", NOTIFICATION_CHANNEL_USERREQ_ID, 0, LEVEL_WAITING_FOR_USER_INPUT, launchVPNIntent);
+        //todo 25.08.11 알림 띄우는거 지우기2
+//        showNotification(getString(R.string.permission_requested),
+//                "", NOTIFICATION_CHANNEL_USERREQ_ID, 0, LEVEL_WAITING_FOR_USER_INPUT, launchVPNIntent);
 
         VpnStatus.updateStateString("USER_INPUT", "waiting for user input", R.string.permission_requested, LEVEL_WAITING_FOR_USER_INPUT, launchVPNIntent);
         return false;
@@ -1351,8 +1380,9 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
             // This also mean we are no longer connected, ignore bytecount messages until next
             // CONNECTED
             // Does not work :(
-            showNotification(VpnStatus.getLastCleanLogMessage(this),
-                    VpnStatus.getLastCleanLogMessage(this), channel, 0, level, intent);
+            //todo 25.08.11 알림 띄우는거 지우기 3
+//            showNotification(VpnStatus.getLastCleanLogMessage(this),
+//                    VpnStatus.getLastCleanLogMessage(this), channel, 0, level, intent);
 
         }
     }
@@ -1378,8 +1408,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
                     humanReadableByteCount(out, false, getResources()),
                     humanReadableByteCount(diffOut / OpenVPNManagement.mBytecountInterval, true, getResources()));
 
-
-            showNotification(netstat, null, NOTIFICATION_CHANNEL_BG_ID, mConnecttime, LEVEL_CONNECTED, null);
+            //todo 25.08.11 알림 띄우는거 지우기 4
+//            showNotification(netstat, null, NOTIFICATION_CHANNEL_BG_ID, mConnecttime, LEVEL_CONNECTED, null);
         }
 
     }
@@ -1410,7 +1440,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
 
     public void requestInputFromUser(int resid, String needed) {
         VpnStatus.updateStateString("NEED", "need " + needed, resid, LEVEL_WAITING_FOR_USER_INPUT);
-        showNotification(getString(resid), getString(resid), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, LEVEL_WAITING_FOR_USER_INPUT, null);
+        //todo 25.08.11 알림 띄우는거 지우기 5
+//        showNotification(getString(resid), getString(resid), NOTIFICATION_CHANNEL_NEWSTATUS_ID, 0, LEVEL_WAITING_FOR_USER_INPUT, null);
     }
 
 

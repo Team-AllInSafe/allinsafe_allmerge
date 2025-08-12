@@ -4,20 +4,29 @@
  */
 package de.blinkt.openvpn.activities
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.ServiceInfo
 import android.net.VpnService
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
+import android.app.Service
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ServiceCompat.startForeground
+import androidx.core.content.ContextCompat
 //import androidx.core.app.ActivityCompat.startActivityForResult
 //import com.google.firestore.v1.FirestoreGrpc.bindService
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.VpnProfile
+import de.blinkt.openvpn.ac4_screenlock.NotificationHelper
 import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
@@ -49,6 +58,17 @@ class VpnMainActivity : BaseActivity() {
             Log.d("allinsafevpn", "VPN 서비스 연결 끊김")
         }
     }
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                launchVPN()
+            } else {
+                Log.d("allinsafevpn","vpn 알림 권한 얻기 실패")
+                Toast.makeText(this,"알림 권한을 허용해주세요", Toast.LENGTH_SHORT).show()
+                // 버튼 시작하기로 돌려놓기
+                setUiInactive(binding)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        Log.d("allinsafevpn","[VpnMainActivity.onCreate] is called")
@@ -102,17 +122,11 @@ class VpnMainActivity : BaseActivity() {
         val id="sua"
         val pw="sua123"
 
-        // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
-        // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
-//            val inputStream = assets.open("client.ovpn")
-//            val reader = BufferedReader(InputStreamReader(inputStream))
-//            val parser = ConfigParser()
-//            parser.parseConfig(reader)
-//
-
         try{
             profile = ProfileManager.getLastConnectedProfile(applicationContext)
         }catch(e: Exception){ //IllegalStateException  NullPointerException e
+            // 접속을 위한 정보 들어있는 파일 ovpn 불러오기(앱 내장)
+            // assets에 있는 실제 파일을 읽어들여서 data 폴더에 저장(앱 내부용 저장소)
             val inputStream = assets.open("client.ovpn")
             val reader = BufferedReader(InputStreamReader(inputStream))
             val parser = ConfigParser()
@@ -203,7 +217,8 @@ class VpnMainActivity : BaseActivity() {
         } else {
             mSelectedProfile = profileToConnect
             mSelectedProfileReason = startReason //null 이어도 딱히 상관없는듯하여 null 체크 생략
-            launchVPN()
+            requestNotificationPermission()
+//            launchVPN()
         }
     }
 
@@ -273,6 +288,7 @@ class VpnMainActivity : BaseActivity() {
                 val replace_running_vpn = true
 
                 // vpn 시작 요청
+                // foreground로 해서 액티비티 생명주기 따르지 말고 백그라운드로 돌아가게
                 val startVPN: Intent = profileToConnect.getStartServiceIntent(applicationContext, startReason, replace_running_vpn)
 //                Log.d("allinsafevpn", "startVPN intent : $startVPN")
                 if (startVPN != null) {
@@ -287,9 +303,23 @@ class VpnMainActivity : BaseActivity() {
             }
         } else if (resultCode == RESULT_CANCELED) {
             // User does not want us to start, so we just vanish
-
         }
     }
 
+    fun requestNotificationPermission() {
+        Log.d("allinsafevpn","vpn 알림 권한 얻기 시작 requestNotificationPermission")
+        // 안드로이드 13 (API 33) 이상 버전에서만 권한 확인
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // 권한이 이미 허용되었는지 확인
+            val permissionState = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            if (permissionState != PackageManager.PERMISSION_GRANTED) {
+                // 권한이 없으면 요청 다이얼로그 실행
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }else{
+                Log.d("allinsafescreenlock", " 알림 권한 있음")
+                launchVPN()
+            }
+        }
+    }
 
 }

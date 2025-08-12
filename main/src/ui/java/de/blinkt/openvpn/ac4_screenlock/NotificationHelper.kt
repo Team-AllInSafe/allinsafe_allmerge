@@ -15,8 +15,9 @@ import androidx.core.app.NotificationManagerCompat
 import de.blinkt.openvpn.R
 
 object NotificationHelper {
-    private const val CHANNEL_ID = "allinSafe_screenLock_channel"
-    private const val CHANNEL_NAME = "AllinSafe Notifications"
+
+     private const val CHANNEL_ID = "allinSafe_screenLock_channel"
+     private const val CHANNEL_NAME = "AllinSafe Notifications"
 
     // 알림을 띄우기 위해서는 채널이란걸 하나씩 만들어야 함
     // 채널 만들기

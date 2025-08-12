@@ -48,12 +48,12 @@ class Ac1_01_applock_init_main : ComponentActivity() { @RequiresApi(Build.VERSIO
         binding.btnStartApplock.setOnClickListener {
             val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
             val edit = pref.edit()
-            edit.putBoolean("applock_onoff",!AppLockAccessibilityService.Companion.onoff) // 기존 상태 반전
+            edit.putBoolean("applock_onoff",!AppLockAccessibilityService.onoff) // 기존 상태 반전
             edit.apply()
-            AppLockAccessibilityService.Companion.onoff =!AppLockAccessibilityService.Companion.onoff
+            AppLockAccessibilityService.onoff =!AppLockAccessibilityService.onoff
 
             // 버튼 글자 바꾸기
-            if(AppLockAccessibilityService.Companion.onoff){
+            if(AppLockAccessibilityService.onoff){
                 //binding.onoffbtn.text="끄기"
                 turnoffUI(binding)
             }else{

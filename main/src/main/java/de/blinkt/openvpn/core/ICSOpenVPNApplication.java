@@ -42,7 +42,7 @@ public class ICSOpenVPNApplication extends Application {
         super.onCreate();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            createNotificationChannels();
+            createNotificationChannels(); //todo 알림 채널 만드는 부분 ics openvpn
         mStatus = new StatusListener();
         mStatus.init(getApplicationContext());
 
@@ -117,6 +117,9 @@ public class ICSOpenVPNApplication extends Application {
         mChannel.setDescription(getString(R.string.channel_description_background));
         mChannel.enableLights(false);
 
+        //todo 25.08.11 알림이 안보이게 추가
+        mChannel.setImportance(NotificationManager.IMPORTANCE_MIN);
+
         mChannel.setLightColor(Color.DKGRAY);
         mNotificationManager.createNotificationChannel(mChannel);
 
@@ -129,6 +132,9 @@ public class ICSOpenVPNApplication extends Application {
         mChannel.setDescription(getString(R.string.channel_description_status));
         mChannel.enableLights(true);
 
+        //todo 25.08.11 알림이 안보이게 추가
+        mChannel.setImportance(NotificationManager.IMPORTANCE_MIN);
+
         mChannel.setLightColor(Color.BLUE);
         mNotificationManager.createNotificationChannel(mChannel);
 
@@ -140,6 +146,10 @@ public class ICSOpenVPNApplication extends Application {
         mChannel.setDescription(getString(R.string.channel_description_userreq));
         mChannel.enableVibration(true);
         mChannel.setLightColor(Color.CYAN);
+
+        //todo 25.08.11 알림이 안보이게 추가
+        mChannel.setImportance(NotificationManager.IMPORTANCE_MIN);
+
         mNotificationManager.createNotificationChannel(mChannel);
     }
 }

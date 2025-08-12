@@ -33,7 +33,7 @@ class EditLockAppActivity : ComponentActivity() {
         binding= Ais12SelectAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //초기화면에 앱 목록 짜넣기
+        //뒤로가기
         binding.btnBack.setOnClickListener{
             finish()
         }
@@ -55,7 +55,7 @@ class EditLockAppActivity : ComponentActivity() {
                 val name = pm.getApplicationLabel(it).toString()
                 val packagename = it.packageName
                 val icon = pm.getApplicationIcon(it)
-                val isChecked = AppLockAccessibilityService.Companion.lockedPackageList.contains(it.packageName)
+                val isChecked = AppLockAccessibilityService.lockedPackageList.contains(it.packageName)
                 AppInfo(packagename,name, icon,isChecked)
             }
             // ui 변경은 메인스레드가 하도록

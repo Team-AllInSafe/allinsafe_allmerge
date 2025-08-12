@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="70dp"
+    android:layout_marginTop="10dp"
     android:background="@drawable/ais_round_halfblue_full_blue_edge">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/item_device_name"
+            android:id="@+id/btm_trust_device_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
@@ -47,6 +48,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/btm_trust_device_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_medium"

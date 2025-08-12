@@ -5,14 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/ais_darkblue">
-<!--    &lt;!&ndash;    뒤로가기버튼&ndash;&gt;-->
-    <ImageView
+    <!--    뒤로가기버튼-->
+    <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="100dp"
         android:background="@color/transparent"
-        android:visibility="invisible"
         android:src="@drawable/ais_ic_back"
         app:layout_constraintStart_toStartOf="@+id/space_left"
         app:layout_constraintTop_toTopOf="@+id/space_top" />

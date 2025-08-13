@@ -46,12 +46,13 @@ class EditLockAppActivity : ComponentActivity() {
                 pm.getLaunchIntentForPackage(it.packageName) != null
             }
 
+            val filteredApps = launchableApps.filterNot{it.packageName.equals(applicationContext.packageName)}
             // 시스템 앱 제외
 //            val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
 
             // 앱 이름 가나다 정렬?
 
-            val appList = launchableApps.map {
+            val appList = filteredApps.map {
                 val name = pm.getApplicationLabel(it).toString()
                 val packagename = it.packageName
                 val icon = pm.getApplicationIcon(it)

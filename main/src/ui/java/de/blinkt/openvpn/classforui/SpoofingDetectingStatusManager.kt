@@ -7,6 +7,7 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import de.blinkt.openvpn.Ac5_03_spoofingdetect_completed
+import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.vpn.CustomVpnService
 
 object SpoofingDetectingStatusManager {
@@ -63,6 +64,13 @@ object SpoofingDetectingStatusManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // context가 Activity가 아닐 수 있으므로
         completedPageStart()
         context.startActivity(intent)
+    }
+    fun statusClear(){
+        arpSpoofDetectResult.setStatus(0)
+        arpSpoofDetectResult.setSeverity("")
+        dnsSpoofDetectResult.setStatus(0)
+        dnsSpoofDetectResult.setSeverity("")
+        LogManager.clearLogs()
     }
     fun completedPageStart(){
         isCompletedPageStart=true

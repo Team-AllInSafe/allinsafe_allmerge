@@ -32,4 +32,8 @@ object LogManager {
     private fun notifyObservers() {
         observers.forEach { it(logMessages) }
     }
+    fun clearLogs() {
+        logMessages.clear()
+        notifyObservers()
+    }
 }

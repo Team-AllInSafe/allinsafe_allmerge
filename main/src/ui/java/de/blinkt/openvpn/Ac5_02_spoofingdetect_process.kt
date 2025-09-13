@@ -2,6 +2,7 @@ package de.blinkt.openvpn
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,8 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // ✅ 탐지 결과 전환을 위해 정확한 Context 등록
         SpoofingDetectingStatusManager.init(this)
 
+        //250913 기존 저장된 dns/arp 스푸핑 조사 결과를 초기화함으로써 탐지를 여러번 했을때 결과를 조정함.
+        SpoofingDetectingStatusManager.statusClear()
         binding = Ais51SpoofDetectingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -42,6 +45,9 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         binding.spoofRecyclerview.layoutManager = LinearLayoutManager(this)
         binding.spoofRecyclerview.adapter = adapter
 
+        //250913 스푸핑 탐지 새로 할 시 로그(아래 표시되는거) 초기화
+//        Log.d("spoofing_ui","로그 삭제")
+//        adapter.clearLogs()
         // ✅ 옵저버 등록해서 로그가 추가될 때마다 RecyclerView 갱신
         LogManager.addObserver { updatedLogs ->
             adapter.updateLogs(updatedLogs)
@@ -94,12 +100,12 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
     //     }
     // }
 
-    fun detect_complete(binding: Ais51SpoofDetectingBinding) {
-        // 실제 스푸핑 코드와 연동하였을 때 사용하기 위한 함수
-        Toast.makeText(this.applicationContext, "스푸핑 탐지가 완료되었습니다!", Toast.LENGTH_LONG).show()
-        val intent = Intent(this, Ac5_03_spoofingdetect_completed::class.java)
-        startActivity(intent)
-    }
+//    fun detect_complete(binding: Ais51SpoofDetectingBinding) {
+//        // 실제 스푸핑 코드와 연동하였을 때 사용하기 위한 함수
+//        Toast.makeText(this.applicationContext, "스푸핑 탐지가 완료되었습니다!", Toast.LENGTH_LONG).show()
+//        val intent = Intent(this, Ac5_03_spoofingdetect_completed::class.java)
+//        startActivity(intent)
+//    }
 }
 
 // ✅ 로그 출력용 ViewHolder
@@ -129,6 +135,10 @@ class LogViewAdapter(private val LogList: MutableList<String>) :
     fun updateLogs(newLogs: List<String>) {
         LogList.clear()
         LogList.addAll(newLogs)
+        notifyDataSetChanged()
+    }
+    fun clearLogs() {
+        LogList.clear()
         notifyDataSetChanged()
     }
 }

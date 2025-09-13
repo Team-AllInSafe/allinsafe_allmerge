@@ -84,6 +84,7 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         super.onResume()
         val filter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         registerReceiver(bondStateReceiver, filter)
+        Log.d("bluetooth_ui","onResume()-syncAndLoadDeviceLists()")
         syncAndLoadDeviceLists() // 화면에 진입할 때마다 최신 목록 로드
     }
 
@@ -97,6 +98,8 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             finish()
         }
         binding.topbarTrustBackground.setOnClickListener {
+            Log.d("bluetooth_ui", "신뢰기기 탭바 클릭")
+            Log.d("bluetooth_ui", "trusted=${trustedDeviceList.size}, blocked=${blockedDeviceList.size}")
             currentDisplayType = DeviceType.TRUSTED
             deviceAdapter.updateData(trustedDeviceList) // 신뢰 목록으로 UI 갱신
         }
@@ -105,7 +108,6 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             deviceAdapter.updateData(blockedDeviceList) // 차단 목록으로 UI 갱신
         }
     }
-// in Ac2_02_bluetooth_trust_device.kt
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private fun handleDeviceDeletion(device: Device, position: Int) {
@@ -122,8 +124,10 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
                             trustedDeviceList.removeAt(position)
                         }
 
+                        //    250913 블루투스 ui 3
                         // ✅ 어댑터의 UI에서 아이템 제거
-                        deviceAdapter.removeItem(position)
+                        //deviceAdapter.removeItem(position)
+                        deviceAdapter.updateData(trustedDeviceList)
                         Toast.makeText(this@Ac2_02_bluetooth_trust_device, "$friendlyName 의 연결을 끊고 신뢰 목록에서 해제했습니다.", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this@Ac2_02_bluetooth_trust_device, "기기 페어링 해제에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -137,9 +141,10 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
                 if (position < blockedDeviceList.size) {
                     blockedDeviceList.removeAt(position)
                 }
-
+                //    250913 블루투스 ui 3
                 // ✅ 어댑터의 UI에서 아이템 제거
-                deviceAdapter.removeItem(position)
+                //deviceAdapter.removeItem(position)
+                deviceAdapter.updateData(blockedDeviceList)
                 Toast.makeText(this, "[$friendlyName] 은(는) 더 이상 차단되지 않습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -156,9 +161,15 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         val unbondedExternally = storedTrusted - bondedNow
         if (unbondedExternally.isNotEmpty()) {
             storedTrusted.removeAll(unbondedExternally)
-            prefs.edit().putStringSet(trustedKey, storedTrusted).apply()
         }
-
+        //250913 ui4
+        val newOnes = bondedNow - storedTrusted
+        if (newOnes.isNotEmpty()) {
+            storedTrusted.addAll(newOnes)
+        }
+        prefs.edit().putStringSet(trustedKey, storedTrusted).apply()
+        Log.d("bluetooth_ui", "trusted=${trustedDeviceList.size}, blocked=${blockedDeviceList.size}")
+        Log.d("bluetooth_ui","syncAndLoadDeviceLists()-loadDeviceLists()")
         loadDeviceLists()
     }
 
@@ -196,8 +207,14 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         blockedDeviceList.addAll(dummyBlockedDevices)
 
         // 5. 현재 선택된 탭에 맞춰 UI를 갱신합니다.
-        val listToDisplay = if (currentDisplayType == DeviceType.TRUSTED) trustedDeviceList else blockedDeviceList
-        deviceAdapter.updateData(listToDisplay)
+        //250913 블루투스 ui 시도
+//        val listToDisplay = if (currentDisplayType == DeviceType.TRUSTED) trustedDeviceList else blockedDeviceList
+//        deviceAdapter.updateData(listToDisplay)
+        binding.recyclerviewDevices.post {
+            val listToDisplay = if (currentDisplayType == DeviceType.TRUSTED) trustedDeviceList else blockedDeviceList
+            deviceAdapter.updateData(listToDisplay)
+            Log.d("bluetooth_ui","post-deviceAdapter.updateData(listToDisplay)")
+        }
     }
 
     private fun removeFromPreferences(key: String, address: String) {

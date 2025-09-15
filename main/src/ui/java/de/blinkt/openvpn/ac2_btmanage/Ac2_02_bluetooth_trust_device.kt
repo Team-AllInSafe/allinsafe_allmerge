@@ -86,6 +86,7 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         registerReceiver(bondStateReceiver, filter)
         Log.d("bluetooth_ui","onResume()-syncAndLoadDeviceLists()")
         syncAndLoadDeviceLists() // 화면에 진입할 때마다 최신 목록 로드
+        binding.tvTitle.text = "신뢰 기기 목록"
     }
 
     override fun onPause() {
@@ -98,12 +99,14 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
             finish()
         }
         binding.topbarTrustBackground.setOnClickListener {
+            binding.tvTitle.text = "신뢰 기기 목록"
             Log.d("bluetooth_ui", "신뢰기기 탭바 클릭")
             Log.d("bluetooth_ui", "trusted=${trustedDeviceList.size}, blocked=${blockedDeviceList.size}")
             currentDisplayType = DeviceType.TRUSTED
             deviceAdapter.updateData(trustedDeviceList) // 신뢰 목록으로 UI 갱신
         }
         binding.topbarBlockBackground.setOnClickListener {
+            binding.tvTitle.text = "차단 기기 목록"
             currentDisplayType = DeviceType.BLOCKED
             deviceAdapter.updateData(blockedDeviceList) // 차단 목록으로 UI 갱신
         }

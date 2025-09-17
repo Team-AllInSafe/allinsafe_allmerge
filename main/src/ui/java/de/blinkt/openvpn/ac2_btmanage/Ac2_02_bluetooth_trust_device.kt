@@ -20,6 +20,7 @@ import de.blinkt.openvpn.databinding.Ais22BtmViewDeviceBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import de.blinkt.openvpn.R
 
 enum class DeviceType {
     TRUSTED, BLOCKED
@@ -87,6 +88,14 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         Log.d("bluetooth_ui","onResume()-syncAndLoadDeviceLists()")
         syncAndLoadDeviceLists() // 화면에 진입할 때마다 최신 목록 로드
         binding.tvTitle.text = "신뢰 기기 목록"
+
+        // ✨ 초기 UI 상태 설정 (신뢰 탭이 활성화된 상태)
+        binding.tvTitle.text = "신뢰 기기 목록"
+        binding.topbarTrustBackground.backgroundTintList = getColorStateList(R.color.trusted_active_bg)
+        binding.textView6.setTextColor(getColor(R.color.white))
+        binding.topbarBlockBackground.backgroundTintList = getColorStateList(R.color.inactive_bg)
+        binding.textView7.setTextColor(getColor(R.color.inactive_text))
+
     }
 
     override fun onPause() {
@@ -98,17 +107,32 @@ class Ac2_02_bluetooth_trust_device : ComponentActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+        // 신뢰기기 탭바 클릭
         binding.topbarTrustBackground.setOnClickListener {
             binding.tvTitle.text = "신뢰 기기 목록"
             Log.d("bluetooth_ui", "신뢰기기 탭바 클릭")
+
             Log.d("bluetooth_ui", "trusted=${trustedDeviceList.size}, blocked=${blockedDeviceList.size}")
             currentDisplayType = DeviceType.TRUSTED
             deviceAdapter.updateData(trustedDeviceList) // 신뢰 목록으로 UI 갱신
+
+            // ✨ 신뢰 탭 활성화 & 차단 탭 비활성화 UI 설정
+            binding.topbarTrustBackground.backgroundTintList = getColorStateList(R.color.trusted_active_bg)
+            binding.textView6.setTextColor(getColor(R.color.white))
+            binding.topbarBlockBackground.backgroundTintList = getColorStateList(R.color.inactive_bg)
+            binding.textView7.setTextColor(getColor(R.color.inactive_text))
         }
-        binding.topbarBlockBackground.setOnClickListener {
+        // 차단기기 탭바 클릭
+            binding.topbarBlockBackground.setOnClickListener {
             binding.tvTitle.text = "차단 기기 목록"
             currentDisplayType = DeviceType.BLOCKED
             deviceAdapter.updateData(blockedDeviceList) // 차단 목록으로 UI 갱신
+
+            // ✨ 차단 탭 활성화 & 신뢰 탭 비활성화 UI 설정
+                binding.topbarBlockBackground.backgroundTintList = getColorStateList(R.color.blocked_active_bg)
+                binding.textView7.setTextColor(getColor(R.color.white)) // 'white'는 기존 색상을 사용
+                binding.topbarTrustBackground.backgroundTintList = getColorStateList(R.color.inactive_bg)
+                binding.textView6.setTextColor(getColor(R.color.inactive_text))
         }
     }
 

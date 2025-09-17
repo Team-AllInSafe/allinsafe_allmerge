@@ -19,6 +19,8 @@
 <!--    ㄹㅇㅁㄴㄹ-->
     <color name="ais_darkblue">#001149</color>
     <color name="ais_neongreenwhite">#F5F8DE</color>
+    <color name="ais_neongreen">#00FFC2</color>
+    <color name="ais_neonred">#FF00A5</color>
     <color name="ais_blue">#233B6A</color>
     <color name="ais_yellow">#FFBC56</color>
     <color name="ais_red">#EB5160</color>
@@ -27,4 +29,10 @@
     <color name="ais_half_red">#88EB5160</color>
     <color name="ais_half_mint">#8844BBA4</color>
     <color name="ais_half_blue">#88233B6A</color>
+
+    //활성화 탭 색상 추가
+    <color name="trusted_active_bg">#00C896</color>
+    <color name="blocked_active_bg">#FF4081</color>
+    <color name="inactive_bg">#3D4456</color>
+    <color name="inactive_text">#BDBDBD</color>
 </resources>

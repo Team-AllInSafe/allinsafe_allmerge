@@ -27,10 +27,6 @@
         android:required="false" />
 
     <application>
-        <activity
-            android:name=".TempBtmTrustDevice"
-            android:exported="false" />
-
         <service
             android:name=".ac4_screenlock.LockScreenService"
             android:enabled="true"

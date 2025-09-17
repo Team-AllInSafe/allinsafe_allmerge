@@ -1,5 +1,6 @@
 package de.blinkt.openvpn.ac2_btmanage
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,16 +79,18 @@ class BtmViewDeviceAdapter(
 
     // 전체 데이터 목록을 교체하고 UI를 갱신
     fun updateData(newDevices: List<Device>) {
-        devices.clear()
-        devices.addAll(newDevices)
+//        devices.clear()
+//        devices.addAll(newDevices)
+        Log.d("bluetooth_ui", "updateData() called size=${newDevices.size}")
+        devices=newDevices.toMutableList()
         notifyDataSetChanged()
     }
-
-    // 특정 아이템을 삭제하고 UI를 갱신
-    fun removeItem(position: Int) {
-        if (position in 0 until devices.size) {
-            devices.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
+//    250913 블루투스 ui 3
+//    // 특정 아이템을 삭제하고 UI를 갱신
+//    fun removeItem(position: Int) {
+//        if (position in 0 until devices.size) {
+//            devices.removeAt(position)
+//            notifyItemRemoved(position)
+//        }
+//    }
 }

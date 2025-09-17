@@ -39,7 +39,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/pretendard_bold"
         android:text="스푸핑 탐지 완료"
         android:textColor="@color/ais_neongreenwhite"
@@ -51,8 +51,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_arp"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/ais_round_blue_full_mint_edge"
         app:layout_constraintEnd_toStartOf="@+id/space_right"
         app:layout_constraintStart_toStartOf="@+id/space_left"
@@ -96,7 +96,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_dns"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/ais_round_blue_full_mint_edge"
         app:layout_constraintEnd_toStartOf="@+id/space_right"
@@ -149,7 +149,7 @@
         app:cardBackgroundColor="@color/ais_blue"
         app:cardCornerRadius="24dp"
         app:cardElevation="4dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/space_bottom"
         app:layout_constraintEnd_toStartOf="@+id/space_right"
         app:layout_constraintStart_toStartOf="@+id/space_left"
@@ -164,7 +164,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ais_ic_caution_mint"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -187,7 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="15dp"
+                android:layout_marginVertical="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView">
 
@@ -218,5 +218,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95"/>
+        app:layout_constraintGuide_percent="0.9"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

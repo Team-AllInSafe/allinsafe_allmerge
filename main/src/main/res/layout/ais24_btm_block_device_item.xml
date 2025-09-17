@@ -44,6 +44,7 @@
             android:text="device name init"
             android:textColor="@color/ais_neongreenwhite"
             android:textSize="16sp"
+            android:maxLines="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

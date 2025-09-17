@@ -4,34 +4,29 @@
  */
 package de.blinkt.openvpn.activities
 
+//import androidx.core.app.ActivityCompat.startActivityForResult
+//import com.google.firestore.v1.FirestoreGrpc.bindService
 import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.ServiceInfo
+import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
-import android.app.Service
-import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ServiceCompat.startForeground
 import androidx.core.content.ContextCompat
-//import androidx.core.app.ActivityCompat.startActivityForResult
-//import com.google.firestore.v1.FirestoreGrpc.bindService
 import de.blinkt.openvpn.R
 import de.blinkt.openvpn.VpnProfile
-import de.blinkt.openvpn.ac4_screenlock.NotificationHelper
 import de.blinkt.openvpn.core.ConfigParser
 import de.blinkt.openvpn.core.IOpenVPNServiceInternal
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.ProfileManager
-import de.blinkt.openvpn.databinding.Ais11ApplockMainBinding
 import de.blinkt.openvpn.databinding.Ais31VpnMainBinding
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -230,6 +225,10 @@ class VpnMainActivity : BaseActivity() {
 //            ProfileManager.setConntectedVpnProfileDisconnected(applicationContext)
         Log.d("allinsafevpn",vpnService.toString())
         vpnService?.stopVPN(false)
+
+        //todo 25.08.13 함 넣어봄
+        val intent = Intent(applicationContext, OpenVPNService::class.java)
+        applicationContext.stopService(intent)
         Log.d("allinsafevpn","stopvpn 실행됨")
 
         // 이걸왜 false로 했지??

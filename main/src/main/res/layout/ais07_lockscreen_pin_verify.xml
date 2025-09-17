@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/ais_darkblue">
-<!--    &lt;!&ndash;    뒤로가기버튼&ndash;&gt;-->
+    <!--    뒤로가기버튼-->
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="40dp"

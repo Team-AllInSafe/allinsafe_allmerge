@@ -11,9 +11,12 @@ import de.blinkt.openvpn.detection.common.LogManager
 import de.blinkt.openvpn.detection.packettest.DummyPacketInjector
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.blinkt.openvpn.databinding.Ais51SpoofDetectingBinding
 import de.blinkt.openvpn.databinding.OldAc506SpoofingdetectItemLogBinding
+import de.blinkt.openvpn.vpn.CustomVpnService
 
 class Ac5_02_spoofingdetect_process : ComponentActivity() {
     private lateinit var binding: Ais51SpoofDetectingBinding
@@ -25,10 +28,23 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // MainActivity 타입의 객체를 동반 객체로 선언한다 (자바에서는 static)
         var activity502: Ac5_02_spoofingdetect_process? = null
     }
+    // 25.09.21 뒤로가기 콜백으로 도중에 나가면 vpnservice(탐지) 중단
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+//            Log.d("allinsafe","뒤로가기 눌림")
+            val vpnStopIntent = Intent(this@Ac5_02_spoofingdetect_process, CustomVpnService::class.java)
+            vpnStopIntent.action = CustomVpnService.ACTION_VPN_STOP
+            startService(vpnStopIntent)
+            finish()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity502 = this
+
+        //뒤로가기 시 콜백 이벤트 실행하도록 등록
+        this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         // ✅ 탐지 결과 전환을 위해 정확한 Context 등록
         SpoofingDetectingStatusManager.init(this)
@@ -85,6 +101,8 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
         // val logText = logs.joinToString("\n")
         // binding.textviewProcess.text = logText
         // Thread.sleep(1000)
+
+
     }
 
     // fun updateActivityStatus(activityName: String) {
@@ -106,7 +124,22 @@ class Ac5_02_spoofingdetect_process : ComponentActivity() {
 //        val intent = Intent(this, Ac5_03_spoofingdetect_completed::class.java)
 //        startActivity(intent)
 //    }
+
+    override fun onResume() {
+        super.onResume()
+        // 화면이 사용자에게 보여질 때(onResume) 콜백을 활성화합니다.
+        // 이 액티비티가 활성화된 상태에서만 뒤로가기 버튼이 작동합니다.
+        onBackPressedCallback.isEnabled = true
+    }
+
+    override fun onPause(){
+        // 뒤로가기 콜백 비활성화
+        super.onPause()
+        onBackPressedCallback.isEnabled=false
+    }
 }
+
+
 
 // ✅ 로그 출력용 ViewHolder
 class LogViewHolder(var binding: OldAc506SpoofingdetectItemLogBinding) :

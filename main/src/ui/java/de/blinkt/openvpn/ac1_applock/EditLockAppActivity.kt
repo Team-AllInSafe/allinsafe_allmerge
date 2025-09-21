@@ -37,6 +37,7 @@ class EditLockAppActivity : ComponentActivity() {
         binding.btnBack.setOnClickListener{
             finish()
         }
+
         lifecycleScope.launch(Dispatchers.IO) {
             val pm = packageManager
             val apps = pm.getInstalledApplications(0)
@@ -47,12 +48,11 @@ class EditLockAppActivity : ComponentActivity() {
             }
 
             val filteredApps = launchableApps.filterNot{it.packageName.equals(applicationContext.packageName)}
-            // 시스템 앱 제외
-//            val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
 
-            // 앱 이름 가나다 정렬?
+            // 앱 이름 가나다 정렬
+            val orderedFilteredApps = filteredApps.sortedBy { pm.getApplicationLabel(it).toString()}
 
-            val appList = filteredApps.map {
+            val appList = orderedFilteredApps.map {
                 val name = pm.getApplicationLabel(it).toString()
                 val packagename = it.packageName
                 val icon = pm.getApplicationIcon(it)
@@ -62,32 +62,11 @@ class EditLockAppActivity : ComponentActivity() {
             // ui 변경은 메인스레드가 하도록
             withContext(Dispatchers.Main) {
                 //기존의 progressbar(로딩중 표시)를 삭제하였음.
-//                binding.loadingCircle.visibility=View.GONE
-//                binding.appListView.visibility=View.VISIBLE
+                binding.loadingCircle.visibility=View.GONE
+                binding.listviewApp.visibility=View.VISIBLE
                 binding.listviewApp.adapter = AppListAdapter(this@EditLockAppActivity, appList)
             }
         }
-//        val pm = packageManager
-//        val apps = pm.getInstalledApplications(0)
-//
-//        //사용자가 직접 실행할 수 있는 앱만 필터링 <- 시스템 앱 다 걸러짐
-//        val launchableApps = apps.filter {
-//            pm.getLaunchIntentForPackage(it.packageName) != null
-//        }
-//
-//        // 시스템 앱 제외 <- 여기에서 실사용 앱들 다 썰린다. 다 걸려서 안보임,근데 시스템 앱도 안보이게 하는건 맞음
-//        val filteredApps = launchableApps.filterNot{ isSystemApp(it) or it.packageName.equals(applicationContext.packageName)}
-//
-//        // 앱 이름 가나다 정렬?
-//
-//        val appList = filteredApps.map {
-//            val name = pm.getApplicationLabel(it).toString()
-//            val packagename = it.packageName
-//            val icon = pm.getApplicationIcon(it)
-//            val isChecked = AppLockAccessibilityService.Companion.lockedPackageList.contains(it.packageName)
-//            AppInfo(packagename,name, icon,isChecked)
-//        }
-//        binding.appListView.adapter = AppListAdapter(this, appList)
 
     }
 

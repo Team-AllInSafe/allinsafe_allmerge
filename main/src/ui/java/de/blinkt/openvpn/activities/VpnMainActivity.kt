@@ -42,15 +42,17 @@ class VpnMainActivity : BaseActivity() {
 
     private var vpnService: IOpenVPNServiceInternal? = null
     private val vpnServiceConnection = object : ServiceConnection {
+        // bindService 하면 이거 실행(연결이 맺어지느라 조금 딜레이 있을 수 있음)
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             vpnService = IOpenVPNServiceInternal.Stub.asInterface(service)
             // 이제 vpnService?.stopVPN(false) 등 호출 가능
             Log.d("allinsafevpn", "VPN 서비스 연결됨")
         }
 
+        // 서비스가 끝나면 이거 자동 실행
         override fun onServiceDisconnected(name: ComponentName?) {
             vpnService = null
-            Log.d("allinsafevpn", "VPN 서비스 연결 끊김")
+            Log.d("allinsafevpn", "VPN 서비스 연결 종료")
         }
     }
     private val requestPermissionLauncher =
@@ -70,7 +72,7 @@ class VpnMainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding=Ais31VpnMainBinding.inflate(layoutInflater)
 
-        //sharedPreference로 앱 활성화 여부를 가져옵니다.
+        //sharedPreference로 vpn 활성화 여부를 가져옵니다.
         val pref = getSharedPreferences("AppPref", MODE_PRIVATE)
         var isAppActive=pref.getBoolean("vpn_onoff", false) //만약 저장된 값이 없을경우(초기상태) false입니다.
 
@@ -89,6 +91,7 @@ class VpnMainActivity : BaseActivity() {
         //기존의 vpnConnect 버튼
         binding.btnOnoffVpn.setOnClickListener {
             if (isAppActive){
+                Log.d("allinsafe","여기 중지 로직있어요")
                 //기능 중지
                 // 1. sharedPreference에 앱 비활성화 저장
                 //Log.d("vpnonoff", "set vpn off")
@@ -226,7 +229,12 @@ class VpnMainActivity : BaseActivity() {
         Log.d("allinsafevpn",vpnService.toString())
         vpnService?.stopVPN(false)
 
-        //todo 25.08.13 함 넣어봄
+        // ServiceConnection가 foreground service라서 unbind 하고 stopVPN을 해야 끝남
+        if(isServiceBound){
+            unbindService(vpnServiceConnection)
+            isServiceBound=false
+        }
+        //todo 25.08.13 함 넣어봄 -> 25.09.21 뭘한번 넣어봤다는거야 과거의나
         val intent = Intent(applicationContext, OpenVPNService::class.java)
         applicationContext.stopService(intent)
         Log.d("allinsafevpn","stopvpn 실행됨")
@@ -254,7 +262,15 @@ class VpnMainActivity : BaseActivity() {
             unbindService(vpnServiceConnection)
             isServiceBound=false
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        // 화면을 나갔다 들어오면 vpnservice 가 null로 초기화되기에 다시 bind하기
+        val bindIntent = Intent(this, OpenVPNService::class.java)
+        bindIntent.setAction(OpenVPNService.START_SERVICE)
+        bindService(bindIntent, vpnServiceConnection, Context.BIND_AUTO_CREATE)
+        isServiceBound=true
     }
 
     private fun launchVPN() {
